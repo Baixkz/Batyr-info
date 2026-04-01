@@ -5,78 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оферта - BATYR INFO</title>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; color: #333; line-height: 1.6; }
-        .legal-box { background: white; padding: 30px; border-radius: 20px; max-width: 700px; margin: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        
-        /* Тіл ауыстыру батырмалары */
-        .lang-switch { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
-        .lang-btn { padding: 10px 25px; border: 2px solid #007bff; background: white; color: #007bff; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: #f8f9fa; 
+            padding: 20px; 
+            color: #1a1a1a; 
+            line-height: 1.7;
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 24px; 
+            max-width: 650px; 
+            margin: auto; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+        }
+        .lang-switch { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .lang-btn { 
+            padding: 10px 20px; 
+            border: 2px solid #007bff; 
+            background: white; 
+            color: #007bff; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
         .lang-btn.active { background: #007bff; color: white; }
-        
         .content { display: none; }
         .content.active { display: block; }
         
-        h2 { color: #d9534f; text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
-        h4 { color: #007bff; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 10px; }
-        p, li { font-size: 14px; text-align: justify; color: #555; }
+        h2 { color: #d9534f; text-align: center; font-size: 22px; margin-bottom: 25px; font-weight: 800; }
+        h4 { color: #007bff; margin-top: 25px; font-size: 18px; font-weight: 700; }
         
-        .important { background: #fff3cd; padding: 15px; border-radius: 10px; border: 1px solid #ffeeba; font-weight: bold; color: #856404; margin: 15px 0; }
-        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
+        /* Қара шрифт пен ерекшелеу */
+        p { font-size: 15px; margin-bottom: 15px; text-align: justify; color: #222; }
+        b, strong { color: #000; font-weight: 800; }
+
+        .warning-box { 
+            background: #fff8e1; 
+            padding: 15px; 
+            border-radius: 12px; 
+            border-left: 5px solid #ffc107; 
+            font-weight: 600; 
+            margin-bottom: 20px;
+        }
+        .back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="legal-box">
-    <a href="index.html" class="back-link">← Артқа / Назад</a>
+<div class="container">
+    <a href="index.html" class="back">← Артқа / Назад</a>
     
     <div class="lang-switch">
-        <button class="lang-btn active" onclick="showLang('kz')">ҚАЗАҚША</button>
-        <button class="lang-btn" onclick="showLang('ru')">РУССКИЙ</button>
+        <button class="lang-btn active" onclick="setLang('kz')">ҚАЗАҚША</button>
+        <button class="lang-btn" onclick="setLang('ru')">РУССКИЙ</button>
     </div>
 
     <div id="kz" class="content active">
-        <h2>ПАЙДАЛАНУ ШАРТТАРЫ (ОФЕРТА)</h2>
-        <div class="important">НАЗАР АУДАРЫҢЫЗ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
+        <h2>ПАЙДАЛАНУ ШАРТТАРЫ</h2>
+        <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
         
         <h4>1. Платформаның мақсаты</h4>
-        <p>BATYR INFO — бұл ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда, медицина немесе өзге де ақылы қызметтерді ТІКЕЛЕЙ КӨРСЕТПЕЙДІ. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
+        <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда немесе өзге де ақылы қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
         
         <h4>2. Жауапкершіліктен бас тарту</h4>
-        <p>Сайттың Иесі және Әзірлеушісі (Разработчик) үшінші тұлғалардың (таксистер, сатушылар, жеткізушілер, шеберлер, дәрігерлер және т.б.) қызмет сапасына, бағасына және іс-әрекеттеріне <strong>ешқандай жауапкершілік көтермейді.</strong></p>
+        <p>Сайттың Иесі және Әзірлеушісі үшінші тұлғалардың (таксистер, сатушылар, жеткізушілер, шеберлер және т.б.) қызмет сапасына, бағасына және іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
         
-        <h4>3. Техникалық рөл</h4>
+        <h4>3. Деректерді жою және қателер</h4>
+        <p>Егер сайтта <b>қате мәлімет</b> тапсаңыз немесе өз нөміріңізді <b>өшіргіңіз келсе</b>, дереу Админге хабарласыңыз. Мәліметтер 24 сағат ішінде түзетіледі немесе толық өшіріледі.</p>
+        
+        <h4>4. Техникалық рөл</h4>
         <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты. Ол пайдаланушылар мен қызмет көрсетушілер арасындағы келіспеушіліктерге қатыспайды.</p>
     </div>
 
     <div id="ru" class="content">
-        <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ (ОФЕРТА)</h2>
-        <div class="important">ВНИМАНИЕ: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
+        <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
+        <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
         
         <h4>1. Статус платформы</h4>
-        <p>BATYR INFO — информационный каталог. Платформа НАПРЯМУЮ НЕ ОКАЗЫВАЕТ услуги перевозки (такси), торговли или иные платные услуги. Мы агрегатор открытых данных.</p>
+        <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги перевозки (такси), торговли или иные платные услуги. Мы агрегатор открытых данных.</p>
         
         <h4>2. Отказ от ответственности</h4>
-        <p>Владелец и Разработчик сайта <strong>не несут никакой ответственности</strong> за качество, стоимость и действия третьих лиц (таксистов, продавцов, курьеров, мастеров, врачей и т.д.).</p>
+        <p>Владелец и Разработчик сайта <b>не несут никакой ответственности</b> за качество, стоимость и действия третьих лиц (таксистов, продавцов, курьеров, мастеров и т.д.).</p>
         
-        <h4>3. Техническая роль</h4>
-        <p>Разработчик отвечает только за техническую часть сайта и не является стороной в спорах между пользователями и поставщиками услуг.</p>
+        <h4>3. Удаление данных и ошибки</h4>
+        <p>Если вы нашли <b>ошибку</b> или хотите <b>удалить свои данные</b>, немедленно свяжитесь с Админом. Информация будет исправлена или удалена в течение 24 часов.</p>
     </div>
 
-    <p style="text-align: center; font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
+    <p style="text-align: center; font-size: 12px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
         © 2026 BATYR INFO | Барлық құқықтар қорғалған.
     </p>
 </div>
 
 <script>
-    function showLang(lang) {
-        // Барлық контентті жабу
-        document.getElementById('kz').classList.remove('active');
-        document.getElementById('ru').classList.remove('active');
-        // Тек таңдалғанды ашу
+    function setLang(lang) {
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(lang).classList.add('active');
-        
-        // Батырмалардың стилін өзгерту
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
         event.currentTarget.classList.add('active');
     }
 </script>
