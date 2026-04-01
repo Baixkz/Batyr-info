@@ -3,52 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пайдалану шарттары - BATYR INFO</title>
+    <title>Оферта - BATYR INFO</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #333; padding: 20px; background: #f9f9f9; }
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 800px; margin: auto; }
-        h1 { color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        h3 { color: #444; margin-top: 25px; }
-        p { margin-bottom: 15px; text-align: justify; }
-        .warning { background: #fff3cd; border-left: 5px solid #ffecb5; padding: 15px; color: #856404; font-weight: bold; }
-        .back-btn { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: bold; }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; color: #333; line-height: 1.6; }
+        .legal-box { background: white; padding: 30px; border-radius: 20px; max-width: 700px; margin: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        /* Тіл ауыстыру батырмалары */
+        .lang-switch { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+        .lang-btn { padding: 10px 25px; border: 2px solid #007bff; background: white; color: #007bff; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .lang-btn.active { background: #007bff; color: white; }
+        
+        .content { display: none; }
+        .content.active { display: block; }
+        
+        h2 { color: #d9534f; text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        h4 { color: #007bff; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 10px; }
+        p, li { font-size: 14px; text-align: justify; color: #555; }
+        
+        .important { background: #fff3cd; padding: 15px; border-radius: 10px; border: 1px solid #ffeeba; font-weight: bold; color: #856404; margin: 15px 0; }
+        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="index.html" class="back-btn">← Артқа қайту</a>
-    <h1>Пайдалану шарттары (Оферта)</h1>
+<div class="legal-box">
+    <a href="index.html" class="back-link">← Артқа / Назад</a>
     
-    <div class="warning">
-        МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз төмендегі шарттармен толық келісесіз.
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="showLang('kz')">ҚАЗАҚША</button>
+        <button class="lang-btn" onclick="showLang('ru')">РУССКИЙ</button>
     </div>
 
-    <h3>1. Платформаның мәртебесі</h3>
-    <p>BATYR INFO — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай қызмет көрсетпейді, тауар сатпайды және төлемдер қабылдамайды. Ол тек үшінші тұлғалардың (таксистердің, дүкендердің, шеберлердің) ашық дереккөздегі мәліметтерін жинақтайды.</p>
+    <div id="kz" class="content active">
+        <h2>ПАЙДАЛАНУ ШАРТТАРЫ (ОФЕРТА)</h2>
+        <div class="important">НАЗАР АУДАРЫҢЫЗ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
+        
+        <h4>1. Платформаның мақсаты</h4>
+        <p>BATYR INFO — бұл ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда, медицина немесе өзге де ақылы қызметтерді ТІКЕЛЕЙ КӨРСЕТПЕЙДІ. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
+        
+        <h4>2. Жауапкершіліктен бас тарту</h4>
+        <p>Сайттың Иесі және Әзірлеушісі (Разработчик) үшінші тұлғалардың (таксистер, сатушылар, жеткізушілер, шеберлер, дәрігерлер және т.б.) қызмет сапасына, бағасына және іс-әрекеттеріне <strong>ешқандай жауапкершілік көтермейді.</strong></p>
+        
+        <h4>3. Техникалық рөл</h4>
+        <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты. Ол пайдаланушылар мен қызмет көрсетушілер арасындағы келіспеушіліктерге қатыспайды.</p>
+    </div>
 
-    <h3>2. Жауапкершіліктен бас тарту (Ең басты бөлім)</h3>
-    <p><strong>Сайттың Иесі және Әзірлеушісі (Разработчик)</strong> үшінші тұлғалар ұсынатын қызметтердің сапасына, бағасына, қауіпсіздігіне және заңдылығына жауап бермейді. Төмендегі жағдайларға сайт әкімшілігі жауапты емес:</p>
-    <ul>
-        <li>Такси жүргізушілерінің жол қозғалысы ережелерін бұзуы немесе кешігуі;</li>
-        <li>Сатушылардың тауар сапасының сәйкес келмеуі немесе бағаны өзгертуі;</li>
-        <li>Кез келген қаржылық шығындар немесе моральдық зияндар.</li>
-    </ul>
+    <div id="ru" class="content">
+        <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ (ОФЕРТА)</h2>
+        <div class="important">ВНИМАНИЕ: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
+        
+        <h4>1. Статус платформы</h4>
+        <p>BATYR INFO — информационный каталог. Платформа НАПРЯМУЮ НЕ ОКАЗЫВАЕТ услуги перевозки (такси), торговли или иные платные услуги. Мы агрегатор открытых данных.</p>
+        
+        <h4>2. Отказ от ответственности</h4>
+        <p>Владелец и Разработчик сайта <strong>не несут никакой ответственности</strong> за качество, стоимость и действия третьих лиц (таксистов, продавцов, курьеров, мастеров, врачей и т.д.).</p>
+        
+        <h4>3. Техническая роль</h4>
+        <p>Разработчик отвечает только за техническую часть сайта и не является стороной в спорах между пользователями и поставщиками услуг.</p>
+    </div>
 
-    <h3>3. Пайдаланушының жауапкершілігі</h3>
-    <p>Пайдаланушы кез келген хабарландыру бойынша хабарласқанда, өз еркімен және өз тәуекелімен әрекет етеді. Ақпараттың дұрыстығын тексеру пайдаланушының міндеті.</p>
-
-    <h3>4. Авторлық құқық және Әзірлеу (Техникалық бөлім)</h3>
-    <p>Сайттың дизайны мен техникалық құрылымы (коды) әзірлеушінің меншігі. Сайт әзірлеушісі техникалық жұмыстарды ғана атқарады және ақпараттық мазмұнға қатысты дауларда тарап болып табылмайды.</p>
-
-    <h3>5. Деректерді жою</h3>
-    <p>Егер сіздің жеке нөміріңіз сайтта қате немесе рұқсатсыз жарияланса, админге хабарласуыңыз керек. Мәлімет 24 сағат ішінде өшіріледі.</p>
-
-    <hr>
-    <p style="font-size: 12px; color: #888; text-align: center;">
-        Осы құжат сайт иесі мен әзірлеушісін кез келген құқықтық даулардан қорғау үшін жасалған.
+    <p style="text-align: center; font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
+        © 2026 BATYR INFO | Барлық құқықтар қорғалған.
     </p>
 </div>
+
+<script>
+    function showLang(lang) {
+        // Барлық контентті жабу
+        document.getElementById('kz').classList.remove('active');
+        document.getElementById('ru').classList.remove('active');
+        // Тек таңдалғанды ашу
+        document.getElementById(lang).classList.add('active');
+        
+        // Батырмалардың стилін өзгерту
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+</script>
 
 </body>
 </html>
