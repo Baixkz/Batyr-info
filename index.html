@@ -3,50 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATYR INFO - Ақтау</title>
+    <title>BATYR INFO</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<header style="background: #007bff; color: white; text-align: center; padding: 20px;">
-    <h1>BATYR INFO</h1>
-    <p>Ақтау қаласының анықтамалығы</p>
+<header style="background: #007bff; color: white; text-align: center; padding: 10px; position: relative;">
+    <div style="position: absolute; right: 10px; top: 10px;">
+        <button onclick="changeLang('kk')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 2px 5px; border-radius: 4px;">KZ</button>
+        <button onclick="changeLang('ru')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 2px 5px; border-radius: 4px;">RU</button>
+    </div>
+    <h1 style="margin: 10px 0 5px 0;">BATYR INFO</h1>
+    <p id="sub-title">Ақтау қаласының анықтамалығы</p>
 </header>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px;">
     
-    <a href="shops.html" style="background: white; padding: 20px; border-radius: 12px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <a href="shops.html" class="card" style="background: white; padding: 20px; border-radius: 12px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <i class="fas fa-shopping-cart" style="color: #007bff; font-size: 24px;"></i><br>
-        <span style="font-weight: bold; display: block; margin-top: 8px;">Дүкендер</span>
+        <span id="btn-shops" style="font-weight: bold; display: block; margin-top: 8px;">Дүкендер</span>
     </a>
 
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        🚗 Автоқызмет
+    <div class="card-simple" style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <span id="btn-auto">🚗 Автоқызмет</span>
     </div>
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        💅 Сұлулық
+    <div class="card-simple" style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <span id="btn-beauty">💅 Сұлулық</span>
     </div>
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        💼 Жұмыс
-    </div>
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        🏗️ Құрылыс
-    </div>
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        🍔 Тамақтану
-    </div>
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        🚚 Тасымалдау
-    </div>
-    <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        📞 Анықтамалық
+    <div class="card-simple" style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <span id="btn-work">💼 Жұмыс</span>
     </div>
 </div>
 
-<footer style="text-align: center; padding: 20px; color: #888;">
-    © 2026 Batyr Info - Ақтау
-</footer>
+<script>
+    const langData = {
+        'kk': {
+            'sub-title': 'Ақтау қаласының анықтамалығы',
+            'btn-shops': 'Дүкендер',
+            'btn-auto': '🚗 Автоқызмет',
+            'btn-beauty': '💅 Сұлулық',
+            'btn-work': '💼 Жұмыс'
+        },
+        'ru': {
+            'sub-title': 'Справочник города Актау',
+            'btn-shops': 'Магазины',
+            'btn-auto': '🚗 Автосервис',
+            'btn-beauty': '💅 Красота',
+            'btn-work': '💼 Работа'
+        }
+    };
+
+    function changeLang(lang) {
+        localStorage.setItem('selectedLang', lang);
+        for (let key in langData[lang]) {
+            document.getElementById(key).innerText = langData[lang][key];
+        }
+    }
+
+    // Бет жүктелгенде сақталған тілді тексеру
+    window.onload = () => {
+        const savedLang = localStorage.getItem('selectedLang') || 'kk';
+        changeLang(savedLang);
+    };
+</script>
 
 </body>
 </html>
