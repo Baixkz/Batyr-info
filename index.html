@@ -3,155 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATYR INFO</title>
+    <title>BATYR INFO - Ultimate Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background-color: #f6f7f9; 
-            margin: 0; 
-            padding: 0; 
-            color: #1a1a1a; 
+        :root {
+            --main-blue: #007aff;
+            --bg-color: #f2f4f7;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
-        /* Super App стиліндегі Header */
-        .header-bg {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            padding: 30px 20px 40px;
-            border-bottom-left-radius: 35px;
-            border-bottom-right-radius: 35px;
+        body { 
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 0; color: #1a1a1a;
+            -webkit-tap-highlight-color: transparent; /* Мобильде көк шаршы шықпауы үшін */
+        }
+
+        /* 1. Премиум Header */
+        .header-section {
+            background: linear-gradient(180deg, #007aff 0%, #005bb7 100%);
+            padding: 40px 20px 60px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
             text-align: center;
             position: relative;
+            box-shadow: 0 10px 20px rgba(0,122,255,0.2);
         }
 
-        .lang-switcher { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; }
-        .lang-btn { 
-            background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.5); 
-            color: white; padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 800;
+        .header-title { 
+            font-size: 34px; 
+            font-weight: 900; 
+            color: white; 
+            letter-spacing: -1px; 
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .header-title { font-size: 30px; font-weight: 900; margin: 10px 0; letter-spacing: 1px; }
+        /* 2. Шыны виджеттер (Glassmorphism) */
+        .widgets-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
 
-        /* Виджеттер (Ауа райы & Уақыт) */
-        .widgets { display: flex; justify-content: center; gap: 12px; margin-top: 15px; }
-        .widget-item {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 18px;
-            border-radius: 15px;
+        .glass-widget {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 18px;
+            color: white;
             font-size: 14px;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
-            backdrop-filter: blur(5px);
         }
 
-        /* Батырмалар торы (2 қатарлы Grid) */
-        .grid-container {
+        /* 3. "Тірі" Карточкалар */
+        .grid-menu {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 25px 20px;
+            gap: 16px;
+            padding: 20px;
             max-width: 500px;
-            margin: -25px auto 0; /* Header-ге сәл мініп тұру үшін */
+            margin: -35px auto 0;
         }
 
-        .card {
-            background: white;
-            padding: 25px 15px;
-            border-radius: 25px;
-            text-align: center;
+        .app-card {
+            background: #ffffff;
+            padding: 28px 15px;
+            border-radius: 28px;
             text-decoration: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: all 0.2s ease;
-            position: relative;
-            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Серіппелі анимация */
         }
 
-        .card:active { transform: scale(0.92); background: #f9f9f9; }
+        .app-card:active {
+            transform: scale(0.9);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        }
 
-        .card i { font-size: 32px; color: #007bff; margin-bottom: 15px; }
-        .card span { font-size: 15px; font-weight: 800; color: #000; }
+        .app-card i {
+            font-size: 34px;
+            background: linear-gradient(135deg, #007aff, #00c6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
 
-        /* "NEW" белгісі */
-        .badge {
-            position: absolute; top: 12px; right: 12px;
-            background: #ff3b30; color: white; font-size: 9px;
-            padding: 3px 8px; border-radius: 10px; font-weight: 900;
+        .app-card span {
+            font-size: 15px;
+            font-weight: 800;
+            color: #000000;
+        }
+
+        /* Жаңалық белгісі (Badge) */
+        .status-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: #ff3b30; color: white;
+            font-size: 9px; padding: 3px 8px;
+            border-radius: 10px; font-weight: 900;
+            box-shadow: 0 4px 8px rgba(255,59,48,0.3);
         }
 
         footer { text-align: center; padding: 40px 20px; }
-        footer a { color: #007bff; text-decoration: none; font-weight: 800; font-size: 15px; }
-        .copy { color: #ccc; font-size: 11px; margin-top: 12px; font-weight: 500; }
+        .footer-link { 
+            color: var(--main-blue); 
+            text-decoration: none; 
+            font-weight: 800; 
+            font-size: 15px;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+        }
     </style>
 </head>
 <body>
 
-    <div class="header-bg">
-        <div class="lang-switcher">
-            <button class="lang-btn">KZ</button>
-            <button class="lang-btn">RU</button>
-        </div>
+    <div class="header-section">
+        <h1 class="header-title">BATYR INFO</h1>
         
-        <div class="header-title">BATYR INFO</div>
-
-        <div class="widgets">
-            <div class="widget-item"><i class="fas fa-cloud-sun"></i> +18°C</div>
-            <div class="widget-item"><i class="fas fa-clock"></i> 17:45</div>
+        <div class="widgets-bar">
+            <div class="glass-widget"><i class="fas fa-cloud-sun"></i> +18°C</div>
+            <div class="glass-widget"><i class="fas fa-clock"></i> 17:45</div>
         </div>
     </div>
 
-    <div class="grid-container">
-        <a href="ads.html" class="card">
-            <span class="badge">NEW</span>
+    <div class="grid-menu">
+        <a href="ads.html" class="app-card" style="position: relative;">
+            <span class="status-badge">NEW</span>
             <i class="fas fa-bullhorn"></i>
             <span>Хабарландыру</span>
         </a>
-        <a href="shops.html" class="card">
+        <a href="shops.html" class="app-card">
             <i class="fas fa-shopping-bag"></i>
             <span>Дүкендер</span>
         </a>
-        <a href="med.html" class="card">
-            <i class="fas fa-hospital"></i>
+        <a href="med.html" class="app-card">
+            <i class="fas fa-hand-holding-medical"></i>
             <span>Медицина</span>
         </a>
-        <a href="edu.html" class="card">
-            <i class="fas fa-graduation-cap"></i>
+        <a href="edu.html" class="app-card">
+            <i class="fas fa-user-graduate"></i>
             <span>Білім</span>
         </a>
-        <a href="food.html" class="card">
+        <a href="food.html" class="app-card">
             <i class="fas fa-utensils"></i>
             <span>Тамақтану</span>
         </a>
-        <a href="auto.html" class="card">
-            <i class="fas fa-car-side"></i>
+        <a href="auto.html" class="app-card">
+            <i class="fas fa-car-alt"></i>
             <span>Автоқызмет</span>
         </a>
-        <a href="jobs.html" class="card">
+        <a href="jobs.html" class="app-card">
             <i class="fas fa-briefcase"></i>
             <span>Жұмыс</span>
         </a>
-        <a href="transport.html" class="card">
-            <i class="fas fa-truck-moving"></i>
+        <a href="transport.html" class="app-card">
+            <i class="fas fa-truck-loading"></i>
             <span>Транспорт</span>
         </a>
-        <a href="contacts.html" class="card">
-            <i class="fas fa-id-card"></i>
+        <a href="contacts.html" class="app-card">
+            <i class="fas fa-address-book"></i>
             <span>Анықтамалық</span>
         </a>
-        <a href="masters.html" class="card">
+        <a href="masters.html" class="app-card">
             <i class="fas fa-tools"></i>
             <span>Қызмет көрсету</span>
         </a>
     </div>
 
     <footer>
-        <a href="rules.html">Пайдалану шарттары (Оферта)</a>
-        <div class="copy">© 2026 BATYR INFO</div>
+        <a href="rules.html" class="footer-link">Пайдалану шарттары (Оферта)</a>
+        <p style="color: #bbb; font-size: 11px; margin-top: 20px; font-weight: 600;">© 2026 BATYR INFO</p>
     </footer>
 
 </body>
