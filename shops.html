@@ -9,29 +9,76 @@
 </head>
 <body>
 
-    <div class="header-mini">
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
-        <h2>Дүкендер • Магазины</h2>
+    <div class="header-mini" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: white; border-bottom: 1px solid #eee;">
+        <div style="display: flex; align-items: center;">
+            <a href="index.html" style="color: #333; font-size: 20px; text-decoration: none;"><i class="fas fa-arrow-left"></i></a>
+            <h2 id="page-title" style="margin-left: 15px; font-size: 18px;">Дүкендер</h2>
+        </div>
+        <div>
+            <button onclick="changeLang('kk')" style="border: 1px solid #007bff; background: none; border-radius: 4px; padding: 2px 5px; font-size: 12px;">KZ</button>
+            <button onclick="changeLang('ru')" style="border: 1px solid #007bff; background: none; border-radius: 4px; padding: 2px 5px; font-size: 12px;">RU</button>
+        </div>
     </div>
 
     <div class="shop-grid">
-        <a href="#" class="grid-item"><i class="fas fa-shopping-basket"></i><span>Маркет<br>Продукты</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-drumstick-bite"></i><span>Ет<br>Мясо</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-fish"></i><span>Балық<br>Рыба</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-seedling"></i><span>Жем-шөп<br>Корма</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-tools"></i><span>Құрылыс<br>Стройка</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-tshirt"></i><span>Киім<br>Одежда</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-shuttle-van"></i><span>Запчасти<br>Авто</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-couch"></i><span>Мебель<br>Техника</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-gift"></i><span>Гүлдер<br>Цветы</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-book"></i><span>Оқу-құрал<br>Канцтовары</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-mobile-alt"></i><span>Телефон<br>Сервис</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-shopping-basket"></i><span id="m-market">Маркет</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-drumstick-bite"></i><span id="m-meat">Ет</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-fish"></i><span id="m-fish">Балық</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-seedling"></i><span id="m-feed">Жем-шөп</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-tools"></i><span id="m-build">Құрылыс</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-tshirt"></i><span id="m-cloth">Киім</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-shuttle-van"></i><span id="m-parts">Запчасти</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-couch"></i><span id="m-mebel">Мебель</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-gift"></i><span id="m-flowers">Гүлдер</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-book"></i><span id="m-kanz">Оқу-құрал</span></a>
+        <a href="#" class="grid-item"><i class="fas fa-mobile-alt"></i><span id="m-phone">Телефон</span></a>
     </div>
 
-    <div class="bottom-nav">
-        <a href="index.html" class="nav-item active"><i class="fas fa-th-large"></i><span>Каталог</span></a>
-        <a href="add.html" class="nav-item"><i class="fas fa-plus-square"></i><span>Қосу</span></a>
-    </div>
+    <script>
+        const langData = {
+            'kk': {
+                'page-title': 'Дүкендер',
+                'm-market': 'Маркет',
+                'm-meat': 'Ет',
+                'm-fish': 'Балық',
+                'm-feed': 'Жем-шөп',
+                'm-build': 'Құрылыс',
+                'm-cloth': 'Киім',
+                'm-parts': 'Запчасти',
+                'm-mebel': 'Мебель',
+                'm-flowers': 'Гүлдер',
+                'm-kanz': 'Оқу-құрал',
+                'm-phone': 'Телефон'
+            },
+            'ru': {
+                'page-title': 'Магазины',
+                'm-market': 'Продукты',
+                'm-meat': 'Мясо',
+                'm-fish': 'Рыба',
+                'm-feed': 'Корма',
+                'm-build': 'Стройка',
+                'm-cloth': 'Одежда',
+                'm-parts': 'Запчасти',
+                'm-mebel': 'Мебель',
+                'm-flowers': 'Цветы',
+                'm-kanz': 'Канцтовары',
+                'm-phone': 'Телефон'
+            }
+        };
+
+        function changeLang(lang) {
+            localStorage.setItem('selectedLang', lang);
+            for (let key in langData[lang]) {
+                const el = document.getElementById(key);
+                if (el) el.innerText = langData[lang][key];
+            }
+        }
+
+        window.onload = () => {
+            const savedLang = localStorage.getItem('selectedLang') || 'kk';
+            changeLang(savedLang);
+        };
+    </script>
 
 </body>
 </html>
