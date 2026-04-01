@@ -3,204 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATYR INFO</title>
+    <title>BATYR INFO - Super App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #f0f2f5; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* Көк Header */
-        header { 
-            background: #007bff; 
-            color: white; 
+        /* Негізгі стильдер */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f6f7f9; /* Заманауи ашық сұр фон */
+            margin: 0;
+            padding: 20px;
+            color: #1a1a1a;
+        }
+
+        /* Тақырып (Header) */
+        .header { 
             text-align: center; 
-            padding: 30px 15px; 
-            border-radius: 0 0 25px 25px; 
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px; 
+            padding-top: 20px; 
+        }
+        .header h1 { 
+            font-size: 26px; 
+            font-weight: 900; 
+            color: #0056b3; 
+            margin: 0; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+        .header p { 
+            font-size: 14px; 
+            color: #666; 
+            margin-top: 5px; 
+            font-weight: 500;
         }
 
-        .lang-btns { position: absolute; right: 15px; top: 15px; }
-        .lang-btns button { 
-            background: rgba(255,255,255,0.2); 
-            border: 1px solid white; 
-            color: white; 
-            padding: 5px 10px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer;
-            font-size: 12px;
+        /* Батырмалар торы (Grid) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Екі қатарлы дизайн */
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        h1 { margin: 0; font-size: 30px; letter-spacing: 1px; }
-
-        /* Виджеттер (Ауа райы / Намаз) */
-        .widgets { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            margin-top: 20px; 
-        }
-        .widget-item { 
-            background: rgba(255,255,255,0.15); 
-            padding: 8px 15px; 
-            border-radius: 12px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Сетка */
-        .main-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 15px; 
-            padding: 20px; 
-        }
-
-        .main-card {
+        /* Карточкалардың стилі */
+        .service-card {
             background: white;
-            padding: 25px 10px;
-            border-radius: 20px;
+            padding: 25px 15px;
+            border-radius: 24px; /* Жұмсақ дөңгеленген шеттер */
             text-align: center;
             text-decoration: none;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* Жеңіл көлеңке */
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            transition: 0.2s;
-        }
-        
-        .main-card i { font-size: 35px; color: #007bff; margin-bottom: 12px; }
-        .main-card span { font-weight: bold; font-size: 15px; }
-
-        /* NEW белгісі */
-        .badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff4757;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: bold;
+            justify-content: center;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
-        .main-card:active { transform: scale(0.95); background: #fafafa; }
+        /* Басқандағы эффект (Нағыз App сияқты) */
+        .service-card:active { 
+            transform: scale(0.92); 
+            background: #f0f0f0; 
+        }
+
+        /* Көк иконкалар */
+        .service-card i {
+            font-size: 32px;
+            color: #007bff; 
+            margin-bottom: 15px;
+        }
+
+        /* Қара қалың мәтін */
+        .service-card span {
+            font-size: 15px;
+            font-weight: 800; /* Максималды қалыңдық */
+            color: #000;
+        }
+
+        /* Астыңғы жағы (Footer) */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .copyright {
+            color: #bbb;
+            font-size: 11px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="lang-btns">
-        <button onclick="changeLang('kk')">KZ</button>
-        <button onclick="changeLang('ru')">RU</button>
+    <div class="header">
+        <h1>BATYR INFO</h1>
+        <p>Mangystau Digital Services</p>
     </div>
-    
-    <h1>BATYR INFO</h1>
-    
-    <div class="widgets">
-        <div class="widget-item">
-            <i class="fas fa-cloud-sun"></i> <span>+18°C</span>
-        </div>
-        <div class="widget-item">
-            <i class="fas fa-mosque"></i> <span>17:45</span>
-        </div>
+
+    <div class="grid-container">
+        <a href="taxi.html" class="service-card">
+            <i class="fas fa-taxi"></i>
+            <span>Такси</span>
+        </a>
+
+        <a href="market.html" class="service-card">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Сауда</span>
+        </a>
+
+        <a href="org.html" class="service-card">
+            <i class="fas fa-university"></i>
+            <span>Мекемелер</span>
+        </a>
+
+        <a href="med.html" class="service-card">
+            <i class="fas fa-heartbeat"></i>
+            <span>Медицина</span>
+        </a>
+
+        <a href="masters.html" class="service-card">
+            <i class="fas fa-tools"></i>
+            <span>Шеберлер</span>
+        </a>
+
+        <a href="ads.html" class="service-card">
+            <i class="fas fa-bullhorn"></i>
+            <span>Жарнама</span>
+        </a>
     </div>
-</header>
 
-<div class="main-grid">
-    
-    <a href="ads.html" class="main-card">
-        <div class="badge">NEW</div>
-        <i class="fas fa-bullhorn"></i>
-        <span id="b-ads">Хабарландыру</span>
-    </a>
-
-    <a href="shops.html" class="main-card">
-        <i class="fas fa-shopping-cart"></i>
-        <span id="b-shops">Дүкендер</span>
-    </a>
-
-    <a href="medicine.html" class="main-card">
-        <i class="fas fa-first-aid"></i>
-        <span id="b-med">Медицина</span>
-    </a>
-
-    <a href="edu.html" class="main-card">
-        <i class="fas fa-graduation-cap"></i>
-        <span id="b-edu">Білім</span>
-    </a>
-
-    <a href="food.html" class="main-card">
-        <i class="fas fa-utensils"></i>
-        <span id="b-food">Тамақтану</span>
-    </a>
-
-    <a href="auto.html" class="main-card">
-        <i class="fas fa-car"></i>
-        <span id="b-auto">Автоқызмет</span>
-    </a>
-
-    <a href="jobs.html" class="main-card">
-        <i class="fas fa-briefcase"></i>
-        <span id="b-jobs">Жұмыс</span>
-    </a>
-
-    <a href="transport.html" class="main-card">
-        <i class="fas fa-truck"></i>
-        <span id="b-trans">Транспорт</span>
-    </a>
-
-    <a href="info.html" class="main-card">
-        <i class="fas fa-phone-alt"></i>
-        <span id="b-info">Анықтамалық</span>
-    </a>
-
-    <a href="service.html" class="main-card">
-        <i class="fas fa-tools"></i>
-        <span id="b-service">Қызмет көрсету</span>
-    </a>
-
-</div>
-
-<script>
-    const langData = {
-        'kk': {
-            'b-ads': 'Хабарландыру', 'b-shops': 'Дүкендер', 'b-med': 'Медицина',
-            'b-edu': 'Білім', 'b-food': 'Тамақтану', 'b-auto': 'Автоқызмет',
-            'b-jobs': 'Жұмыс', 'b-trans': 'Транспорт', 'b-info': 'Анықтамалық', 'b-service': 'Қызмет көрсету'
-        },
-        'ru': {
-            'b-ads': 'Объявления', 'b-shops': 'Магазины', 'b-med': 'Медицина',
-            'b-edu': 'Образование', 'b-food': 'Питание', 'b-auto': 'Автосервис',
-            'b-jobs': 'Работа', 'b-trans': 'Транспорт', 'b-info': 'Справочник', 'b-service': 'Услуги'
-        }
-    };
-
-    function changeLang(lang) {
-        localStorage.setItem('selectedLang', lang);
-        for (let key in langData[lang]) {
-            const el = document.getElementById(key);
-            if (el) el.innerText = langData[lang][key];
-        }
-    }
-
-    window.onload = () => {
-        const savedLang = localStorage.getItem('selectedLang') || 'kk';
-        changeLang(savedLang);
-    };
-</script>
-<footer style="text-align: center; padding: 20px; background: white; margin-top: 20px;">
-    <a href="rules.html" style="color: #007bff; text-decoration: none; font-weight: bold; font-size: 14px;">
-        Пайдалану шарттары (Оферта / Соглашение)
-    </a>
-    <p style="font-size: 12px; color: #888; margin-top: 5px;">© 2026 BATYR INFO</p>
-</footer>
+    <footer>
+        <a href="rules.html">Пайдалану шарттары (Оферта)</a>
+        <div class="copyright">© 2026 BATYR INFO</div>
+    </footer>
 
 </body>
 </html>
