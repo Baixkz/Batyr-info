@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -8,95 +7,76 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body style="background: #f0f2f5; margin: 0; font-family: sans-serif;">
 
-<header style="background: #007bff; color: white; text-align: center; padding: 15px; position: relative;">
-    <div style="position: absolute; right: 10px; top: 15px;">
-        <button onclick="changeLang('kk')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 3px 7px; border-radius: 5px; font-weight: bold;">KZ</button>
-        <button onclick="changeLang('ru')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 3px 7px; border-radius: 5px; font-weight: bold;">RU</button>
+<header style="background: #007bff; color: white; text-align: center; padding: 25px 15px; position: relative; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <div style="position: absolute; right: 15px; top: 15px;">
+        <button onclick="changeLang('kk')" style="background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer;">KZ</button>
+        <button onclick="changeLang('ru')" style="background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer;">RU</button>
     </div>
-    <h1 style="margin-top: 10px; font-size: 24px;">BATYR INFO</h1>
-    <p id="sub-title" style="font-size: 14px; opacity: 0.9;">Ақтау қаласының анықтамалығы</p>
+    
+    <h1 style="margin: 0; font-size: 32px; text-transform: uppercase; letter-spacing: 2px;">BATYR INFO</h1>
+    
+    <div style="display: flex; justify-content: center; gap: 25px; margin-top: 15px; font-size: 14px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 10px; display: inline-flex;">
+        <span><i class="fas fa-cloud-sun"></i> Ақтау: +18°C</span>
+        <span><i class="fas fa-mosque"></i> Екінті: 17:45</span>
+    </div>
 </header>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; background: #f8f9fa;">
+<div style="padding: 20px 15px 5px 15px;">
+    <div style="background: white; border-radius: 15px; display: flex; align-items: center; padding: 12px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <i class="fas fa-search" style="color: #007bff; margin-right: 12px; font-size: 18px;"></i>
+        <input type="text" id="search-input" placeholder="Іздеу... / Поиск..." style="border: none; outline: none; width: 100%; font-size: 16px;">
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px;">
     
-    <a href="shops.html" class="main-card">
-        <i class="fas fa-shopping-cart"></i>
-        <span id="btn-shops">Дүкендер</span>
-    </a>
+    <a href="shops.html" class="main-card"><i class="fas fa-shopping-cart"></i><span id="b-shops">Дүкендер</span></a>
+    
+    <a href="ads.html" class="main-card" style="background: #fff4e5;"><i class="fas fa-bullhorn" style="color: #ff8800;"></i><span id="b-ads">Хабарландыру</span></a>
+    
+    <a href="medicine.html" class="main-card"><i class="fas fa-first-aid"></i><span id="b-med">Медицина</span></a>
+    <a href="edu.html" class="main-card"><i class="fas fa-graduation-cap"></i><span id="b-edu">Білім</span></a>
+    <a href="food.html" class="main-card"><i class="fas fa-utensils"></i><span id="b-food">Тамақтану</span></a>
+    <a href="auto.html" class="main-card"><i class="fas fa-car"></i><span id="b-auto">Автоқызмет</span></a>
+    <a href="jobs.html" class="main-card"><i class="fas fa-briefcase"></i><span id="b-jobs">Жұмыс</span></a>
+    <a href="transport.html" class="main-card"><i class="fas fa-truck"></i><span id="b-trans">Транспорт</span></a>
+    <a href="info.html" class="main-card"><i class="fas fa-phone-alt"></i><span id="b-info">Анықтамалық</span></a>
+    <a href="service.html" class="main-card"><i class="fas fa-tools"></i><span id="b-service">Қызмет көрсету</span></a>
 
-    <a href="#" class="main-card">
-        <i class="fas fa-utensils"></i>
-        <span id="btn-food">Тамақтану</span>
-    </a>
-
-    <a href="#" class="main-card">
-        <i class="fas fa-first-aid"></i>
-        <span id="btn-health">Медицина</span>
-    </a>
-
-    <a href="#" class="main-card">
-        <i class="fas fa-briefcase"></i>
-        <span id="btn-work">Жұмыс</span>
-    </a>
-
-    <a href="#" class="main-card">
-        <i class="fas fa-car-side"></i>
-        <span id="btn-auto">Автоқызмет</span>
-    </a>
-
-    <a href="#" class="main-card">
-        <i class="fas fa-magic"></i>
-        <span id="btn-beauty">Сұлулық</span>
-    </a>
 </div>
 
 <style>
     .main-card {
         background: white;
-        padding: 20px 10px;
-        border-radius: 15px;
+        padding: 22px 10px;
+        border-radius: 18px;
         text-align: center;
         text-decoration: none;
         color: #333;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.04);
         display: flex;
         flex-direction: column;
         align-items: center;
-        transition: 0.3s;
+        transition: 0.2s;
     }
-    .main-card i {
-        font-size: 26px;
-        color: #007bff;
-        margin-bottom: 10px;
-    }
-    .main-card span {
-        font-weight: bold;
-        font-size: 14px;
-    }
-    .main-card:active { transform: scale(0.95); }
+    .main-card i { font-size: 28px; color: #007bff; margin-bottom: 12px; }
+    .main-card span { font-weight: bold; font-size: 14px; }
+    .main-card:active { transform: scale(0.95); background: #f9f9f9; }
 </style>
 
 <script>
     const langData = {
         'kk': {
-            'sub-title': 'Ақтау қаласының анықтамалығы',
-            'btn-shops': 'Дүкендер',
-            'btn-food': 'Тамақтану',
-            'btn-health': 'Медицина',
-            'btn-work': 'Жұмыс',
-            'btn-auto': 'Автоқызмет',
-            'btn-beauty': 'Сұлулық'
+            'b-shops': 'Дүкендер', 'b-ads': 'Хабарландыру', 'b-med': 'Медицина',
+            'b-edu': 'Білім', 'b-food': 'Тамақтану', 'b-auto': 'Автоқызмет',
+            'b-jobs': 'Жұмыс', 'b-trans': 'Транспорт', 'b-info': 'Анықтамалық', 'b-service': 'Қызмет көрсету'
         },
         'ru': {
-            'sub-title': 'Справочник города Актау',
-            'btn-shops': 'Магазины',
-            'btn-food': 'Питание',
-            'btn-health': 'Медицина',
-            'btn-work': 'Работа',
-            'btn-auto': 'Автосервис',
-            'btn-beauty': 'Красота'
+            'b-shops': 'Магазины', 'b-ads': 'Объявления', 'b-med': 'Медицина',
+            'b-edu': 'Образование', 'b-food': 'Питание', 'b-auto': 'Автосервис',
+            'b-jobs': 'Работа', 'b-trans': 'Транспорт', 'b-info': 'Справочник', 'b-service': 'Услуги'
         }
     };
 
