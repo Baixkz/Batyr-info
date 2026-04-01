@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -9,59 +10,104 @@
 </head>
 <body>
 
-<header style="background: #007bff; color: white; text-align: center; padding: 10px; position: relative;">
-    <div style="position: absolute; right: 10px; top: 10px;">
-        <button onclick="changeLang('kk')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 2px 5px; border-radius: 4px;">KZ</button>
-        <button onclick="changeLang('ru')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 2px 5px; border-radius: 4px;">RU</button>
+<header style="background: #007bff; color: white; text-align: center; padding: 15px; position: relative;">
+    <div style="position: absolute; right: 10px; top: 15px;">
+        <button onclick="changeLang('kk')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 3px 7px; border-radius: 5px; font-weight: bold;">KZ</button>
+        <button onclick="changeLang('ru')" style="background: none; border: 1px solid white; color: white; cursor: pointer; padding: 3px 7px; border-radius: 5px; font-weight: bold;">RU</button>
     </div>
-    <h1 style="margin: 10px 0 5px 0;">BATYR INFO</h1>
-    <p id="sub-title">Ақтау қаласының анықтамалығы</p>
+    <h1 style="margin-top: 10px; font-size: 24px;">BATYR INFO</h1>
+    <p id="sub-title" style="font-size: 14px; opacity: 0.9;">Ақтау қаласының анықтамалығы</p>
 </header>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; background: #f8f9fa;">
     
-    <a href="shops.html" class="card" style="background: white; padding: 20px; border-radius: 12px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <i class="fas fa-shopping-cart" style="color: #007bff; font-size: 24px;"></i><br>
-        <span id="btn-shops" style="font-weight: bold; display: block; margin-top: 8px;">Дүкендер</span>
+    <a href="shops.html" class="main-card">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="btn-shops">Дүкендер</span>
     </a>
 
-    <div class="card-simple" style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <span id="btn-auto">🚗 Автоқызмет</span>
-    </div>
-    <div class="card-simple" style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <span id="btn-beauty">💅 Сұлулық</span>
-    </div>
-    <div class="card-simple" style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <span id="btn-work">💼 Жұмыс</span>
-    </div>
+    <a href="#" class="main-card">
+        <i class="fas fa-utensils"></i>
+        <span id="btn-food">Тамақтану</span>
+    </a>
+
+    <a href="#" class="main-card">
+        <i class="fas fa-first-aid"></i>
+        <span id="btn-health">Медицина</span>
+    </a>
+
+    <a href="#" class="main-card">
+        <i class="fas fa-briefcase"></i>
+        <span id="btn-work">Жұмыс</span>
+    </a>
+
+    <a href="#" class="main-card">
+        <i class="fas fa-car-side"></i>
+        <span id="btn-auto">Автоқызмет</span>
+    </a>
+
+    <a href="#" class="main-card">
+        <i class="fas fa-magic"></i>
+        <span id="btn-beauty">Сұлулық</span>
+    </a>
 </div>
+
+<style>
+    .main-card {
+        background: white;
+        padding: 20px 10px;
+        border-radius: 15px;
+        text-align: center;
+        text-decoration: none;
+        color: #333;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: 0.3s;
+    }
+    .main-card i {
+        font-size: 26px;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+    .main-card span {
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .main-card:active { transform: scale(0.95); }
+</style>
 
 <script>
     const langData = {
         'kk': {
             'sub-title': 'Ақтау қаласының анықтамалығы',
             'btn-shops': 'Дүкендер',
-            'btn-auto': '🚗 Автоқызмет',
-            'btn-beauty': '💅 Сұлулық',
-            'btn-work': '💼 Жұмыс'
+            'btn-food': 'Тамақтану',
+            'btn-health': 'Медицина',
+            'btn-work': 'Жұмыс',
+            'btn-auto': 'Автоқызмет',
+            'btn-beauty': 'Сұлулық'
         },
         'ru': {
             'sub-title': 'Справочник города Актау',
             'btn-shops': 'Магазины',
-            'btn-auto': '🚗 Автосервис',
-            'btn-beauty': '💅 Красота',
-            'btn-work': '💼 Работа'
+            'btn-food': 'Питание',
+            'btn-health': 'Медицина',
+            'btn-work': 'Работа',
+            'btn-auto': 'Автосервис',
+            'btn-beauty': 'Красота'
         }
     };
 
     function changeLang(lang) {
         localStorage.setItem('selectedLang', lang);
         for (let key in langData[lang]) {
-            document.getElementById(key).innerText = langData[lang][key];
+            const el = document.getElementById(key);
+            if (el) el.innerText = langData[lang][key];
         }
     }
 
-    // Бет жүктелгенде сақталған тілді тексеру
     window.onload = () => {
         const savedLang = localStorage.getItem('selectedLang') || 'kk';
         changeLang(savedLang);
