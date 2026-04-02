@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
 
         /* HEADER */
         .header-section {
@@ -19,6 +19,7 @@
         .location-btn { 
             background: rgba(255,255,255,0.2); border: none; color: white; 
             padding: 7px 12px; border-radius: 12px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 5px;
         }
 
         .lang-switcher { display: flex; gap: 4px; }
@@ -38,7 +39,7 @@
         }
         .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
 
-        /* GRID */
+        /* GRID / CATALOG */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px; max-width: 500px; margin: 0 auto; }
         .card {
             background: white; padding: 25px 10px; border-radius: 25px; text-decoration: none;
@@ -49,26 +50,35 @@
         .card span { font-size: 14px; font-weight: 800; color: #000; }
         .badge-red { position: absolute; top: 12px; right: 12px; background: #ff3b30; color: white; font-size: 9px; padding: 3px 7px; border-radius: 8px; font-weight: 900; }
 
-        /* BOTTOM SHEET (Локация тізімі) */
+        /* BOTTOM SHEET */
         #locationSheet {
             position: fixed; bottom: -100%; left: 0; width: 100%; background: white;
             border-top-left-radius: 30px; border-top-right-radius: 30px;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.2); transition: 0.4s; z-index: 1000;
-            max-height: 70vh; overflow-y: auto; padding: 20px; box-sizing: border-box;
+            transition: 0.4s; z-index: 1000; padding: 20px 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
         }
         #locationSheet.active { bottom: 0; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
-        .loc-item { padding: 15px; border-bottom: 1px solid #eee; font-weight: 700; cursor: pointer; }
+        
+        .loc-item { 
+            padding: 18px 25px; border-bottom: 1px solid #f0f0f0; 
+            font-weight: 700; color: #333; cursor: pointer; 
+        }
+        .loc-item:last-child { border-bottom: none; }
+        .sheet-header { padding: 0 25px 15px; font-weight: 900; font-size: 18px; border-bottom: 2px solid var(--main-blue); color: var(--main-blue); }
 
-        footer { text-align: center; padding: 40px; }
-        .footer-logo { font-size: 24px; font-weight: 900; color: #000; text-decoration: none; }
+        /* FOOTER */
+        footer { text-align: center; padding: 40px 20px; }
+        .footer-logo { font-size: 24px; font-weight: 900; color: #000; text-decoration: none; display: block; margin-top: 15px; }
+        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="header-section">
         <div class="top-bar">
-            <button class="location-btn" onclick="toggleSheet(true)" id="currentLoc">📍 Батыр ауылы</button>
+            <button class="location-btn" onclick="toggleSheet(true)">
+                <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span>
+            </button>
             <div class="lang-switcher">
                 <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
                 <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
@@ -81,20 +91,20 @@
         </div>
     </div>
 
-    <div class="grid">
-        <a href="#" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
-        <a href="#" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
-        <a href="#" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
-        <a href="#" class="card"><i class="fas fa-graduation-cap"></i><span data-key="edu">Білім</span></a>
-        <a href="#" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
-        <a href="#" class="card"><i class="fas fa-car-side"></i><span data-key="auto">Автоқызмет</span></a>
-        <a href="#" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
-        <a href="#" class="card"><i class="fas fa-truck-moving"></i><span data-key="trans">Транспорт</span></a>
+    <div class="grid" id="mainGrid">
+        <a href="ads.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
+        <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
+        <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
+        <a href="edu.html" class="card"><i class="fas fa-graduation-cap"></i><span data-key="edu">Білім</span></a>
+        <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
+        <a href="auto.html" class="card"><i class="fas fa-car-side"></i><span data-key="auto">Автоқызмет</span></a>
+        <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
+        <a href="transport.html" class="card"><i class="fas fa-truck-moving"></i><span data-key="trans">Транспорт</span></a>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
     <div id="locationSheet">
-        <h3 id="sheetTitle">Локация таңдаңыз</h3>
+        <div class="sheet-header" id="sheetTitle">Локация таңдаңыз</div>
         <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
         <div class="loc-item" onclick="selectLoc('Ақтау')">Ақтау</div>
         <div class="loc-item" onclick="selectLoc('Жаңаөзен')">Жаңаөзен</div>
@@ -104,19 +114,20 @@
     </div>
 
     <footer>
-        <a href="#" class="footer-logo">BAIX</a>
+        <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары (Оферта)</a>
+        <a href="index.html" class="footer-logo">BAIX</a>
+        <p style="color: #ccc; font-size: 11px; margin-top: 10px;">© 2026 BATYR INFO</p>
     </footer>
 
     <script>
         const langData = {
-            kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", food: "Тамақтану", auto: "Автоқызмет", jobs: "Жұмыс", trans: "Транспорт", search: "Іздеу...", sheet: "Локация таңдаңыз" },
-            ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", food: "Питание", auto: "Автосервис", jobs: "Работа", trans: "Транспорт", search: "Поиск...", sheet: "Выберите локацию" }
+            kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", food: "Тамақтану", auto: "Автоқызмет", jobs: "Жұмыс", trans: "Транспорт", search: "Іздеу...", sheet: "Локация таңдаңыз", oferta: "Пайдалану шарттары (Оферта)" },
+            ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", food: "Питание", auto: "Автосервис", jobs: "Работа", trans: "Транспорт", search: "Поиск...", sheet: "Выберите локацию", oferta: "Условия использования (Оферта)" }
         };
 
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-            
             document.querySelectorAll('[data-key]').forEach(el => {
                 el.innerText = langData[lang][el.getAttribute('data-key')];
             });
@@ -130,7 +141,7 @@
         }
 
         function selectLoc(city) {
-            document.getElementById('currentLoc').innerText = "📍 " + city;
+            document.getElementById('currentLocText').innerText = city;
             toggleSheet(false);
         }
     </script>
