@@ -7,76 +7,92 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; }
 
         /* HEADER */
         .header-section {
-            background: #007aff; padding: 15px 20px 45px;
-            border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; color: white;
+            background: #007aff; padding: 15px 20px 65px;
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; color: white;
+            position: relative;
         }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         
         .location-btn { 
             background: rgba(255,255,255,0.2); border: none; color: white; 
-            padding: 7px 12px; border-radius: 12px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; gap: 5px;
+            padding: 8px 15px; border-radius: 14px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; font-size: 14px;
         }
 
-        .lang-switcher { display: flex; gap: 4px; }
+        .lang-switcher { display: flex; gap: 6px; }
         .lang-btn { 
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); 
-            color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
+            color: white; padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;
         }
         .lang-btn.active { background: white !important; color: #007aff !important; }
 
-        .header-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; }
+        .header-title { font-size: 34px; font-weight: 900; text-align: center; margin-bottom: 25px; letter-spacing: 1px; }
 
         /* SEARCH */
         .search-box {
-            background: white; border-radius: 18px; padding: 12px 15px;
-            display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background: white; border-radius: 20px; padding: 14px 18px;
+            display: flex; align-items: center; gap: 12px; max-width: 500px; margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 16px; color: #333; }
 
-        /* GRID / CATALOG */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px; max-width: 500px; margin: 0 auto; }
-        .card {
-            background: white; padding: 25px 10px; border-radius: 25px; text-decoration: none;
-            display: flex; flex-direction: column; align-items: center; position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        /* BANNER ANIMATION */
+        .banner-container {
+            padding: 0 20px; margin: -35px auto 0;
+            position: relative; z-index: 100; max-width: 500px;
         }
-        .card i { font-size: 32px; color: var(--main-blue); margin-bottom: 12px; }
-        .card span { font-size: 14px; font-weight: 800; color: #000; }
-        .badge-red { position: absolute; top: 12px; right: 12px; background: #ff3b30; color: white; font-size: 9px; padding: 3px 7px; border-radius: 8px; font-weight: 900; }
-
-        /* BOTTOM SHEET */
-        #locationSheet {
-            position: fixed; bottom: -100%; left: 0; width: 100%; background: white;
-            border-top-left-radius: 30px; border-top-right-radius: 30px;
-            transition: 0.4s; z-index: 1000; padding: 20px 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+        .banner-slider {
+            width: 100%; height: 180px; background: white; border-radius: 30px;
+            overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: relative;
         }
-        #locationSheet.active { bottom: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
+        .banner-item {
+            position: absolute; width: 100%; height: 100%; opacity: 0;
+            transition: opacity 0.8s ease-in-out; display: flex; align-items: center; justify-content: center;
+        }
+        .banner-item.active { opacity: 1; }
+        .banner-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.75); }
         
-        .loc-item { 
-            padding: 18px 25px; border-bottom: 1px solid #f0f0f0; 
-            font-weight: 700; color: #333; cursor: pointer; 
+        .banner-content {
+            position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;
         }
-        .loc-item:last-child { border-bottom: none; }
-        .sheet-header { padding: 0 25px 15px; font-weight: 900; font-size: 18px; border-bottom: 2px solid var(--main-blue); color: var(--main-blue); }
+        .banner-tag {
+            background: #ff3b30; padding: 4px 10px; border-radius: 8px;
+            font-size: 10px; font-weight: 900; text-transform: uppercase;
+        }
+        .banner-content h3 { margin: 8px 0 4px; font-size: 20px; font-weight: 800; }
+        .banner-content p { margin: 0; font-size: 13px; opacity: 0.9; }
 
-        /* FOOTER */
+        /* GRID CATALOG */
+        .grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
+            padding: 30px 20px; max-width: 500px; margin: 0 auto; 
+        }
+        .card {
+            background: white; padding: 28px 10px; border-radius: 28px; text-decoration: none;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.04); transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.95); }
+        .card i { font-size: 34px; color: var(--main-blue); margin-bottom: 14px; }
+        .card span { font-size: 15px; font-weight: 800; color: #1a1a1a; }
+        .badge-red { 
+            position: absolute; top: 15px; right: 15px; background: #ff3b30; 
+            color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; font-weight: 900; 
+        }
+
         footer { text-align: center; padding: 40px 20px; }
-        .footer-logo { font-size: 24px; font-weight: 900; color: #000; text-decoration: none; display: block; margin-top: 15px; }
-        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 14px; }
+        .footer-logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <div class="header-section">
         <div class="top-bar">
-            <button class="location-btn" onclick="toggleSheet(true)">
+            <button class="location-btn">
                 <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span>
             </button>
             <div class="lang-switcher">
@@ -88,6 +104,27 @@
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
             <input type="text" id="searchInput" placeholder="Іздеу...">
+        </div>
+    </div>
+
+    <div class="banner-container">
+        <div class="banner-slider">
+            <div class="banner-item active">
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&h=250&fit=crop">
+                <div class="banner-content">
+                    <span class="banner-tag">АКЦИЯ</span>
+                    <h3>BATYR INFO-ға қосылыңыз</h3>
+                    <p>Алғашқы дүкендерге тіркелу тегін!</p>
+                </div>
+            </div>
+            <div class="banner-item">
+                <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=600&h=250&fit=crop">
+                <div class="banner-content">
+                    <span class="banner-tag" style="background:#34c759">ЖАҢА</span>
+                    <h3>Дүкендер каталогы</h3>
+                    <p>Барлық тауарлар бір жерде</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -104,54 +141,34 @@
         <a href="bath.html" class="card"><i class="fas fa-hot-tub"></i><span data-key="bath">Монша</span></a>
     </div>
 
-    <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
-    <div id="locationSheet">
-        <div class="sheet-header" id="sheetTitle">Локация таңдаңыз</div>
-        <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
-        <div class="loc-item" onclick="selectLoc('Ақтау')">Ақтау</div>
-        <div class="loc-item" onclick="selectLoc('Жаңаөзен')">Жаңаөзен</div>
-        <div class="loc-item" onclick="selectLoc('Бейнеу')">Бейнеу</div>
-        <div class="loc-item" onclick="selectLoc('Шетпе')">Шетпе</div>
-        <div class="loc-item" onclick="selectLoc('Құрық')">Құрық</div>
-    </div>
-
     <footer>
-        <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары (Оферта)</a>
         <a href="index.html" class="footer-logo">BAIX</a>
-        <p style="color: #ccc; font-size: 11px; margin-top: 10px;">© 2026 BATYR INFO</p>
+        <p style="color: #ccc; font-size: 12px; margin-top: 10px;">© 2026 BATYR INFO</p>
     </footer>
 
     <script>
+        // БАННЕР АНИМАЦИЯСЫ (ЛОГИКА)
+        let currentB = 0;
+        const items = document.querySelectorAll('.banner-item');
+
+        function rotateBanners() {
+            items[currentB].classList.remove('active');
+            currentB = (currentB + 1) % items.length;
+            items[currentB].classList.add('active');
+        }
+        setInterval(rotateBanners, 4000); // 4 секунд сайын ауысады
+
+        // ТІЛ АУЫСТЫРУ СӨЗДІГІ
         const langData = {
             kk: { 
-                ads: "Хабарландыру", 
-                shops: "Дүкендер", 
-                med: "Медицина", 
-                edu: "Білім", 
-                fun: "Ойын-сауық",
-                food: "Тамақтану", 
-                auto: "Автоқызмет", 
-                jobs: "Жұмыс", 
-                trans: "Транспорт", 
-                bath: "Монша", 
-                search: "Іздеу...", 
-                sheet: "Локация таңдаңыз", 
-                oferta: "Пайдалану шарттары (Оферта)" 
+                ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", 
+                fun: "Ойын-сауық", food: "Тамақтану", auto: "Автоқызмет", 
+                jobs: "Жұмыс", trans: "Транспорт", bath: "Монша", search: "Іздеу..." 
             },
             ru: { 
-                ads: "Объявления", 
-                shops: "Магазины", 
-                med: "Медицина", 
-                edu: "Образование", 
-                fun: "Развлечения",
-                food: "Питание", 
-                auto: "Автосервис", 
-                jobs: "Работа", 
-                trans: "Транспорт", 
-                bath: "Бани", 
-                search: "Поиск...", 
-                sheet: "Выберите локацию", 
-                oferta: "Условия использования (Оферта)" 
+                ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", 
+                fun: "Развлечения", food: "Питание", auto: "Автосервис", 
+                jobs: "Работа", trans: "Транспорт", bath: "Бани", search: "Поиск..." 
             }
         };
 
@@ -162,17 +179,6 @@
                 el.innerText = langData[lang][el.getAttribute('data-key')];
             });
             document.getElementById('searchInput').placeholder = langData[lang].search;
-            document.getElementById('sheetTitle').innerText = langData[lang].sheet;
-        }
-
-        function toggleSheet(show) {
-            document.getElementById('locationSheet').classList.toggle('active', show);
-            document.getElementById('overlay').style.display = show ? 'block' : 'none';
-        }
-
-        function selectLoc(city) {
-            document.getElementById('currentLocText').innerText = city;
-            toggleSheet(false);
         }
     </script>
 </body>
