@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Хабарландыру - BATYR INFO</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
@@ -19,7 +19,7 @@
         .back-btn { color: white; text-decoration: none; font-size: 20px; }
         .header h2 { margin: 0; font-size: 17px; font-weight: 800; }
 
-        /* LANG SWITCHER (OLX ішіндегі батырмалар) */
+        /* LANG SWITCHER */
         .lang-switcher { display: flex; gap: 5px; }
         .lang-btn { 
             background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
@@ -34,7 +34,8 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 110px; box-sizing: border-box;
         }
-        .card i { font-size: 30px; color: var(--main-blue); margin-bottom: 12px; }
+        .card:active { transform: scale(0.96); }
+        .card i { font-size: 30px; color: var(--main-blue); margin-bottom: 12px; width: 40px; text-align: center; }
         .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
         /* WA BUTTON */
@@ -60,16 +61,16 @@
     </div>
 
     <div class="grid">
-        <a href="#" class="card"><i class="fas fa-cow"></i><span data-key="mal">Мал базар</span></a>
-        <a href="#" class="card"><i class="fas fa-car"></i><span data-key="auto">Көлік сату</span></a>
-        <a href="#" class="card"><i class="fas fa-home"></i><span data-key="home">Жер және Үй</span></a>
-        <a href="#" class="card"><i class="fas fa-tools"></i><span data-key="tools">Құрылыс заттары</span></a>
-        <a href="#" class="card"><i class="fas fa-couch"></i><span data-key="items">Тұрмыстық заттар</span></a>
+        <a href="#" class="card"><i class="fa-solid fa-shrimp" style="transform: rotate(180deg);"></i><span data-key="mal">Мал базар</span></a>
+        <a href="#" class="card"><i class="fa-solid fa-car"></i><span data-key="auto">Көлік сату</span></a>
+        <a href="#" class="card"><i class="fa-solid fa-house"></i><span data-key="home">Жер және Үй</span></a>
+        <a href="#" class="card"><i class="fa-solid fa-screwdriver-wrench"></i><span data-key="tools">Құрылыс заттары</span></a>
+        <a href="#" class="card"><i class="fa-solid fa-couch"></i><span data-key="items">Тұрмыстық заттар</span></a>
     </div>
 
     <div class="wa-btn-container">
         <a href="https://wa.me/77XXXXXXXXX" class="wa-btn" id="waBtn">
-            <i class="fab fa-whatsapp"></i> <span data-key="add">Хабарландыру беру</span>
+            <i class="fab fa-whatsapp" style="font-size: 22px;"></i> <span data-key="add">Хабарландыру беру</span>
         </a>
     </div>
 
