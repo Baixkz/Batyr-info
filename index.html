@@ -77,7 +77,7 @@
     </div>
 
     <div class="grid">
-        <a href="ads.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
+        <a href="olx.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
         <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
         <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
         <a href="edu.html" class="card"><i class="fas fa-graduation-cap"></i><span data-key="edu">Білім</span></a>
@@ -110,4 +110,15 @@
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-            document.querySelectorAll('
+            document.querySelectorAll('[data-key]').forEach(el => { el.innerText = langData[lang][el.getAttribute('data-key')]; });
+            document.getElementById('searchInput').placeholder = langData[lang].search;
+            document.getElementById('sheetTitle').innerText = langData[lang].sheet;
+        }
+        function toggleSheet(show) { document.getElementById('locationSheet').classList.toggle('active', show); document.getElementById('overlay').style.display = show ? 'block' : 'none'; }
+        function selectLoc(city) { document.getElementById('currentLocText').innerText = city; toggleSheet(false); }
+        const track = document.getElementById('promoTrack');
+        let index = 0;
+        setInterval(() => { index = (index + 1) % 2; track.style.transform = `translateX(-${index * 100}%)`; }, 4000);
+    </script>
+</body>
+</html>
