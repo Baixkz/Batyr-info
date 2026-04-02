@@ -16,78 +16,76 @@
             position: relative;
         }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        
-        .location-btn { 
-            background: rgba(255,255,255,0.2); border: none; color: white; 
-            padding: 8px 15px; border-radius: 14px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; font-size: 14px;
-        }
-
+        .location-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; }
         .lang-switcher { display: flex; gap: 6px; }
-        .lang-btn { 
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
-            color: white; padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;
-        }
+        .lang-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
         .lang-btn.active { background: white !important; color: #007aff !important; }
-
         .header-title { font-size: 34px; font-weight: 900; text-align: center; margin-bottom: 25px; letter-spacing: 1px; }
 
         /* SEARCH */
-        .search-box {
-            background: white; border-radius: 20px; padding: 14px 18px;
-            display: flex; align-items: center; gap: 12px; max-width: 500px; margin: 0 auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
+        .search-box { background: white; border-radius: 20px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; font-size: 16px; color: #333; }
 
-        /* BANNER ANIMATION (150px ЫҚШАМ) */
-        .banner-container {
-            padding: 0 20px; margin: -35px auto 0;
-            position: relative; z-index: 100; max-width: 500px;
+        /* STORIES-STYLE SERVICESS BANNER (KASPI STYLE) */
+        .stories-container {
+            padding: 15px 15px 0;
+            margin-top: -45px;
+            position: relative;
+            z-index: 100;
         }
-        .banner-slider {
-            width: 100%; height: 150px; background: white; border-radius: 30px;
-            overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: relative;
-        }
-        .banner-item {
-            position: absolute; width: 100%; height: 100%; opacity: 0;
-            transition: opacity 0.8s ease-in-out; display: flex; align-items: center; justify-content: center;
-        }
-        .banner-item.active { opacity: 1; }
-        .banner-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); }
         
-        .banner-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        .stories-wrapper {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto; /* Оңға қарай сырғиды */
+            scrollbar-width: none; /* Скролл жолағын жасыру */
+            padding-bottom: 10px;
+        }
+        .stories-wrapper::-webkit-scrollbar { display: none; } /* Safari үшін */
+
+        .story-item {
+            min-width: 105px;
+            height: 125px;
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 12px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .story-item:active { transform: scale(0.95); }
+
+        .story-item img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.65); /* Мәтін көрінуі үшін */
         }
 
-        .banner-content {
-            position: absolute; bottom: 15px; left: 20px; right: 20px; color: white;
+        .story-item span {
+            position: relative;
+            color: white;
+            font-size: 11px;
+            font-weight: 900;
+            line-height: 1.2;
+            z-index: 2;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
-        .banner-tag {
-            background: #ff3b30; padding: 3px 9px; border-radius: 8px;
-            font-size: 10px; font-weight: 900; text-transform: uppercase;
-        }
-        .banner-content h3 { margin: 6px 0 2px; font-size: 18px; font-weight: 800; }
-        .banner-content p { margin: 0; font-size: 12px; opacity: 0.9; }
 
         /* GRID CATALOG */
-        .grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
-            padding: 25px 20px; max-width: 500px; margin: 0 auto; 
-        }
-        .card {
-            background: white; padding: 25px 10px; border-radius: 28px; text-decoration: none;
-            display: flex; flex-direction: column; align-items: center; position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.04); transition: transform 0.2s;
-        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; max-width: 500px; margin: 0 auto; }
+        .card { background: white; padding: 25px 10px; border-radius: 28px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.04); transition: transform 0.2s; }
         .card:active { transform: scale(0.95); }
         .card i { font-size: 32px; color: var(--main-blue); margin-bottom: 12px; }
         .card span { font-size: 14px; font-weight: 800; color: #1a1a1a; }
-        .badge-red { 
-            position: absolute; top: 12px; right: 12px; background: #ff3b30; 
-            color: white; font-size: 9px; padding: 3px 7px; border-radius: 10px; font-weight: 900; 
-        }
+        .badge-red { position: absolute; top: 12px; right: 12px; background: #ff3b30; color: white; font-size: 9px; padding: 3px 7px; border-radius: 10px; font-weight: 900; }
 
         footer { text-align: center; padding: 30px 20px; }
         .footer-logo { font-size: 24px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: 2px; }
@@ -98,7 +96,7 @@
     <div class="header-section">
         <div class="top-bar">
             <button class="location-btn">
-                <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span>
+                <i class="fas fa-map-marker-alt"></i> <span>Батыр ауылы</span>
             </button>
             <div class="lang-switcher">
                 <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
@@ -112,35 +110,32 @@
         </div>
     </div>
 
-    <div class="banner-container">
-        <div class="banner-slider">
-            <div class="banner-item active">
-                <img src="https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=600&h=200&fit=crop">
-                <div class="banner-overlay"></div>
-                <div class="banner-content">
-                    <span class="banner-tag">BAIX</span>
-                    <h3>BATYR INFO-ға қосылыңыз</h3>
-                    <p>Ауылыңыздың барлық ақпараты бір жерде</p>
-                </div>
-            </div>
-            <div class="banner-item">
-                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=600&h=200&fit=crop">
-                <div class="banner-overlay"></div>
-                <div class="banner-content">
-                    <span class="banner-tag" style="background:#34c759">БИЗНЕС</span>
-                    <h3>Сіздің дүкеніңіз осында!</h3>
-                    <p>Жарнама беріңіз және кәсібіңізді өсіріңіз</p>
-                </div>
-            </div>
-            <div class="banner-item">
-                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&h=200&fit=crop">
-                <div class="banner-overlay"></div>
-                <div class="banner-content">
-                    <span class="banner-tag" style="background:#ff2d55">FOOD</span>
-                    <h3>Дәмді тағамдарға тапсырыс</h3>
-                    <p>Ауыл ішінде жылдам жеткізу қызметі</p>
-                </div>
-            </div>
+    <div class="stories-container">
+        <div class="stories-wrapper">
+            <a href="#" class="story-item">
+                <img src="https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=200&h=200&fit=crop">
+                <span>BATYR INFO-ға қосылыңыз</span>
+            </a>
+            <a href="#" class="story-item">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=200&h=200&fit=crop">
+                <span>Сіздің дүкеніңіз осында</span>
+            </a>
+            <a href="#" class="story-item">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=200&h=200&fit=crop">
+                <span>Дәмді тағамдар & жеткізу</span>
+            </a>
+            <a href="#" class="story-item">
+                <img src="https://images.unsplash.com/photo-1549421263-5ec394a5ad4c?q=80&w=200&h=200&fit=crop">
+                <span>Жедел такси қызметі</span>
+            </a>
+            <a href="#" class="story-item">
+                <img src="https://images.unsplash.com/photo-1521791136364-798a7bc0d262?q=80&w=200&h=200&fit=crop">
+                <span>Ауылдағы бос жұмыс орындары</span>
+            </a>
+            <a href="#" class="story-item">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=200&h=200&fit=crop">
+                <span>🔥 Күнделікті ыстық жеңілдіктер</span>
+            </a>
         </div>
     </div>
 
@@ -163,35 +158,15 @@
     </footer>
 
     <script>
-        let currentB = 0;
-        const items = document.querySelectorAll('.banner-item');
-
-        function rotateBanners() {
-            items[currentB].classList.remove('active');
-            currentB = (currentB + 1) % items.length;
-            items[currentB].classList.add('active');
-        }
-        setInterval(rotateBanners, 4000);
-
         const langData = {
-            kk: { 
-                ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", 
-                fun: "Ойын-сауық", food: "Тамақтану", auto: "Автоқызмет", 
-                jobs: "Жұмыс", trans: "Транспорт", bath: "Монша", search: "Іздеу..." 
-            },
-            ru: { 
-                ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", 
-                fun: "Развлечения", food: "Питание", auto: "Автосервис", 
-                jobs: "Работа", trans: "Транспорт", bath: "Бани", search: "Поиск..." 
-            }
+            kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", fun: "Ойын-сауық", food: "Тамақтану", auto: "Автоқызмет", jobs: "Жұмыс", trans: "Транспорт", bath: "Монша", search: "Іздеу..." },
+            ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", fun: "Развлечения", food: "Питание", auto: "Автосервис", jobs: "Работа", trans: "Транспорт", bath: "Бани", search: "Поиск..." }
         };
 
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-            document.querySelectorAll('[data-key]').forEach(el => {
-                el.innerText = langData[lang][el.getAttribute('data-key')];
-            });
+            document.querySelectorAll('[data-key]').forEach(el => { el.innerText = langData[lang][el.getAttribute('data-key')]; });
             document.getElementById('searchInput').placeholder = langData[lang].search;
         }
     </script>
