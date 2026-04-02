@@ -40,13 +40,13 @@
         }
         .search-box input { border: none; outline: none; width: 100%; font-size: 16px; color: #333; }
 
-        /* BANNER ANIMATION */
+        /* BANNER ANIMATION (150px ЫҚШАМ) */
         .banner-container {
             padding: 0 20px; margin: -35px auto 0;
             position: relative; z-index: 100; max-width: 500px;
         }
         .banner-slider {
-            width: 100%; height: 180px; background: white; border-radius: 30px;
+            width: 100%; height: 150px; background: white; border-radius: 30px;
             overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: relative;
         }
         .banner-item {
@@ -54,38 +54,43 @@
             transition: opacity 0.8s ease-in-out; display: flex; align-items: center; justify-content: center;
         }
         .banner-item.active { opacity: 1; }
-        .banner-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.75); }
+        .banner-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); }
         
+        .banner-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+
         .banner-content {
-            position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;
+            position: absolute; bottom: 15px; left: 20px; right: 20px; color: white;
         }
         .banner-tag {
-            background: #ff3b30; padding: 4px 10px; border-radius: 8px;
+            background: #ff3b30; padding: 3px 9px; border-radius: 8px;
             font-size: 10px; font-weight: 900; text-transform: uppercase;
         }
-        .banner-content h3 { margin: 8px 0 4px; font-size: 20px; font-weight: 800; }
-        .banner-content p { margin: 0; font-size: 13px; opacity: 0.9; }
+        .banner-content h3 { margin: 6px 0 2px; font-size: 18px; font-weight: 800; }
+        .banner-content p { margin: 0; font-size: 12px; opacity: 0.9; }
 
         /* GRID CATALOG */
         .grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
-            padding: 30px 20px; max-width: 500px; margin: 0 auto; 
+            padding: 25px 20px; max-width: 500px; margin: 0 auto; 
         }
         .card {
-            background: white; padding: 28px 10px; border-radius: 28px; text-decoration: none;
+            background: white; padding: 25px 10px; border-radius: 28px; text-decoration: none;
             display: flex; flex-direction: column; align-items: center; position: relative;
             box-shadow: 0 5px 15px rgba(0,0,0,0.04); transition: transform 0.2s;
         }
         .card:active { transform: scale(0.95); }
-        .card i { font-size: 34px; color: var(--main-blue); margin-bottom: 14px; }
-        .card span { font-size: 15px; font-weight: 800; color: #1a1a1a; }
+        .card i { font-size: 32px; color: var(--main-blue); margin-bottom: 12px; }
+        .card span { font-size: 14px; font-weight: 800; color: #1a1a1a; }
         .badge-red { 
-            position: absolute; top: 15px; right: 15px; background: #ff3b30; 
-            color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; font-weight: 900; 
+            position: absolute; top: 12px; right: 12px; background: #ff3b30; 
+            color: white; font-size: 9px; padding: 3px 7px; border-radius: 10px; font-weight: 900; 
         }
 
-        footer { text-align: center; padding: 40px 20px; }
-        .footer-logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: 2px; }
+        footer { text-align: center; padding: 30px 20px; }
+        .footer-logo { font-size: 24px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -110,19 +115,30 @@
     <div class="banner-container">
         <div class="banner-slider">
             <div class="banner-item active">
-                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&h=250&fit=crop">
+                <img src="https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=600&h=200&fit=crop">
+                <div class="banner-overlay"></div>
                 <div class="banner-content">
-                    <span class="banner-tag">АКЦИЯ</span>
+                    <span class="banner-tag">BAIX</span>
                     <h3>BATYR INFO-ға қосылыңыз</h3>
-                    <p>Алғашқы дүкендерге тіркелу тегін!</p>
+                    <p>Ауылыңыздың барлық ақпараты бір жерде</p>
                 </div>
             </div>
             <div class="banner-item">
-                <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=600&h=250&fit=crop">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=600&h=200&fit=crop">
+                <div class="banner-overlay"></div>
                 <div class="banner-content">
-                    <span class="banner-tag" style="background:#34c759">ЖАҢА</span>
-                    <h3>Дүкендер каталогы</h3>
-                    <p>Барлық тауарлар бір жерде</p>
+                    <span class="banner-tag" style="background:#34c759">БИЗНЕС</span>
+                    <h3>Сіздің дүкеніңіз осында!</h3>
+                    <p>Жарнама беріңіз және кәсібіңізді өсіріңіз</p>
+                </div>
+            </div>
+            <div class="banner-item">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&h=200&fit=crop">
+                <div class="banner-overlay"></div>
+                <div class="banner-content">
+                    <span class="banner-tag" style="background:#ff2d55">FOOD</span>
+                    <h3>Дәмді тағамдарға тапсырыс</h3>
+                    <p>Ауыл ішінде жылдам жеткізу қызметі</p>
                 </div>
             </div>
         </div>
@@ -143,11 +159,10 @@
 
     <footer>
         <a href="index.html" class="footer-logo">BAIX</a>
-        <p style="color: #ccc; font-size: 12px; margin-top: 10px;">© 2026 BATYR INFO</p>
+        <p style="color: #ccc; font-size: 11px; margin-top: 5px;">© 2026 BATYR INFO</p>
     </footer>
 
     <script>
-        // БАННЕР АНИМАЦИЯСЫ (ЛОГИКА)
         let currentB = 0;
         const items = document.querySelectorAll('.banner-item');
 
@@ -156,9 +171,8 @@
             currentB = (currentB + 1) % items.length;
             items[currentB].classList.add('active');
         }
-        setInterval(rotateBanners, 4000); // 4 секунд сайын ауысады
+        setInterval(rotateBanners, 4000);
 
-        // ТІЛ АУЫСТЫРУ СӨЗДІГІ
         const langData = {
             kk: { 
                 ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", 
