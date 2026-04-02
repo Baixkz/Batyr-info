@@ -8,71 +8,33 @@
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; }
-
-        /* HEADER */
-        .header-section {
-            background: #007aff; padding: 15px 20px 35px;
-            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white;
-        }
+        .header-section { background: #007aff; padding: 15px 20px 35px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        
-        .location-btn { 
-            background: rgba(255,255,255,0.2); border: none; color: white; 
-            padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; font-size: 13px;
-        }
-
+        .location-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
         .lang-switcher { display: flex; gap: 5px; }
-        .lang-btn { 
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
-            color: white; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;
-        }
+        .lang-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
         .lang-btn.active { background: white !important; color: #007aff !important; }
-
         .header-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
-
         .live-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
         .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-
-        .search-box {
-            background: white; border-radius: 15px; padding: 10px 15px;
-            display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
+        .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
-
-        /* SLIDER */
         .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
         .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
         .promo-slide img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
         .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
         .promo-text p { margin: 1px 0 0; font-size: 10px; color: #666; }
-
-        /* GRID (10 BLOCKS) */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 5px 20px 25px; max-width: 500px; margin: 0 auto; }
-        .card {
-            background: white; padding: 20px 10px; border-radius: 22px; text-decoration: none;
-            display: flex; flex-direction: column; align-items: center; position: relative;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s;
-        }
+        .card { background: white; padding: 20px 10px; border-radius: 22px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; }
         .card:active { transform: scale(0.96); }
         .card i { font-size: 26px; color: var(--main-blue); margin-bottom: 10px; }
         .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
         .badge-red { position: absolute; top: 10px; right: 10px; background: #ff3b30; color: white; font-size: 8px; padding: 2px 6px; border-radius: 6px; font-weight: 900; }
-
-        /* FOOTER */
         footer { text-align: center; padding: 30px 20px; background: white; margin-top: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; }
         .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 20px; }
         .copy { color: #000; font-size: 14px; font-weight: 800; }
-
-        /* BOTTOM SHEET */
-        #locationSheet {
-            position: fixed; bottom: -100%; left: 0; width: 100%; background: white;
-            border-top-left-radius: 25px; border-top-right-radius: 25px;
-            transition: 0.4s; z-index: 1000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
-            max-height: 70vh; overflow-y: auto;
-        }
+        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 1000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
         #locationSheet.active { bottom: 0; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
         .sheet-header { padding: 20px 25px; font-weight: 900; font-size: 18px; color: var(--main-blue); border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; background: white; }
@@ -80,7 +42,6 @@
     </style>
 </head>
 <body>
-
     <div class="header-section">
         <div class="top-bar">
             <button class="location-btn" onclick="toggleSheet(true)">
@@ -91,14 +52,11 @@
                 <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
             </div>
         </div>
-        
         <div class="header-title">BATYR INFO</div>
-
         <div class="live-bar">
             <div class="live-item"><i class="fas fa-clock"></i> Бесін: 13:24</div>
             <div class="live-item"><i class="fas fa-cloud-sun"></i> +12°C</div>
         </div>
-
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
             <input type="text" id="searchInput" placeholder="Іздеу...">
@@ -146,44 +104,10 @@
 
     <script>
         const langData = {
-            kk: { 
-                ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", fun: "Ойын-сауық",
-                food: "Тамақтану", auto: "Автоқызмет", jobs: "Жұмыс", trans: "Транспорт", bath: "Монша",
-                search: "Іздеу...", oferta: "Пайдалану шарттары", sheet: "Локация таңдаңыз"
-            },
-            ru: { 
-                ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", fun: "Развлечения",
-                food: "Питание", auto: "Автосервис", jobs: "Работа", trans: "Транспорт", bath: "Баня",
-                search: "Поиск...", oferta: "Условия использования", sheet: "Выберите локацию"
-            }
+            kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", fun: "Ойын-сауық", food: "Тамақтану", auto: "Автоқызмет", jobs: "Жұмыс", trans: "Транспорт", bath: "Монша", search: "Іздеу...", oferta: "Пайдалану шарттары", sheet: "Локация таңдаңыз" },
+            ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", fun: "Развлечения", food: "Питание", auto: "Автосервис", jobs: "Работа", trans: "Транспорт", bath: "Баня", search: "Поиск...", oferta: "Условия использования", sheet: "Выберите локацию" }
         };
-
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-            document.querySelectorAll('[data-key]').forEach(el => {
-                el.innerText = langData[lang][el.getAttribute('data-key')];
-            });
-            document.getElementById('searchInput').placeholder = langData[lang].search;
-            document.getElementById('sheetTitle').innerText = langData[lang].sheet;
-        }
-
-        function toggleSheet(show) {
-            document.getElementById('locationSheet').classList.toggle('active', show);
-            document.getElementById('overlay').style.display = show ? 'block' : 'none';
-        }
-
-        function selectLoc(city) {
-            document.getElementById('currentLocText').innerText = city;
-            toggleSheet(false);
-        }
-
-        const track = document.getElementById('promoTrack');
-        let index = 0;
-        setInterval(() => {
-            index = (index + 1) % 2;
-            track.style.transform = `translateX(-${index * 100}%)`;
-        }, 4000);
-    </script>
-</body>
-</html>
+            document.querySelectorAll('
