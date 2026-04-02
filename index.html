@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATYR INFO</title>
+    <title>BATYR INFO | Mangystau</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
@@ -11,139 +11,160 @@
 
         /* HEADER */
         .header-section {
-            background: #007aff; padding: 15px 20px 45px;
-            border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; color: white;
-            text-align: center;
+            background: #007aff; padding: 10px 20px 25px;
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white;
         }
-        .header-title { font-size: 28px; font-weight: 900; margin: 10px 0 20px; letter-spacing: 1px; }
 
-        /* SEARCH */
+        /* LOCATION SELECTOR */
+        .location-selector {
+            position: relative; margin-bottom: 15px; display: inline-block;
+        }
+        .current-location {
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 12px;
+            font-size: 13px; font-weight: 700;
+        }
+        .location-list {
+            display: none; position: absolute; top: 110%; left: 0; 
+            background: white; color: #333; width: 200px; 
+            border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            z-index: 1000; overflow: hidden;
+        }
+        .location-list.show { display: block; animation: slideDown 0.3s ease; }
+        .location-list div { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .location-list div:last-child { border: 0; }
+        .location-list div:active { background: #f0f0f0; }
+
+        .header-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header-main h1 { margin: 0; font-size: 24px; font-weight: 900; }
+
+        .live-chips { display: flex; gap: 8px; }
+        .chip { background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+
         .search-box { 
-            background: white; border-radius: 18px; padding: 12px 16px; 
-            display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background: white; border-radius: 15px; padding: 12px 16px; 
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
 
-        /* LIVE INFO (PRAYER & WEATHER) */
-        .live-info {
-            display: flex; justify-content: center; gap: 10px; margin: -25px auto 15px;
-            position: relative; z-index: 100; padding: 0 20px;
-        }
-        .info-chip {
-            background: white; padding: 8px 15px; border-radius: 50px;
-            font-size: 12px; font-weight: 700; color: #333;
-            display: flex; align-items: center; gap: 6px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        }
-        .info-chip i { color: #007aff; }
+        /* BANNER */
+        .promo-slider { margin: 15px 20px; height: 75px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .promo-track { display: flex; transition: 0.6s ease; height: 100%; }
+        .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
+        .promo-slide img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+        .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
+        .promo-text p { margin: 2px 0 0; font-size: 10px; color: #666; }
 
-        /* AD SLIDER (Wide & Clean) */
-        .promo-slider {
-            margin: 0 20px 20px; height: 100px; 
-            background: white; border-radius: 22px;
-            overflow: hidden; box-shadow: 0 6px 15px rgba(0,0,0,0.06);
-            position: relative;
-        }
-        .promo-track { display: flex; transition: transform 0.6s ease; height: 100%; }
-        .promo-slide {
-            min-width: 100%; height: 100%; display: flex; align-items: center;
-            padding: 0 15px; box-sizing: border-box; gap: 15px;
-        }
-        .promo-slide img { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; }
-        .promo-text h4 { margin: 0; font-size: 15px; color: #1a1a1a; font-weight: 800; }
-        .promo-text p { margin: 3px 0 0; font-size: 12px; color: #666; font-weight: 500; }
+        /* GRID */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
+        .card { background: white; padding: 22px 10px; border-radius: 22px; text-decoration: none; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .card i { font-size: 26px; color: var(--main-blue); margin-bottom: 8px; }
+        .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; }
 
-        /* GRID CATALOG */
-        .grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
-            padding: 0 20px 30px; max-width: 500px; margin: 0 auto; 
-        }
-        .card {
-            background: white; padding: 22px 10px; border-radius: 25px; text-decoration: none;
-            display: flex; flex-direction: column; align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: 0.2s;
-        }
-        .card:active { transform: scale(0.96); }
-        .card i { font-size: 30px; color: var(--main-blue); margin-bottom: 10px; }
-        .card span { font-size: 14px; font-weight: 800; color: #1a1a1a; }
+        /* FOOTER */
+        footer { background: #fff; padding: 30px 20px; text-align: center; border-top: 1px solid #eee; }
+        .footer-logo { font-size: 22px; font-weight: 900; margin-bottom: 15px; display: block; text-decoration: none; color: #000; }
+        .footer-links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .footer-links a { color: #666; font-size: 12px; text-decoration: none; font-weight: 600; }
+        .copy { font-size: 10px; color: #aaa; border-top: 1px solid #f5f5f5; padding-top: 15px; }
 
-        footer { text-align: center; padding-bottom: 30px; font-weight: 900; font-size: 20px; color: #000; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="header-section">
-        <div class="header-title">BATYR INFO</div>
+        <div class="header-main">
+            <h1>BATYR INFO</h1>
+            <div class="live-chips">
+                <div class="chip"><i class="fas fa-clock"></i> 13:24</div>
+                <div class="chip"><i class="fas fa-sun"></i> +12°C</div>
+            </div>
+        </div>
+
+        <div class="location-selector" onclick="toggleLocations()">
+            <div class="current-location" id="selectedLocation">
+                <i class="fas fa-map-marker-alt"></i> Батыр ауылы <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>
+            </div>
+            <div class="location-list" id="locationList">
+                <div onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
+                <div onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
+                <div onclick="selectLoc('Мұнайлы ауданы')">Мұнайлы ауданы</div>
+                <div onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
+                <div onclick="selectLoc('Маңғыстау ауылы')">Маңғыстау ауылы</div>
+                <div onclick="selectLoc('Түпқараған ауданы')">Түпқараған ауданы</div>
+                <div onclick="selectLoc('Қарақия ауданы')">Қарақия ауданы</div>
+                <div onclick="selectLoc('Бейнеу ауданы')">Бейнеу ауданы</div>
+            </div>
+        </div>
+
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
-            <input type="text" placeholder="Дүкен, асхана іздеу...">
-        </div>
-    </div>
-
-    <div class="live-info">
-        <div class="info-chip">
-            <i class="fas fa-clock"></i> <span>Бесін: 13:24</span>
-        </div>
-        <div class="info-chip">
-            <i class="fas fa-cloud-sun"></i> <span>+12°C</span>
+            <input type="text" placeholder="Іздеу...">
         </div>
     </div>
 
     <div class="promo-slider">
         <div class="promo-track" id="promoTrack">
             <div class="promo-slide">
-                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=150">
-                <div class="promo-text">
-                    <h4>"Береке" Асханасы</h4>
-                    <p>Ыстық тағамдар мен мәзірлер</p>
-                </div>
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100">
+                <div class="promo-text"><h4>"Береке" Асханасы</h4><p>Ас мәзірі және жеткізу</p></div>
             </div>
             <div class="promo-slide">
-                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=150">
-                <div class="promo-text">
-                    <h4>"Айгерім" Сұлулық салоны</h4>
-                    <p>Кәсіби шаш қию және макияж</p>
-                </div>
-            </div>
-            <div class="promo-slide">
-                <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=150">
-                <div class="promo-text">
-                    <h4>"Арзан" сауда орталығы</h4>
-                    <p>Күнделікті керек-жарақтар</p>
-                </div>
-            </div>
-            <div class="promo-slide">
-                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=150">
-                <div class="promo-text">
-                    <h4>"Шипа" Моншасы</h4>
-                    <p>Демалыс және тазалық мекені</p>
-                </div>
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=100">
+                <div class="promo-text"><h4>"Шипа" Моншасы</h4><p>Демалыс және тазалық</p></div>
             </div>
         </div>
     </div>
 
     <div class="grid">
-        <a href="ads.html" class="card"><i class="fas fa-bullhorn"></i><span>Хабарландыру</span></a>
-        <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
-        <a href="med.html" class="card"><i class="fas fa-hospital"></i><span>Медицина</span></a>
-        <a href="edu.html" class="card"><i class="fas fa-graduation-cap"></i><span>Білім</span></a>
-        <a href="food.html" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
-        <a href="bath.html" class="card"><i class="fas fa-hot-tub"></i><span>Монша</span></a>
-        <a href="auto.html" class="card"><i class="fas fa-car-side"></i><span>Автоқызмет</span></a>
-        <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span>Жұмыс</span></a>
+        <a href="#" class="card"><i class="fas fa-bullhorn"></i><span>Хабарландыру</span></a>
+        <a href="#" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
+        <a href="#" class="card"><i class="fas fa-hospital"></i><span>Медицина</span></a>
+        <a href="#" class="card"><i class="fas fa-graduation-cap"></i><span>Білім</span></a>
+        <a href="#" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
+        <a href="#" class="card"><i class="fas fa-hot-tub"></i><span>Монша</span></a>
     </div>
 
-    <footer>BAIX</footer>
+    <footer>
+        <a href="#" class="footer-logo">BAIX</a>
+        <div class="footer-links">
+            <a href="#">Пайдалану шарттары</a>
+            <a href="#">Жария оферта</a>
+            <a href="#">Жарнама беру</a>
+        </div>
+        <div class="copy">
+            © 2026 BATYR INFO. Маңғыстау облысы бойынша ақпараттық сервис.
+        </div>
+    </footer>
 
     <script>
+        // Локация тізімін ашу/жабу
+        function toggleLocations() {
+            document.getElementById('locationList').classList.toggle('show');
+        }
+
+        // Локацияны таңдау
+        function selectLoc(name) {
+            document.getElementById('selectedLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${name} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>`;
+            // Тізімді жабу
+            setTimeout(() => { document.getElementById('locationList').classList.remove('show'); }, 100);
+        }
+
+        // Слайдер анимациясы
         const track = document.getElementById('promoTrack');
         let index = 0;
-        function nextSlide() {
-            index = (index + 1) % 4; // 4 слайд бар
+        setInterval(() => {
+            index = (index + 1) % 2;
             track.style.transform = `translateX(-${index * 100}%)`;
+        }, 4000);
+
+        // Тізімнен тыс жерді басса жабылуы үшін
+        window.onclick = function(event) {
+            if (!event.target.closest('.location-selector')) {
+                document.getElementById('locationList').classList.remove('show');
+            }
         }
-        setInterval(nextSlide, 4000); // 4 секунд сайын ауысады
     </script>
 </body>
 </html>
