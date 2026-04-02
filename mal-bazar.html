@@ -9,6 +9,7 @@
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
 
+        /* HEADER */
         .header {
             background: var(--main-blue); padding: 15px 20px;
             display: flex; align-items: center; justify-content: space-between; color: white;
@@ -18,6 +19,7 @@
         .back-btn { color: white; text-decoration: none; font-size: 20px; }
         .header h2 { margin: 0; font-size: 17px; font-weight: 800; }
 
+        /* LANG SWITCHER */
         .lang-switcher { display: flex; gap: 5px; }
         .lang-btn { 
             background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
@@ -25,6 +27,7 @@
         }
         .lang-btn.active { background: white !important; color: var(--main-blue) !important; }
 
+        /* GRID */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; max-width: 500px; margin: 0 auto; }
         .card {
             background: white; padding: 25px 10px; border-radius: 22px; text-decoration: none;
@@ -32,9 +35,17 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 115px; box-sizing: border-box;
         }
         .card:active { transform: scale(0.96); }
-        .card i { font-size: 34px; color: var(--main-blue); margin-bottom: 12px; }
+
+        /* СМАЙЛИКТЕРДІ КӨК ҚЫЛУ СТИЛІ */
+        .emoji { 
+            font-size: 40px; 
+            margin-bottom: 10px; 
+            /* Көк түске бояу үшін фильтр (iOS стиліндегі көк) */
+            filter: invert(34%) sepia(85%) saturate(2853%) hue-rotate(199deg) brightness(101%) contrast(106%);
+        }
         .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
+        /* WA BUTTON */
         .wa-btn-container { padding: 10px 20px 30px; max-width: 500px; margin: 0 auto; }
         .wa-btn {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -57,13 +68,30 @@
     </div>
 
     <div class="grid">
-        <a href="#" class="card"><i class="fa-solid fa-cow"></i><span data-key="iri">Ірі қара</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-horse"></i><span data-key="jylqy">Жылқы</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-sheep"></i><span data-key="qoi">Қой мен Ешкі</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-shuttle-space" style="transform: rotate(-90deg);"></i><span data-key="tuie">Түйе</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-dove"></i><span data-key="qustar">Құстар</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-dog"></i><span data-key="januar">Үй жануарлары</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-wheat-awn"></i><span data-key="shóp">Жем-шөп</span></a>
+        <a href="#" class="card">
+            <span class="emoji">🐂</span>
+            <span data-key="iri">Ірі қара</span>
+        </a>
+        <a href="#" class="card">
+            <span class="emoji">🐴</span>
+            <span data-key="jylqy">Жылқы</span>
+        </a>
+        <a href="#" class="card">
+            <span class="emoji">🐑</span>
+            <span data-key="qoi">Қой мен Ешкі</span>
+        </a>
+        <a href="#" class="card">
+            <span class="emoji">🐪</span>
+            <span data-key="tuie">Түйе</span>
+        </a>
+        <a href="#" class="card">
+            <span class="emoji">🐔</span>
+            <span data-key="qustar">Құстар</span>
+        </a>
+        <a href="#" class="card">
+            <span class="emoji">🐈</span>
+            <span data-key="januar">Үй жануарлары</span>
+        </a>
     </div>
 
     <div class="wa-btn-container">
@@ -72,8 +100,8 @@
 
     <script>
         const langData = {
-            kk: { title: "Мал базар", iri: "Ірі қара", jylqy: "Жылқы", qoi: "Қой мен Ешкі", tuie: "Түйе", qustar: "Құстар", januar: "Үй жануарлары", shóp: "Жем-шөп", add: "Хабарландыру беру" },
-            ru: { title: "Скотный рынок", iri: "Крупный рогатый", jylqy: "Лошади", qoi: "Овцы и Козы", tuie: "Верблюды", qustar: "Птицы", januar: "Домашние животные", shóp: "Корма", add: "Подать объявление" }
+            kk: { title: "Мал базар", iri: "Ірі қара", jylqy: "Жылқы", qoi: "Қой мен Ешкі", tuie: "Түйе", qustar: "Құстар", januar: "Үй жануарлары", add: "Хабарландыру беру" },
+            ru: { title: "Скотный рынок", iri: "Крупный рогатый", jylqy: "Лошади", qoi: "Овцы и Козы", tuie: "Верблюды", qustar: "Птицы", januar: "Домашние животные", add: "Подать объявление" }
         };
 
         function changeLang(lang) {
