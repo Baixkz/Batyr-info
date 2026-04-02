@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мал Базар - BATYR INFO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
@@ -28,24 +27,32 @@
         }
         .lang-btn.active { background: white !important; color: var(--main-blue) !important; }
 
-        /* GRID */
+        /* GRID CATALOG */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; max-width: 500px; margin: 0 auto; }
+        
         .card {
-            background: white; padding: 25px 10px; border-radius: 22px; text-decoration: none;
+            background: white; padding: 20px 10px; border-radius: 22px; text-decoration: none;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 110px; box-sizing: border-box;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 120px; box-sizing: border-box;
         }
         .card:active { transform: scale(0.96); }
-        
-        /* Иконкалар стилі */
-        .card i, .card .mi { 
-            font-size: 40px; 
-            color: var(--main-blue); 
-            margin-bottom: 8px; 
-        }
-        .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
-        /* WA BUTTON */
+        /* ИКОНКАЛАР СТИЛІ */
+        .card img {
+            width: 48px; height: 48px; margin-bottom: 10px;
+            /* Көк түске бояу үшін фильтр (Дал каталогтағыдай) */
+            filter: invert(34%) sepia(85%) saturate(2853%) hue-rotate(199deg) brightness(101%) contrast(106%);
+        }
+        
+        .card span { 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: #1a1a1a; 
+            text-align: center;
+            display: block; /* Жазу түзу тұру үшін */
+        }
+
+        /* WHATSAPP БАТЫРМАСЫ */
         .wa-btn-container { padding: 10px 20px 30px; max-width: 500px; margin: 0 auto; }
         .wa-btn {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -68,17 +75,40 @@
     </div>
 
     <div class="grid">
-        <a href="#" class="card"><i class="fa-solid fa-cow"></i><span data-key="iri">Ірі қара</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-horse"></i><span data-key="jylqy">Жылқы</span></a>
-        
-        <a href="#" class="card"><span class="material-icons-round mi">cruelty_free</span><span data-key="qoi">Қой мен Ешкі</span></a>
-        
-        <a href="#" class="card"><span class="material-icons-round mi">legend_toggle</span><span data-key="tuie" style="transform: rotate(-90deg); display: inline-block;">Түйе</span></a>
-        
-        <a href="#" class="card"><i class="fa-solid fa-kiwi-bird"></i><span data-key="qustar">Құстар</span></a>
-        
-        <a href="#" class="card"><i class="fa-solid fa-dog"></i><span data-key="januar">Үй жануарлары</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-wheat-awn"></i><span data-key="shóp">Жем-шөп</span></a>
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1998/1998610.png" alt="Iri qara">
+            <span data-key="iri">Ірі қара</span>
+        </a>
+
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1998/1998592.png" alt="Jylqy">
+            <span data-key="jylqy">Жылқы</span>
+        </a>
+
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1998/1998620.png" alt="Qoi">
+            <span data-key="qoi">Қой мен Ешкі</span>
+        </a>
+
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1998/1998572.png" alt="Tuie">
+            <span data-key="tuie">Түйе</span>
+        </a>
+
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1998/1998563.png" alt="Qustar">
+            <span data-key="qustar">Құстар</span>
+        </a>
+
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1998/1998599.png" alt="Januar">
+            <span data-key="januar">Үй жануарлары</span>
+        </a>
+
+        <a href="#" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1632/1632596.png" alt="Shop">
+            <span data-key="shóp">Жем-шөп</span>
+        </a>
     </div>
 
     <div class="wa-btn-container">
@@ -102,7 +132,9 @@
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
+            
             document.getElementById('pageTitle').innerText = langData[lang].title;
+            
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 el.innerText = langData[lang][key];
