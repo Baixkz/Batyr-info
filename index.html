@@ -96,12 +96,13 @@
         <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
         <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
         <a href="edu.html" class="card"><i class="fas fa-graduation-cap"></i><span data-key="edu">Білім</span></a>
+        <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span data-key="fun">Ойын-сауық</span></a>
         <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
         <a href="auto.html" class="card"><i class="fas fa-car-side"></i><span data-key="auto">Автоқызмет</span></a>
         <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
         <a href="transport.html" class="card"><i class="fas fa-truck-moving"></i><span data-key="trans">Транспорт</span></a>
-    </div>bath: "Монша",
-
+        <a href="bath.html" class="card"><i class="fas fa-hot-tub"></i><span data-key="bath">Монша</span></a>
+    </div>
 
     <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
     <div id="locationSheet">
@@ -122,11 +123,37 @@
 
     <script>
         const langData = {
-            kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім", food: "Тамақтану", auto: "Автоқызмет", jobs: "Жұмыс", trans: "Транспорт",bath: "Монша",
- search: "Іздеу...", sheet: "Локация таңдаңыз", oferta: "Пайдалану шарттары (Оферта)" },
-            ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование", food: "Питание", auto: "Автосервис", jobs: "Работа", trans: "Транспорт", search: "Поиск...", sheet: "Выберите локацию", oferta: "Условия использования (Оферта)" }
-        };bath: "Бани",
-
+            kk: { 
+                ads: "Хабарландыру", 
+                shops: "Дүкендер", 
+                med: "Медицина", 
+                edu: "Білім", 
+                fun: "Ойын-сауық",
+                food: "Тамақтану", 
+                auto: "Автоқызмет", 
+                jobs: "Жұмыс", 
+                trans: "Транспорт", 
+                bath: "Монша", 
+                search: "Іздеу...", 
+                sheet: "Локация таңдаңыз", 
+                oferta: "Пайдалану шарттары (Оферта)" 
+            },
+            ru: { 
+                ads: "Объявления", 
+                shops: "Магазины", 
+                med: "Медицина", 
+                edu: "Образование", 
+                fun: "Развлечения",
+                food: "Питание", 
+                auto: "Автосервис", 
+                jobs: "Работа", 
+                trans: "Транспорт", 
+                bath: "Бани", 
+                search: "Поиск...", 
+                sheet: "Выберите локацию", 
+                oferta: "Условия использования (Оферта)" 
+            }
+        };
 
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
