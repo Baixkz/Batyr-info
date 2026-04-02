@@ -35,7 +35,8 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 110px; box-sizing: border-box;
         }
         .card:active { transform: scale(0.96); }
-        .card i { font-size: 30px; color: var(--main-blue); margin-bottom: 12px; width: 40px; text-align: center; }
+        /* ИКОНКАЛАРДЫҢ СТИЛІ */
+        .card i { font-size: 34px; color: var(--main-blue); margin-bottom: 12px; width: 40px; text-align: center; }
         .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
         /* WA BUTTON */
@@ -61,7 +62,11 @@
     </div>
 
     <div class="grid">
-        <a href="#" class="card"><i class="fa-solid fa-shrimp" style="transform: rotate(180deg);"></i><span data-key="mal">Мал базар</span></a>
+        <a href="#" class="card">
+            <i class="fa-solid fa-paw"></i>
+            <span data-key="mal">Мал базар</span>
+        </a>
+
         <a href="#" class="card"><i class="fa-solid fa-car"></i><span data-key="auto">Көлік сату</span></a>
         <a href="#" class="card"><i class="fa-solid fa-house"></i><span data-key="home">Жер және Үй</span></a>
         <a href="#" class="card"><i class="fa-solid fa-screwdriver-wrench"></i><span data-key="tools">Құрылыс заттары</span></a>
