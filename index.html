@@ -3,104 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATYR INFO | Mangystau</title>
+    <title>BATYR INFO | BAIX</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; }
 
         /* HEADER */
         .header-section {
-            background: #007aff; padding: 10px 20px 25px;
+            background: #007aff; padding: 15px 20px 35px;
             border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white;
         }
-
-        /* LOCATION SELECTOR */
-        .location-selector {
-            position: relative; margin-bottom: 15px; display: inline-block;
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        
+        .location-btn { 
+            background: rgba(255,255,255,0.2); border: none; color: white; 
+            padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; font-size: 13px;
         }
-        .current-location {
-            display: flex; align-items: center; gap: 8px; cursor: pointer;
-            background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 12px;
-            font-size: 13px; font-weight: 700;
+
+        .lang-switcher { display: flex; gap: 5px; }
+        .lang-btn { 
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
+            color: white; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;
         }
-        .location-list {
-            display: none; position: absolute; top: 110%; left: 0; 
-            background: white; color: #333; width: 200px; 
-            border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-            z-index: 1000; overflow: hidden;
-        }
-        .location-list.show { display: block; animation: slideDown 0.3s ease; }
-        .location-list div { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .location-list div:last-child { border: 0; }
-        .location-list div:active { background: #f0f0f0; }
+        .lang-btn.active { background: white !important; color: #007aff !important; }
 
-        .header-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .header-main h1 { margin: 0; font-size: 24px; font-weight: 900; }
+        .header-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
 
-        .live-chips { display: flex; gap: 8px; }
-        .chip { background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        /* LIVE INFO (PRAYER & WEATHER) */
+        .live-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
+        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
 
-        .search-box { 
-            background: white; border-radius: 15px; padding: 12px 16px; 
-            display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        /* SEARCH */
+        .search-box {
+            background: white; border-radius: 15px; padding: 10px 15px;
+            display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
         .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
 
-        /* BANNER */
-        .promo-slider { margin: 15px 20px; height: 75px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .promo-track { display: flex; transition: 0.6s ease; height: 100%; }
+        /* COMPACT BANNER SLIDER (70px) */
+        .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
         .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
         .promo-slide img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
         .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
-        .promo-text p { margin: 2px 0 0; font-size: 10px; color: #666; }
+        .promo-text p { margin: 1px 0 0; font-size: 10px; color: #666; }
 
-        /* GRID */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
-        .card { background: white; padding: 22px 10px; border-radius: 22px; text-decoration: none; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .card i { font-size: 26px; color: var(--main-blue); margin-bottom: 8px; }
+        /* GRID CATALOG */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 5px 20px 25px; max-width: 500px; margin: 0 auto; }
+        .card {
+            background: white; padding: 20px 10px; border-radius: 22px; text-decoration: none;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s;
+        }
+        .card:active { transform: scale(0.96); }
+        .card i { font-size: 26px; color: var(--main-blue); margin-bottom: 10px; }
         .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+        .badge-red { position: absolute; top: 10px; right: 10px; background: #ff3b30; color: white; font-size: 8px; padding: 2px 6px; border-radius: 6px; font-weight: 900; }
+
+        /* BOTTOM SHEET */
+        #locationSheet {
+            position: fixed; bottom: -100%; left: 0; width: 100%; background: white;
+            border-top-left-radius: 25px; border-top-right-radius: 25px;
+            transition: 0.4s; z-index: 1000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+            max-height: 70vh; overflow-y: auto;
+        }
+        #locationSheet.active { bottom: 0; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
+        .sheet-header { padding: 20px 25px; font-weight: 900; font-size: 18px; color: var(--main-blue); border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; background: white; }
+        .loc-item { padding: 15px 25px; border-bottom: 1px solid #f9f9f9; font-weight: 600; color: #333; font-size: 15px; }
 
         /* FOOTER */
-        footer { background: #fff; padding: 30px 20px; text-align: center; border-top: 1px solid #eee; }
-        .footer-logo { font-size: 22px; font-weight: 900; margin-bottom: 15px; display: block; text-decoration: none; color: #000; }
-        .footer-links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .footer-links a { color: #666; font-size: 12px; text-decoration: none; font-weight: 600; }
-        .copy { font-size: 10px; color: #aaa; border-top: 1px solid #f5f5f5; padding-top: 15px; }
-
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        footer { text-align: center; padding: 30px 20px; background: white; margin-top: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; }
+        .footer-logo { font-size: 22px; font-weight: 900; color: #000; text-decoration: none; display: block; margin: 15px 0; }
+        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 12px; display: inline-block; margin: 0 10px; }
+        .copy { color: #ccc; font-size: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="header-section">
-        <div class="header-main">
-            <h1>BATYR INFO</h1>
-            <div class="live-chips">
-                <div class="chip"><i class="fas fa-clock"></i> 13:24</div>
-                <div class="chip"><i class="fas fa-sun"></i> +12°C</div>
+        <div class="top-bar">
+            <button class="location-btn" onclick="toggleSheet(true)">
+                <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span> <i class="fas fa-chevron-down" style="font-size: 9px;"></i>
+            </button>
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
+                <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
             </div>
         </div>
+        
+        <div class="header-title">BATYR INFO</div>
 
-        <div class="location-selector" onclick="toggleLocations()">
-            <div class="current-location" id="selectedLocation">
-                <i class="fas fa-map-marker-alt"></i> Батыр ауылы <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>
-            </div>
-            <div class="location-list" id="locationList">
-                <div onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
-                <div onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
-                <div onclick="selectLoc('Мұнайлы ауданы')">Мұнайлы ауданы</div>
-                <div onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
-                <div onclick="selectLoc('Маңғыстау ауылы')">Маңғыстау ауылы</div>
-                <div onclick="selectLoc('Түпқараған ауданы')">Түпқараған ауданы</div>
-                <div onclick="selectLoc('Қарақия ауданы')">Қарақия ауданы</div>
-                <div onclick="selectLoc('Бейнеу ауданы')">Бейнеу ауданы</div>
-            </div>
+        <div class="live-bar">
+            <div class="live-item"><i class="fas fa-clock"></i> Бесін: 13:24</div>
+            <div class="live-item"><i class="fas fa-cloud-sun"></i> +12°C</div>
         </div>
 
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
-            <input type="text" placeholder="Іздеу...">
+            <input type="text" id="searchInput" placeholder="Іздеу...">
         </div>
     </div>
 
@@ -108,63 +112,99 @@
         <div class="promo-track" id="promoTrack">
             <div class="promo-slide">
                 <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100">
-                <div class="promo-text"><h4>"Береке" Асханасы</h4><p>Ас мәзірі және жеткізу</p></div>
+                <div class="promo-text"><h4 data-key="berek">"Береке" Асханасы</h4><p data-key="berek_p">Дәмді тағамдар мен мәзірлер</p></div>
+            </div>
+            <div class="promo-slide">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100">
+                <div class="promo-text"><h4 data-key="aige">"Айгерім" Сұлулық салоны</h4><p data-key="aige_p">Кәсіби шаш қию және макияж</p></div>
             </div>
             <div class="promo-slide">
                 <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=100">
-                <div class="promo-text"><h4>"Шипа" Моншасы</h4><p>Демалыс және тазалық</p></div>
+                <div class="promo-text"><h4 data-key="shipa">"Шипа" Моншасы</h4><p data-key="shipa_p">Демалыс және тазалық мекені</p></div>
             </div>
         </div>
     </div>
 
     <div class="grid">
-        <a href="#" class="card"><i class="fas fa-bullhorn"></i><span>Хабарландыру</span></a>
-        <a href="#" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
-        <a href="#" class="card"><i class="fas fa-hospital"></i><span>Медицина</span></a>
-        <a href="#" class="card"><i class="fas fa-graduation-cap"></i><span>Білім</span></a>
-        <a href="#" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
-        <a href="#" class="card"><i class="fas fa-hot-tub"></i><span>Монша</span></a>
+        <a href="ads.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
+        <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
+        <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
+        <a href="edu.html" class="card"><i class="fas fa-graduation-cap"></i><span data-key="edu">Білім</span></a>
+        <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
+        <a href="bath.html" class="card"><i class="fas fa-hot-tub"></i><span data-key="bath">Монша</span></a>
+        <a href="auto.html" class="card"><i class="fas fa-car-side"></i><span data-key="auto">Автоқызмет</span></a>
+        <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
+    <div id="locationSheet">
+        <div class="sheet-header" id="sheetTitle">Локация таңдаңыз</div>
+        <div class="loc-item" onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
+        <div class="loc-item" onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
+        <div class="loc-item" onclick="selectLoc('Мұнайлы ауданы')">Мұнайлы ауданы</div>
+        <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Маңғыстау ауылы')">Маңғыстау ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Түпқараған ауданы')">Түпқараған ауданы</div>
+        <div class="loc-item" onclick="selectLoc('Қарақия ауданы')">Қарақия ауданы</div>
+        <div class="loc-item" onclick="selectLoc('Бейнеу ауданы')">Бейнеу ауданы</div>
     </div>
 
     <footer>
-        <a href="#" class="footer-logo">BAIX</a>
         <div class="footer-links">
-            <a href="#">Пайдалану шарттары</a>
-            <a href="#">Жария оферта</a>
-            <a href="#">Жарнама беру</a>
+            <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
+            <a href="privacy.html" class="footer-link" data-key="privacy">Құпиялылық саясаты</a>
         </div>
-        <div class="copy">
-            © 2026 BATYR INFO. Маңғыстау облысы бойынша ақпараттық сервис.
-        </div>
+        <a href="index.html" class="footer-logo">BAIX</a>
+        <div class="copy">© 2026 BATYR INFO. Mangystau Region.</div>
     </footer>
 
     <script>
-        // Локация тізімін ашу/жабу
-        function toggleLocations() {
-            document.getElementById('locationList').classList.toggle('show');
+        const langData = {
+            kk: { 
+                ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", edu: "Білім",
+                food: "Тамақтану", bath: "Монша", auto: "Автоқызмет", jobs: "Жұмыс",
+                search: "Іздеу...", sheet: "Локация таңдаңыз", oferta: "Пайдалану шарттары", privacy: "Құпиялылық саясаты",
+                berek: '"Береке" Асханасы', berek_p: "Дәмді тағамдар мен мәзірлер",
+                shipa: '"Шипа" Моншасы', shipa_p: "Демалыс және тазалық мекені",
+                aige: '"Айгерім" Сұлулық салоны', aige_p: "Кәсіби шаш қию және макияж"
+            },
+            ru: { 
+                ads: "Объявления", shops: "Магазины", med: "Медицина", edu: "Образование",
+                food: "Питание", bath: "Бани", auto: "Автосервис", jobs: "Работа",
+                search: "Поиск...", sheet: "Выберите локацию", oferta: "Условия использования", privacy: "Политика конфиденциальности",
+                berek: 'Столовая "Береке"', berek_p: "Вкусные блюда и меню",
+                shipa: 'Баня "Шипа"', shipa_p: "Место отдыха и чистоты",
+                aige: 'Салон красоты "Айгерим"', aige_p: "Проф. стрижки и макияж"
+            }
+        };
+
+        function changeLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
+            document.querySelectorAll('[data-key]').forEach(el => {
+                el.innerText = langData[lang][el.getAttribute('data-key')];
+            });
+            document.getElementById('searchInput').placeholder = langData[lang].search;
+            document.getElementById('sheetTitle').innerText = langData[lang].sheet;
         }
 
-        // Локацияны таңдау
-        function selectLoc(name) {
-            document.getElementById('selectedLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${name} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>`;
-            // Тізімді жабу
-            setTimeout(() => { document.getElementById('locationList').classList.remove('show'); }, 100);
+        function toggleSheet(show) {
+            document.getElementById('locationSheet').classList.toggle('active', show);
+            document.getElementById('overlay').style.display = show ? 'block' : 'none';
         }
 
-        // Слайдер анимациясы
+        function selectLoc(city) {
+            document.getElementById('currentLocText').innerText = city;
+            toggleSheet(false);
+        }
+
+        // Слайдер логикасы
         const track = document.getElementById('promoTrack');
         let index = 0;
         setInterval(() => {
-            index = (index + 1) % 2;
+            index = (index + 1) % 3;
             track.style.transform = `translateX(-${index * 100}%)`;
         }, 4000);
-
-        // Тізімнен тыс жерді басса жабылуы үшін
-        window.onclick = function(event) {
-            if (!event.target.closest('.location-selector')) {
-                document.getElementById('locationList').classList.remove('show');
-            }
-        }
     </script>
 </body>
 </html>
