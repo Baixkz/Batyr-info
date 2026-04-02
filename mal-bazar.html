@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мал Базар - BATYR INFO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
@@ -35,7 +36,13 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 110px; box-sizing: border-box;
         }
         .card:active { transform: scale(0.96); }
-        .card i { font-size: 34px; color: var(--main-blue); margin-bottom: 12px; }
+        
+        /* Иконкалар стилі */
+        .card i, .card .mi { 
+            font-size: 40px; 
+            color: var(--main-blue); 
+            margin-bottom: 8px; 
+        }
         .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
         /* WA BUTTON */
@@ -63,9 +70,13 @@
     <div class="grid">
         <a href="#" class="card"><i class="fa-solid fa-cow"></i><span data-key="iri">Ірі қара</span></a>
         <a href="#" class="card"><i class="fa-solid fa-horse"></i><span data-key="jylqy">Жылқы</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-sheep"></i><span data-key="qoi">Қой мен Ешкі</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-shuttle-space" style="transform: rotate(90deg);"></i><span data-key="tuie">Түйе</span></a>
-        <a href="#" class="card"><i class="fa-solid fa-feather-pointed"></i><span data-key="qustar">Құстар</span></a>
+        
+        <a href="#" class="card"><span class="material-icons-round mi">cruelty_free</span><span data-key="qoi">Қой мен Ешкі</span></a>
+        
+        <a href="#" class="card"><span class="material-icons-round mi">legend_toggle</span><span data-key="tuie" style="transform: rotate(-90deg); display: inline-block;">Түйе</span></a>
+        
+        <a href="#" class="card"><i class="fa-solid fa-kiwi-bird"></i><span data-key="qustar">Құстар</span></a>
+        
         <a href="#" class="card"><i class="fa-solid fa-dog"></i><span data-key="januar">Үй жануарлары</span></a>
         <a href="#" class="card"><i class="fa-solid fa-wheat-awn"></i><span data-key="shóp">Жем-шөп</span></a>
     </div>
