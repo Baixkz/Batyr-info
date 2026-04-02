@@ -19,7 +19,6 @@
         .back-btn { color: white; text-decoration: none; font-size: 20px; }
         .header h2 { margin: 0; font-size: 17px; font-weight: 800; }
 
-        /* LANG SWITCHER */
         .lang-switcher { display: flex; gap: 5px; }
         .lang-btn { 
             background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
@@ -30,20 +29,20 @@
         /* GRID */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; max-width: 500px; margin: 0 auto; }
         .card {
-            background: white; padding: 25px 10px; border-radius: 22px; text-decoration: none;
+            background: white; padding: 20px 10px; border-radius: 22px; text-decoration: none;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 115px; box-sizing: border-box;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; height: 130px; box-sizing: border-box;
         }
         .card:active { transform: scale(0.96); }
 
-        /* СМАЙЛИКТЕРДІ КӨК ҚЫЛУ СТИЛІ */
+        /* СМАЙЛИКТЕРДІҢ ӨЛШЕМІ МЕН ТҮСІ */
         .emoji { 
-            font-size: 40px; 
-            margin-bottom: 10px; 
-            /* Көк түске бояу үшін фильтр (iOS стиліндегі көк) */
+            font-size: 55px; /* Размерін үлкейттік */
+            margin-bottom: 8px; 
+            display: block;
             filter: invert(34%) sepia(85%) saturate(2853%) hue-rotate(199deg) brightness(101%) contrast(106%);
         }
-        .card span { font-size: 13px; font-weight: 700; color: #1a1a1a; text-align: center; }
+        .card span:not(.emoji) { font-size: 14px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
         /* WA BUTTON */
         .wa-btn-container { padding: 10px 20px 30px; max-width: 500px; margin: 0 auto; }
@@ -58,7 +57,7 @@
 
     <div class="header">
         <div class="header-left">
-            <a href="olx.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
             <h2 id="pageTitle">Мал базар</h2>
         </div>
         <div class="lang-switcher">
@@ -77,7 +76,7 @@
             <span data-key="jylqy">Жылқы</span>
         </a>
         <a href="#" class="card">
-            <span class="emoji">🐑</span>
+            <span class="emoji">🐏</span>
             <span data-key="qoi">Қой мен Ешкі</span>
         </a>
         <a href="#" class="card">
@@ -89,19 +88,31 @@
             <span data-key="qustar">Құстар</span>
         </a>
         <a href="#" class="card">
-            <span class="emoji">🐈</span>
+            <span class="emoji">🐕</span>
             <span data-key="januar">Үй жануарлары</span>
+        </a>
+        <a href="#" class="card">
+            <span class="emoji">🌾</span>
+            <span data-key="shóp">Жем-шөп</span>
         </a>
     </div>
 
     <div class="wa-btn-container">
-        <a href="https://wa.me/77XXXXXXXXX" class="wa-btn"><i class="fab fa-whatsapp" style="font-size: 22px;"></i> <span data-key="add">Хабарландыру беру</span></a>
+        <a href="https://wa.me/77XXXXXXXXX" class="wa-btn">
+            <i class="fab fa-whatsapp" style="font-size: 22px;"></i> <span data-key="add">Хабарландыру беру</span>
+        </a>
     </div>
 
     <script>
         const langData = {
-            kk: { title: "Мал базар", iri: "Ірі қара", jylqy: "Жылқы", qoi: "Қой мен Ешкі", tuie: "Түйе", qustar: "Құстар", januar: "Үй жануарлары", add: "Хабарландыру беру" },
-            ru: { title: "Скотный рынок", iri: "Крупный рогатый", jylqy: "Лошади", qoi: "Овцы и Козы", tuie: "Верблюды", qustar: "Птицы", januar: "Домашние животные", add: "Подать объявление" }
+            kk: { 
+                title: "Мал базар", iri: "Ірі қара", jylqy: "Жылқы", qoi: "Қой мен Ешкі", 
+                tuie: "Түйе", qustar: "Құстар", januar: "Үй жануарлары", shóp: "Жем-шөп", add: "Хабарландыру беру"
+            },
+            ru: { 
+                title: "Скотный рынок", iri: "Крупный рогатый", jylqy: "Лошади", qoi: "Овцы и Козы", 
+                tuie: "Верблюды", qustar: "Птицы", januar: "Домашние животные", shóp: "Корма", add: "Подать объявление"
+            }
         };
 
         function changeLang(lang) {
