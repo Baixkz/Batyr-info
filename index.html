@@ -7,14 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; }
-        
-        /* БЕТТЕРДІҢ СТИЛІ */
-        .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* HEADER СТИЛЬДЕРІ (СЕНІҢ КОДЫҢ) */
+        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; }
         .header-section { background: #007aff; padding: 15px 20px 35px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .location-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
@@ -27,63 +20,160 @@
         .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
         
-        /* СЕТКА ЖӘНЕ КАРТОЧКАЛАР (СЕНІҢ КОДЫҢ) */
+        .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
+        .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
+        .promo-slide img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+        .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
+        .promo-text p { margin: 1px 0 0; font-size: 10px; color: #666; }
+
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
-        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; cursor: pointer; }
+        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; }
         .card:active { transform: scale(0.96); }
         .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; height: 32px; display: flex; align-items: center; }
         .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
         .badge-red { position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 7px; padding: 1px 5px; border-radius: 5px; font-weight: 900; }
 
-        /* BOTTOM NAVIGATION (ЖАҢА) */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
-        .nav-item.active { color: var(--main-blue); }
+        footer { text-align: center; padding: 30px 20px; background: white; margin-top: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; }
+        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 20px; }
+        .copy { color: #000; font-size: 14px; font-weight: 800; }
 
-        /* ЛОКАЦИЯ ПАНЕЛІ (СЕНІҢ КОДЫҢ) */
-        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
+        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 1000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
         #locationSheet.active { bottom: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1999; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
+        .sheet-header { padding: 20px 25px; font-weight: 900; font-size: 18px; color: var(--main-blue); border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; background: white; }
         .loc-item { padding: 15px 25px; border-bottom: 1px solid #f9f9f9; font-weight: 600; color: #333; font-size: 15px; }
     </style>
 </head>
 <body>
-
-    <div id="home" class="page active">
-        <div class="header-section">
-            <div class="top-bar">
-                <button class="location-btn" onclick="toggleSheet(true)">
-                    <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span> <i class="fas fa-chevron-down" style="font-size: 9px;"></i>
-                </button>
-                <div class="lang-switcher">
-                    <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
-                    <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
-                </div>
-            </div>
-            <div class="header-title">BATYR INFO</div>
-            <div class="live-bar">
-                <div class="live-item"><i class="fas fa-mosque"></i> Жүктелуде...</div>
-                <div class="live-item"><i class="fas fa-temperature-high"></i> ...°C</div>
-            </div>
-            <div class="search-box">
-                <i class="fas fa-search" style="color:#888"></i>
-                <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Іздеу...">
+    <div class="header-section">
+        <div class="top-bar">
+            <button class="location-btn" onclick="toggleSheet(true)">
+                <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span> <i class="fas fa-chevron-down" style="font-size: 9px;"></i>
+            </button>
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
+                <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
             </div>
         </div>
-
-        <div class="grid" id="mainGrid">
-            <div onclick="showPage('market')" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></div>
-            <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
-            <div onclick="showPage('market')" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></div>
-            <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span data-key="trans">Көлік және Такси</span></a>
-            <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
-            <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span data-key="services">Қызмет көрсету</span></a>
-            <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
-            <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span data-key="org">Мекемелер</span></a>
-            <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span data-key="fun">Ойын-сауық</span></a>
+        <div class="header-title">BATYR INFO</div>
+        <div class="live-bar">
+            <div class="live-item"><i class="fas fa-mosque"></i> Жүктелуде...</div>
+            <div class="live-item"><i class="fas fa-temperature-high"></i> ...°C</div>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search" style="color:#888"></i>
+            <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Іздеу...">
         </div>
     </div>
 
-    <div id="market" class="page">
-        <div class="header-section" style="padding-bottom: 20px; border-radius:
+    <div class="promo-slider">
+        <div class="promo-track" id="promoTrack">
+            <div class="promo-slide">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100">
+                <div class="promo-text"><h4>"Береке" Асханасы</h4><p>Дәмді тағамдар мен мәзірлер</p></div>
+            </div>
+            <div class="promo-slide">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100">
+                <div class="promo-text"><h4>"Айгерім" Сұлулық салоны</h4><p>Кәсіби шаш қию және макияж</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid" id="mainGrid">
+        <a href="olx.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
+        <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
+        <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
+        <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span data-key="trans">Көлік және Такси</span></a>
+        <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
+        <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span data-key="services">Қызмет көрсету</span></a>
+        <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
+        <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span data-key="org">Мекемелер</span></a>
+        <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span data-key="fun">Ойын-сауық</span></a>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
+    <div id="locationSheet">
+        <div class="sheet-header" id="sheetTitle">Локация таңдаңыз</div>
+        <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
+        <div class="loc-item" onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
+        <div class="loc-item" onclick="selectLoc('Мұнайлы ауданы')">Мұнайлы ауданы</div>
+        <div class="loc-item" onclick="selectLoc('Бейнеу ауылы')">Бейнеу ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Шетпе ауылы')">Шетпе ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Құрық ауылы')">Құрық ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Форт-Шевченко')">Форт-Шевченко</div>
+    </div>
+
+    <footer>
+        <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
+        <div class="copy">2026 BAIX</div>
+    </footer>
+
+    <script>
+        // АВТОМАТТЫ МӘЛІМЕТТЕР (НАМАЗ ЖӘНЕ АУА РАЙЫ)
+        async function getPrayerTimes() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
+                const data = await res.json();
+                const timings = data.data.timings;
+                const liveBar = document.querySelector('.live-bar');
+                if (liveBar) {
+                    liveBar.children[0].innerHTML = `<i class="fas fa-mosque"></i> Бесін: ${timings.Dhuhr}`;
+                }
+            } catch (e) { console.log("Намаз қатесі"); }
+        }
+
+        async function getWeather() {
+            try {
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
+                const data = await res.json();
+                const temp = Math.round(data.current_weather.temperature);
+                const liveBar = document.querySelector('.live-bar');
+                if (liveBar) {
+                    liveBar.children[1].innerHTML = `<i class="fas fa-temperature-high"></i> ${temp}°C`;
+                }
+            } catch (e) { console.log("Ауа райы қатесі"); }
+        }
+
+        // ІЗДЕУ ЖӘНЕ ТІЛДЕР
+        const langData = {
+            kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", org: "Мекемелер", fun: "Ойын-сауық", food: "Тамақтану", services: "Қызмет көрсету", jobs: "Жұмыс", trans: "Көлік және Такси", search: "Іздеу...", oferta: "Пайдалану шарттары", sheet: "Локация таңдаңыз" },
+            ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", org: "Организации", fun: "Досуг", food: "Питание", services: "Услуги", jobs: "Работа", trans: "Транспорт и Такси", search: "Поиск...", oferta: "Условия использования", sheet: "Выберите локацию" }
+        };
+
+        function searchCards() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementById('mainGrid').getElementsByClassName('card');
+            for (let i = 0; i < cards.length; i++) {
+                let txtValue = cards[i].textContent || cards[i].innerText;
+                cards[i].style.display = txtValue.toLowerCase().indexOf(input) > -1 ? "" : "none";
+            }
+        }
+
+        function changeLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
+            document.querySelectorAll('[data-key]').forEach(el => { el.innerText = langData[lang][el.getAttribute('data-key')]; });
+            document.getElementById('searchInput').placeholder = langData[lang].search;
+            document.getElementById('sheetTitle').innerText = langData[lang].sheet;
+        }
+
+        function toggleSheet(show) { document.getElementById('locationSheet').classList.toggle('active', show); document.getElementById('overlay').style.display = show ? 'block' : 'none'; }
+        function selectLoc(city) { document.getElementById('currentLocText').innerText = city; toggleSheet(false); }
+
+        // СЛАЙДЕР ЖӘНЕ БЕТ ЖҮКТЕЛУІ
+        const track = document.getElementById('promoTrack');
+        let index = 0;
+        setInterval(() => { index = (index + 1) % 2; if(track) track.style.transform = `translateX(-${index * 100}%)`; }, 4000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            getPrayerTimes();
+            getWeather();
+        });
+    </script>
+</body>
+</html>
+
+
+тек 3бет страница кос жазп бер баска тийспе баст страница болек
