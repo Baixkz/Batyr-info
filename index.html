@@ -6,15 +6,15 @@
     <title>BATYR INFO</title>
     
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007aff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="BATYR INFO">
-    <link rel="apple-touch-icon" href="icon-192.png">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; }
         
         .page { display: none; }
         .page.active { display: block; }
@@ -27,7 +27,7 @@
         .lang-btn.active { background: white !important; color: #007aff !important; }
         .header-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
         .live-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
-        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; min-width: 80px; justify-content: center; }
         .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
         
@@ -151,7 +151,8 @@
                 fun: "Ойын-сауық", navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль",
                 search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
                 catalogTitle: "Каталогтар", catalogDesc: "Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.",
-                promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер", prayerLabel: "Бесін"
+                promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер",
+                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" }
             },
             ru: {
                 ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
@@ -159,7 +160,8 @@
                 fun: "Развлечения", navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль",
                 search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
                 catalogTitle: "Каталоги", catalogDesc: "Здесь будут ваши объявления и каталоги.",
-                promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню", prayerLabel: "Обед"
+                promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню",
+                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" }
             }
         };
 
@@ -195,8 +197,31 @@
             try {
                 const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
                 const data = await res.json();
-                const time = data.data.timings.Dhuhr;
-                const label = translations[lang].prayerLabel;
+                const timings = data.data.timings;
+                
+                // Қазіргі уақытқа ең жақын намазды табу
+                const now = new Date();
+                const currentTime = now.getHours() * 60 + now.getMinutes();
+                
+                let nextPrayer = "Fajr";
+                const schedule = [
+                    { name: "Fajr", time: timings.Fajr },
+                    { name: "Dhuhr", time: timings.Dhuhr },
+                    { name: "Asr", time: timings.Asr },
+                    { name: "Maghrib", time: timings.Maghrib },
+                    { name: "Isha", time: timings.Isha }
+                ];
+
+                for (let p of schedule) {
+                    const [h, m] = p.time.split(':');
+                    if (parseInt(h) * 60 + parseInt(m) > currentTime) {
+                        nextPrayer = p.name;
+                        break;
+                    }
+                }
+
+                const label = translations[lang].prayerNames[nextPrayer];
+                const time = timings[nextPrayer];
                 document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${label}: ${time}`;
             } catch (e) { 
                 document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> --:--`;
