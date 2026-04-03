@@ -16,7 +16,6 @@
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; }
         
-        /* PAGE SYSTEM */
         .page { display: none; }
         .page.active { display: block; }
 
@@ -46,7 +45,6 @@
         .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
         .badge-red { position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 7px; padding: 1px 5px; border-radius: 5px; font-weight: 900; }
 
-        /* BOTTOM NAV */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
         .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
@@ -78,7 +76,7 @@
             </div>
             <div class="header-title">BATYR INFO</div>
             <div class="live-bar">
-                <div class="live-item" id="prayerText"><i class="fas fa-mosque"></i> Жүктелуде...</div>
+                <div class="live-item" id="prayerText"><i class="fas fa-mosque"></i> ...</div>
                 <div class="live-item" id="weatherText"><i class="fas fa-temperature-high"></i> ...°C</div>
             </div>
             <div class="search-box">
@@ -88,7 +86,7 @@
         </div>
 
         <div class="promo-slider">
-            <div class="promo-track" id="promoTrack">
+            <div class="promo-track">
                 <div class="promo-slide">
                     <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100">
                     <div class="promo-text"><h4 id="promoTitle">"Береке" Асханасы</h4><p id="promoDesc">Дәмді тағамдар мен мәзірлер</p></div>
@@ -153,7 +151,7 @@
                 fun: "Ойын-сауық", navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль",
                 search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
                 catalogTitle: "Каталогтар", catalogDesc: "Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.",
-                promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер", prayer: "Бесін"
+                promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер", prayerLabel: "Бесін"
             },
             ru: {
                 ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
@@ -161,11 +159,14 @@
                 fun: "Развлечения", navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль",
                 search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
                 catalogTitle: "Каталоги", catalogDesc: "Здесь будут ваши объявления и каталоги.",
-                promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню", prayer: "Обед"
+                promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню", prayerLabel: "Обед"
             }
         };
 
+        let currentLang = 'kk';
+
         function changeLang(lang) {
+            currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
             
@@ -179,7 +180,6 @@
             document.getElementById('promoTitle').textContent = translations[lang].promoTitle;
             document.getElementById('promoDesc').textContent = translations[lang].promoDesc;
             
-            // Намаз бен ауа райын қайта жүктеу (тіл үшін)
             getPrayerTimes(lang);
         }
 
@@ -191,13 +191,16 @@
             window.scrollTo(0,0);
         }
 
-        async function getPrayerTimes(lang = 'kk') {
+        async function getPrayerTimes(lang) {
             try {
                 const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
                 const data = await res.json();
-                const label = translations[lang].prayer;
-                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${label}: ${data.data.timings.Dhuhr}`;
-            } catch (e) { console.log("Намаз қатесі"); }
+                const time = data.data.timings.Dhuhr;
+                const label = translations[lang].prayerLabel;
+                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${label}: ${time}`;
+            } catch (e) { 
+                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> --:--`;
+            }
         }
 
         async function getWeather() {
@@ -205,7 +208,9 @@
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
                 const data = await res.json();
                 document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(data.current_weather.temperature)}°C`;
-            } catch (e) { console.log("Ауа райы қатесі"); }
+            } catch (e) { 
+                document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> --°C`;
+            }
         }
 
         function searchCards() {
@@ -217,16 +222,25 @@
             }
         }
 
-        function toggleSheet(show) { document.getElementById('locationSheet').classList.toggle('active', show); document.getElementById('overlay').style.display = show ? 'block' : 'none'; }
-        function selectLoc(city) { document.getElementById('currentLocText').innerText = city; toggleSheet(false); }
+        function toggleSheet(show) { 
+            document.getElementById('locationSheet').classList.toggle('active', show); 
+            document.getElementById('overlay').style.display = show ? 'block' : 'none'; 
+        }
+
+        function selectLoc(city) { 
+            document.getElementById('currentLocText').innerText = city; 
+            toggleSheet(false); 
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            getPrayerTimes();
             getWeather();
+            getPrayerTimes(currentLang);
         });
 
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
+            });
         }
     </script>
 </body>
