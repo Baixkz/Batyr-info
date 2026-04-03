@@ -78,8 +78,8 @@
             </div>
             <div class="header-title">BATYR INFO</div>
             <div class="live-bar">
-                <div class="live-item"><i class="fas fa-mosque"></i> Жүктелуде...</div>
-                <div class="live-item"><i class="fas fa-temperature-high"></i> ...°C</div>
+                <div class="live-item" id="prayerText"><i class="fas fa-mosque"></i> Жүктелуде...</div>
+                <div class="live-item" id="weatherText"><i class="fas fa-temperature-high"></i> ...°C</div>
             </div>
             <div class="search-box">
                 <i class="fas fa-search" style="color:#888"></i>
@@ -91,7 +91,7 @@
             <div class="promo-track" id="promoTrack">
                 <div class="promo-slide">
                     <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100">
-                    <div class="promo-text"><h4>"Береке" Асханасы</h4><p>Дәмді тағамдар мен мәзірлер</p></div>
+                    <div class="promo-text"><h4 id="promoTitle">"Береке" Асханасы</h4><p id="promoDesc">Дәмді тағамдар мен мәзірлер</p></div>
                 </div>
             </div>
         </div>
@@ -111,17 +111,17 @@
 
     <div id="page-market" class="page">
         <div class="header-section" style="padding-bottom: 20px; border-radius: 0 0 25px 25px;">
-            <div class="header-title">МАРКЕТ</div>
+            <div class="header-title" data-key="navMarket">МАРКЕТ</div>
         </div>
         <div style="padding: 20px; text-align: center; color: #666;">
-            <h3>Каталогтар</h3>
-            <p>Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.</p>
+            <h3 data-key="catalogTitle">Каталогтар</h3>
+            <p data-key="catalogDesc">Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.</p>
         </div>
     </div>
 
     <div id="page-profile" class="page">
         <div class="header-section" style="padding-bottom: 20px; border-radius: 0 0 25px 25px;">
-            <div class="header-title">ПРОФИЛЬ</div>
+            <div class="header-title" data-key="navProfile">ПРОФИЛЬ</div>
         </div>
         <div style="padding: 20px; text-align: center;">
             <footer style="background: transparent;">
@@ -132,9 +132,9 @@
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="showPage('home')"><i class="fas fa-home"></i><span>Басты</span></div>
-        <div class="nav-item" id="nav-market" onclick="showPage('market')"><i class="fas fa-store"></i><span>Маркет</span></div>
-        <div class="nav-item" id="nav-profile" onclick="showPage('profile')"><i class="fas fa-user"></i><span>Профиль</span></div>
+        <div class="nav-item active" id="nav-home" onclick="showPage('home')"><i class="fas fa-home"></i><span data-key="navHome">Басты</span></div>
+        <div class="nav-item" id="nav-market" onclick="showPage('market')"><i class="fas fa-store"></i><span data-key="navMarket">Маркет</span></div>
+        <div class="nav-item" id="nav-profile" onclick="showPage('profile')"><i class="fas fa-user"></i><span data-key="navProfile">Профиль</span></div>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
@@ -146,9 +146,41 @@
     </div>
 
     <script>
-        // СЕН ҚОСҚАН SERVICE WORKER СКРИПТІ
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js');
+        const translations = {
+            kk: {
+                ads: "Хабарландыру", shops: "Дүкендер", jobs: "Жұмыс", trans: "Көлік және Такси",
+                food: "Тамақтану", services: "Қызмет көрсету", med: "Медицина", org: "Мекемелер",
+                fun: "Ойын-сауық", navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль",
+                search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
+                catalogTitle: "Каталогтар", catalogDesc: "Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.",
+                promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер", prayer: "Бесін"
+            },
+            ru: {
+                ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
+                food: "Питание", services: "Услуги", med: "Медицина", org: "Учреждения",
+                fun: "Развлечения", navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль",
+                search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
+                catalogTitle: "Каталоги", catalogDesc: "Здесь будут ваши объявления и каталоги.",
+                promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню", prayer: "Обед"
+            }
+        };
+
+        function changeLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+
+            document.getElementById('searchInput').placeholder = translations[lang].search;
+            document.getElementById('sheetTitle').textContent = translations[lang].locTitle;
+            document.getElementById('promoTitle').textContent = translations[lang].promoTitle;
+            document.getElementById('promoDesc').textContent = translations[lang].promoDesc;
+            
+            // Намаз бен ауа райын қайта жүктеу (тіл үшін)
+            getPrayerTimes(lang);
         }
 
         function showPage(pageId) {
@@ -159,11 +191,12 @@
             window.scrollTo(0,0);
         }
 
-        async function getPrayerTimes() {
+        async function getPrayerTimes(lang = 'kk') {
             try {
                 const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
                 const data = await res.json();
-                document.querySelector('.live-bar').children[0].innerHTML = `<i class="fas fa-mosque"></i> Бесін: ${data.data.timings.Dhuhr}`;
+                const label = translations[lang].prayer;
+                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${label}: ${data.data.timings.Dhuhr}`;
             } catch (e) { console.log("Намаз қатесі"); }
         }
 
@@ -171,7 +204,7 @@
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
                 const data = await res.json();
-                document.querySelector('.live-bar').children[1].innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(data.current_weather.temperature)}°C`;
+                document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(data.current_weather.temperature)}°C`;
             } catch (e) { console.log("Ауа райы қатесі"); }
         }
 
@@ -184,11 +217,6 @@
             }
         }
 
-        function changeLang(lang) {
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-        }
-
         function toggleSheet(show) { document.getElementById('locationSheet').classList.toggle('active', show); document.getElementById('overlay').style.display = show ? 'block' : 'none'; }
         function selectLoc(city) { document.getElementById('currentLocText').innerText = city; toggleSheet(false); }
 
@@ -196,6 +224,10 @@
             getPrayerTimes();
             getWeather();
         });
+
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('sw.js');
+        }
     </script>
 </body>
 </html>
