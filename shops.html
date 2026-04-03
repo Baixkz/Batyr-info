@@ -4,80 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дүкендер - BATYR INFO</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
+        
+        .header-mini { 
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 12px 20px; background: white; border-bottom: 1px solid #eee;
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .back-btn { color: #333; font-size: 18px; text-decoration: none; transition: 0.2s; }
+        .back-btn:active { opacity: 0.5; }
+        #page-title { margin: 0; font-size: 18px; font-weight: 800; color: #1a1a1a; }
+
+        .lang-switcher { display: flex; gap: 4px; background: #f0f0f0; padding: 3px; border-radius: 8px; }
+        .lang-btn { 
+            border: none; background: none; border-radius: 6px; 
+            padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; color: #666;
+        }
+        .lang-btn.active { background: white; color: var(--main-blue); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* ИДЕАЛ GRID ДИЗАЙН */
+        .shop-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
+            padding: 15px; max-width: 600px; margin: 0 auto; 
+        }
+        .grid-item { 
+            background: white; border-radius: 22px; text-decoration: none; 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 20px 10px; transition: 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        .grid-item:active { transform: scale(0.95); background: #fafafa; }
+        
+        /* Иконкалардың артындағы жұмсақ фондар */
+        .grid-item i { 
+            font-size: 26px; margin-bottom: 12px; 
+            width: 55px; height: 55px; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 16px; 
+        }
+        .grid-item span { font-size: 13px; font-weight: 700; color: #333; }
+
+        /* Категориялар бойынша түстер */
+        .market i { background: #fff8e1; color: #ffb300; } /* Сары */
+        .meat i { background: #ffebee; color: #e53935; }   /* Қызыл */
+        .fish i { background: #e1f5fe; color: #039be5; }   /* Көк */
+        .feed i { background: #e8f5e9; color: #43a047; }   /* Жасыл */
+        .build i { background: #efebe9; color: #6d4c41; }  /* Қоңыр */
+        .cloth i { background: #f3e5f5; color: #8e24aa; }  /* Күлгін */
+        .parts i { background: #eceff1; color: #546e7a; }  /* Сұр-көк */
+        .mebel i { background: #fff3e0; color: #f4511e; }  /* Қызғылт сары */
+        .flowers i { background: #fce4ec; color: #d81b60; } /* Қызғылт */
+        .kanz i { background: #e0f2f1; color: #00897b; }   /* Тиффани */
+        .phone i { background: #f5f5f5; color: #212121; }  /* Қара */
+        .cakes i { background: #fff0f6; color: #ff4d94; }  /* Pink */
+        .kids i { background: #eef2ff; color: #4f46e5; }   /* Indigo */
+    </style>
 </head>
 <body>
 
-    <div class="header-mini" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: white; border-bottom: 1px solid #eee;">
-        <div style="display: flex; align-items: center;">
-            <a href="index.html" style="color: #333; font-size: 20px; text-decoration: none;"><i class="fas fa-arrow-left"></i></a>
-            <h2 id="page-title" style="margin-left: 15px; font-size: 18px;">Дүкендер</h2>
+    <div class="header-mini">
+        <div class="header-left">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <h2 id="page-title">Дүкендер</h2>
         </div>
-        <div>
-            <button onclick="changeLang('kk')" style="border: 1px solid #007bff; background: none; border-radius: 4px; padding: 2px 5px; font-size: 12px;">KZ</button>
-            <button onclick="changeLang('ru')" style="border: 1px solid #007bff; background: none; border-radius: 4px; padding: 2px 5px; font-size: 12px;">RU</button>
+        <div class="lang-switcher">
+            <button onclick="setLang('kk')" id="btn-kk" class="lang-btn">KZ</button>
+            <button onclick="setLang('ru')" id="id-ru" class="lang-btn">RU</button>
         </div>
     </div>
 
     <div class="shop-grid">
-        <a href="#" class="grid-item"><i class="fas fa-shopping-basket"></i><span id="m-market">Маркет</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-drumstick-bite"></i><span id="m-meat">Ет</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-fish"></i><span id="m-fish">Балық</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-seedling"></i><span id="m-feed">Жем-шөп</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-tools"></i><span id="m-build">Құрылыс</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-tshirt"></i><span id="m-cloth">Киім</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-shuttle-van"></i><span id="m-parts">Запчасти</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-couch"></i><span id="m-mebel">Мебель</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-gift"></i><span id="m-flowers">Гүлдер</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-book"></i><span id="m-kanz">Оқу-құрал</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-mobile-alt"></i><span id="m-phone">Телефон</span></a>
-        
-        <a href="#" class="grid-item"><i class="fas fa-birthday-cake"></i><span id="m-cakes">Торттар</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-pen-nib"></i><span id="m-stationery">Кеңсе</span></a>
-        <a href="#" class="grid-item"><i class="fas fa-baby-carriage"></i><span id="m-kids">Детские</span></a>
+        <a href="#" class="grid-item market"><i class="fas fa-shopping-basket"></i><span id="m-market">Маркет</span></a>
+        <a href="#" class="grid-item meat"><i class="fas fa-drumstick-bite"></i><span id="m-meat">Ет</span></a>
+        <a href="#" class="grid-item fish"><i class="fas fa-fish"></i><span id="m-fish">Балық</span></a>
+        <a href="#" class="grid-item feed"><i class="fas fa-seedling"></i><span id="m-feed">Жем-шөп</span></a>
+        <a href="#" class="grid-item build"><i class="fas fa-tools"></i><span id="m-build">Құрылыс</span></a>
+        <a href="#" class="grid-item cloth"><i class="fas fa-tshirt"></i><span id="m-cloth">Киім</span></a>
+        <a href="#" class="grid-item parts"><i class="fas fa-car"></i><span id="m-parts">Запчасти</span></a>
+        <a href="#" class="grid-item mebel"><i class="fas fa-couch"></i><span id="m-mebel">Мебель</span></a>
+        <a href="#" class="grid-item flowers"><i class="fas fa-gift"></i><span id="m-flowers">Гүлдер</span></a>
+        <a href="#" class="grid-item kanz"><i class="fas fa-book"></i><span id="m-kanz">Оқу-құрал</span></a>
+        <a href="#" class="grid-item phone"><i class="fas fa-mobile-alt"></i><span id="m-phone">Телефон</span></a>
+        <a href="#" class="grid-item cakes"><i class="fas fa-birthday-cake"></i><span id="m-cakes">Торттар</span></a>
+        <a href="#" class="grid-item kids"><i class="fas fa-baby-carriage"></i><span id="m-kids">Балалар әлемі</span></a>
     </div>
 
     <script>
         const langData = {
-            'kk': {
-                'page-title': 'Дүкендер',
-                'm-market': 'Маркет',
-                'm-meat': 'Ет',
-                'm-fish': 'Балық',
-                'm-feed': 'Жем-шөп',
-                'm-build': 'Құрылыс',
-                'm-cloth': 'Киім',
-                'm-parts': 'Запчасти',
-                'm-mebel': 'Мебель',
-                'm-flowers': 'Гүлдер',
-                'm-kanz': 'Оқу-құрал',
-                'm-phone': 'Телефон',
-                'm-cakes': 'Торттар',
-                'm-stationery': 'Кеңсе тауарлары',
-                'm-kids': 'Балалар әлемі'
-            },
-            'ru': {
-                'page-title': 'Магазины',
-                'm-market': 'Продукты',
-                'm-meat': 'Мясо',
-                'm-fish': 'Рыба',
-                'm-feed': 'Корма',
-                'm-build': 'Стройка',
-                'm-cloth': 'Одежда',
-                'm-parts': 'Запчасти',
-                'm-mebel': 'Мебель',
-                'm-flowers': 'Цветы',
-                'm-kanz': 'Канцтовары',
-                'm-phone': 'Телефон',
-                'm-cakes': 'Торты',
-                'm-stationery': 'Канцтовары',
-                'm-kids': 'Детские'
-            }
+            'kk': { 'page-title': 'Дүкендер', 'm-market': 'Маркет', 'm-meat': 'Ет', 'm-fish': 'Балық', 'm-feed': 'Жем-шөп', 'm-build': 'Құрылыс', 'm-cloth': 'Киім', 'm-parts': 'Запчасти', 'm-mebel': 'Мебель', 'm-flowers': 'Гүлдер', 'm-kanz': 'Оқу-құрал', 'm-phone': 'Телефон', 'm-cakes': 'Торттар', 'm-kids': 'Балалар әлемі' },
+            'ru': { 'page-title': 'Магазины', 'm-market': 'Продукты', 'm-meat': 'Мясо', 'm-fish': 'Рыба', 'm-feed': 'Корма', 'm-build': 'Стройка', 'm-cloth': 'Одежда', 'm-parts': 'Запчасти', 'm-mebel': 'Мебель', 'm-flowers': 'Цветы', 'm-kanz': 'Канцтовары', 'm-phone': 'Телефон', 'm-cakes': 'Торты', 'm-kids': 'Детский мир' }
         };
 
-        function changeLang(lang) {
+        function setLang(lang) {
             localStorage.setItem('selectedLang', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = lang === 'kk' ? document.getElementById('btn-kk') : document.getElementById('id-ru');
+            if(activeBtn) activeBtn.classList.add('active');
+            
             for (let key in langData[lang]) {
                 const el = document.getElementById(key);
                 if (el) el.innerText = langData[lang][key];
@@ -86,7 +112,7 @@
 
         window.onload = () => {
             const savedLang = localStorage.getItem('selectedLang') || 'kk';
-            changeLang(savedLang);
+            setLang(savedLang);
         };
     </script>
 
