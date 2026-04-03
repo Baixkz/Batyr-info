@@ -1,17 +1,21 @@
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open('batyr-info').then((cache) => cache.addAll([
-      'index.html',
-      'olx.html',
-      'shops.html',
-      'jobs.html'
-    ]))
-  );
-});
-
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
-  );
-});
-
+{
+  "name": "BATYR INFO",
+  "short_name": "BATYR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#007aff",
+  "theme_color": "#007aff",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
