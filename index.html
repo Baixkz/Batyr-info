@@ -30,7 +30,6 @@
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
         .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; }
         .card:active { transform: scale(0.96); }
-        /* Иконкаларды біркелкі (28px) және үлкенірек еттім */
         .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; height: 32px; display: flex; align-items: center; }
         .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
         .badge-red { position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 7px; padding: 1px 5px; border-radius: 5px; font-weight: 900; }
@@ -59,8 +58,8 @@
         </div>
         <div class="header-title">BATYR INFO</div>
         <div class="live-bar">
-            <div class="live-item"><i class="fas fa-clock"></i> Бесін: 13:24</div>
-            <div class="live-item"><i class="fas fa-cloud-sun"></i> +12°C</div>
+            <div class="live-item"><i class="fas fa-mosque"></i> Жүктелуде...</div>
+            <div class="live-item"><i class="fas fa-temperature-high"></i> ...°C</div>
         </div>
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
@@ -85,11 +84,9 @@
         <a href="olx.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
         <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
         <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
-
         <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span data-key="trans">Көлік және Такси</span></a>
         <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
         <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span data-key="services">Қызмет көрсету</span></a>
-
         <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
         <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span data-key="org">Мекемелер</span></a>
         <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span data-key="fun">Ойын-сауық</span></a>
@@ -114,12 +111,37 @@
     </footer>
 
     <script>
+        // АВТОМАТТЫ МӘЛІМЕТТЕР (НАМАЗ ЖӘНЕ АУА РАЙЫ)
+        async function getPrayerTimes() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
+                const data = await res.json();
+                const timings = data.data.timings;
+                const liveBar = document.querySelector('.live-bar');
+                if (liveBar) {
+                    liveBar.children[0].innerHTML = `<i class="fas fa-mosque"></i> Бесін: ${timings.Dhuhr}`;
+                }
+            } catch (e) { console.log("Намаз қатесі"); }
+        }
+
+        async function getWeather() {
+            try {
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
+                const data = await res.json();
+                const temp = Math.round(data.current_weather.temperature);
+                const liveBar = document.querySelector('.live-bar');
+                if (liveBar) {
+                    liveBar.children[1].innerHTML = `<i class="fas fa-temperature-high"></i> ${temp}°C`;
+                }
+            } catch (e) { console.log("Ауа райы қатесі"); }
+        }
+
+        // ІЗДЕУ ЖӘНЕ ТІЛДЕР
         const langData = {
             kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", org: "Мекемелер", fun: "Ойын-сауық", food: "Тамақтану", services: "Қызмет көрсету", jobs: "Жұмыс", trans: "Көлік және Такси", search: "Іздеу...", oferta: "Пайдалану шарттары", sheet: "Локация таңдаңыз" },
             ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", org: "Организации", fun: "Досуг", food: "Питание", services: "Услуги", jobs: "Работа", trans: "Транспорт и Такси", search: "Поиск...", oferta: "Условия использования", sheet: "Выберите локацию" }
         };
 
-        // Іздеу функциясы
         function searchCards() {
             let input = document.getElementById('searchInput').value.toLowerCase();
             let cards = document.getElementById('mainGrid').getElementsByClassName('card');
@@ -136,11 +158,19 @@
             document.getElementById('searchInput').placeholder = langData[lang].search;
             document.getElementById('sheetTitle').innerText = langData[lang].sheet;
         }
+
         function toggleSheet(show) { document.getElementById('locationSheet').classList.toggle('active', show); document.getElementById('overlay').style.display = show ? 'block' : 'none'; }
         function selectLoc(city) { document.getElementById('currentLocText').innerText = city; toggleSheet(false); }
+
+        // СЛАЙДЕР ЖӘНЕ БЕТ ЖҮКТЕЛУІ
         const track = document.getElementById('promoTrack');
         let index = 0;
-        setInterval(() => { index = (index + 1) % 2; track.style.transform = `translateX(-${index * 100}%)`; }, 4000);
+        setInterval(() => { index = (index + 1) % 2; if(track) track.style.transform = `translateX(-${index * 100}%)`; }, 4000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            getPrayerTimes();
+            getWeather();
+        });
     </script>
 </body>
 </html>
