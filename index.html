@@ -27,11 +27,11 @@
         .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
         .promo-text p { margin: 1px 0 0; font-size: 10px; color: #666; }
 
-        /* GRID 3 БАҒАНДЫҚ ЖҮЙЕ */
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
         .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; }
         .card:active { transform: scale(0.96); }
-        .card i { font-size: 24px; color: var(--main-blue); margin-bottom: 8px; }
+        /* Иконкаларды біркелкі (28px) және үлкенірек еттім */
+        .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; height: 32px; display: flex; align-items: center; }
         .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
         .badge-red { position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 7px; padding: 1px 5px; border-radius: 5px; font-weight: 900; }
 
@@ -39,7 +39,6 @@
         .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 20px; }
         .copy { color: #000; font-size: 14px; font-weight: 800; }
 
-        /* LOC SHEET */
         #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 1000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
         #locationSheet.active { bottom: 0; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
@@ -65,7 +64,7 @@
         </div>
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
-            <input type="text" id="searchInput" placeholder="Іздеу...">
+            <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Іздеу...">
         </div>
     </div>
 
@@ -82,14 +81,14 @@
         </div>
     </div>
 
-    <div class="grid">
+    <div class="grid" id="mainGrid">
         <a href="olx.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
         <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
         <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
 
         <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span data-key="trans">Көлік және Такси</span></a>
         <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
-        <a href="bath.html" class="card"><i class="fas fa-concierge-bell"></i><span data-key="services">Қызмет көрсету</span></a>
+        <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span data-key="services">Қызмет көрсету</span></a>
 
         <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
         <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span data-key="org">Мекемелер</span></a>
@@ -102,6 +101,11 @@
         <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
         <div class="loc-item" onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
         <div class="loc-item" onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
+        <div class="loc-item" onclick="selectLoc('Мұнайлы ауданы')">Мұнайлы ауданы</div>
+        <div class="loc-item" onclick="selectLoc('Бейнеу ауылы')">Бейнеу ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Шетпе ауылы')">Шетпе ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Құрық ауылы')">Құрық ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Форт-Шевченко')">Форт-Шевченко</div>
     </div>
 
     <footer>
@@ -114,6 +118,17 @@
             kk: { ads: "Хабарландыру", shops: "Дүкендер", med: "Медицина", org: "Мекемелер", fun: "Ойын-сауық", food: "Тамақтану", services: "Қызмет көрсету", jobs: "Жұмыс", trans: "Көлік және Такси", search: "Іздеу...", oferta: "Пайдалану шарттары", sheet: "Локация таңдаңыз" },
             ru: { ads: "Объявления", shops: "Магазины", med: "Медицина", org: "Организации", fun: "Досуг", food: "Питание", services: "Услуги", jobs: "Работа", trans: "Транспорт и Такси", search: "Поиск...", oferta: "Условия использования", sheet: "Выберите локацию" }
         };
+
+        // Іздеу функциясы
+        function searchCards() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementById('mainGrid').getElementsByClassName('card');
+            for (let i = 0; i < cards.length; i++) {
+                let txtValue = cards[i].textContent || cards[i].innerText;
+                cards[i].style.display = txtValue.toLowerCase().indexOf(input) > -1 ? "" : "none";
+            }
+        }
+
         function changeLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
