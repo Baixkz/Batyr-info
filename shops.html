@@ -9,58 +9,63 @@
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-color); margin: 0; padding: 0; }
         
+        /* HEADER - БАСТЫ БЕТПЕН БІРДЕЙ КӨК СТИЛЬ */
         .header-mini { 
             position: sticky; top: 0; z-index: 100;
             display: flex; align-items: center; justify-content: space-between; 
-            padding: 12px 20px; background: white; border-bottom: 1px solid #eee;
+            padding: 15px 20px; background: var(--main-blue); color: white;
+            border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .header-left { display: flex; align-items: center; gap: 15px; }
-        .back-btn { color: #333; font-size: 18px; text-decoration: none; transition: 0.2s; }
-        .back-btn:active { opacity: 0.5; }
-        #page-title { margin: 0; font-size: 18px; font-weight: 800; color: #1a1a1a; }
+        .back-btn { color: white; font-size: 20px; text-decoration: none; display: flex; align-items: center; }
+        #page-title { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: 0.5px; }
 
-        .lang-switcher { display: flex; gap: 4px; background: #f0f0f0; padding: 3px; border-radius: 8px; }
+        /* ТІЛ АУЫСТЫРҒЫШ - БАСТЫ БЕТТЕГІДЕЙ */
+        .lang-switcher { display: flex; gap: 5px; }
         .lang-btn { 
-            border: none; background: none; border-radius: 6px; 
-            padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; color: #666;
+            border: none; background: rgba(255,255,255,0.2); border-radius: 8px; 
+            padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer; color: white;
+            transition: 0.2s;
         }
-        .lang-btn.active { background: white; color: var(--main-blue); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .lang-btn.active { background: white; color: var(--main-blue); }
 
-        /* ИДЕАЛ GRID ДИЗАЙН */
+        /* GRID ЖҮЙЕСІ */
         .shop-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
-            padding: 15px; max-width: 600px; margin: 0 auto; 
+            padding: 20px 15px; max-width: 600px; margin: 0 auto; 
         }
         .grid-item { 
-            background: white; border-radius: 22px; text-decoration: none; 
+            background: white; border-radius: 24px; text-decoration: none; 
             display: flex; flex-direction: column; align-items: center; 
-            padding: 20px 10px; transition: 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 22px 10px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
         }
-        .grid-item:active { transform: scale(0.95); background: #fafafa; }
+        .grid-item:active { transform: scale(0.96); background: #fdfdfd; }
         
-        /* Иконкалардың артындағы жұмсақ фондар */
+        /* ИКОНКАЛАР - КӨК АКЦЕНТПЕН */
         .grid-item i { 
-            font-size: 26px; margin-bottom: 12px; 
-            width: 55px; height: 55px; 
+            font-size: 28px; margin-bottom: 12px; 
+            width: 60px; height: 60px; 
             display: flex; align-items: center; justify-content: center; 
-            border-radius: 16px; 
+            border-radius: 18px;
+            color: var(--main-blue); /* Барлық иконка негізгі көк түсте */
         }
-        .grid-item span { font-size: 13px; font-weight: 700; color: #333; }
+        .grid-item span { font-size: 13.5px; font-weight: 700; color: #1a1a1a; text-align: center; }
 
-        /* Категориялар бойынша түстер */
-        .market i { background: #fff8e1; color: #ffb300; } /* Сары */
-        .meat i { background: #ffebee; color: #e53935; }   /* Қызыл */
-        .fish i { background: #e1f5fe; color: #039be5; }   /* Көк */
-        .feed i { background: #e8f5e9; color: #43a047; }   /* Жасыл */
-        .build i { background: #efebe9; color: #6d4c41; }  /* Қоңыр */
-        .cloth i { background: #f3e5f5; color: #8e24aa; }  /* Күлгін */
-        .parts i { background: #eceff1; color: #546e7a; }  /* Сұр-көк */
-        .mebel i { background: #fff3e0; color: #f4511e; }  /* Қызғылт сары */
-        .flowers i { background: #fce4ec; color: #d81b60; } /* Қызғылт */
-        .kanz i { background: #e0f2f1; color: #00897b; }   /* Тиффани */
-        .phone i { background: #f5f5f5; color: #212121; }  /* Қара */
-        .cakes i { background: #fff0f6; color: #ff4d94; }  /* Pink */
-        .kids i { background: #eef2ff; color: #4f46e5; }   /* Indigo */
+        /* ЖҰМСАҚ ПАСТЕЛЬДІ ФОНДАР */
+        .market i { background: #fff8e1; } 
+        .meat i { background: #ffebee; }   
+        .fish i { background: #e1f5fe; }   
+        .feed i { background: #e8f5e9; }   
+        .build i { background: #efebe9; }  
+        .cloth i { background: #f3e5f5; }  
+        .parts i { background: #eceff1; }  
+        .mebel i { background: #fff3e0; }  
+        .flowers i { background: #fce4ec; } 
+        .kanz i { background: #e0f2f1; }   
+        .phone i { background: #f5f5f5; }  
+        .cakes i { background: #fff0f6; }  
+        .kids i { background: #eef2ff; }   
     </style>
 </head>
 <body>
@@ -72,7 +77,7 @@
         </div>
         <div class="lang-switcher">
             <button onclick="setLang('kk')" id="btn-kk" class="lang-btn">KZ</button>
-            <button onclick="setLang('ru')" id="id-ru" class="lang-btn">RU</button>
+            <button onclick="setLang('ru')" id="btn-ru" class="lang-btn">RU</button>
         </div>
     </div>
 
@@ -101,7 +106,7 @@
         function setLang(lang) {
             localStorage.setItem('selectedLang', lang);
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            const activeBtn = lang === 'kk' ? document.getElementById('btn-kk') : document.getElementById('id-ru');
+            const activeBtn = lang === 'kk' ? document.getElementById('btn-kk') : document.getElementById('btn-ru');
             if(activeBtn) activeBtn.classList.add('active');
             
             for (let key in langData[lang]) {
