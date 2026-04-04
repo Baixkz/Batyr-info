@@ -43,9 +43,21 @@
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "BATYR INFO Mobile"
+      "label": "BATYR INFO интерфейсі"
     }
   ],
   "categories": ["news", "utilities", "business", "shopping"],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Хабарландыру",
+      "url": "/olx.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Маркет",
+      "url": "/#page-market",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
