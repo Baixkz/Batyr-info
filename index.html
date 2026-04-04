@@ -168,7 +168,8 @@
                 catalogTitle: "Каталогтар", catalogDesc: "Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.",
                 promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер",
                 prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" },
-                installBtn: "Қолданбаны орнату"
+                installBtn: "Қолданбаны орнату",
+                installGuide: "Орнату үшін: Браузер мәзірін ашып (≡), 'Басты экранға қосу' батырмасын басыңыз."
             },
             ru: {
                 ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
@@ -178,18 +179,29 @@
                 catalogTitle: "Каталоги", catalogDesc: "Здесь будут ваши объявления и каталоги.",
                 promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню",
                 prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" },
-                installBtn: "Установить приложение"
+                installBtn: "Установить приложение",
+                installGuide: "Для установки: Откройте меню браузера (≡) и нажмите 'Добавить на главный экран'."
             }
         };
 
         let currentLang = 'kk';
         let deferredPrompt;
 
-        // PWA Орнату логикасы
+        // --- PWA ОРНАТУ ЖАҢАРТЫЛҒАН ЛОГИКАСЫ ---
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             document.getElementById('installContainer').style.display = 'block';
+        });
+
+        // Samsung Internet және басқаларында батырманы 3 секундтан кейін көрсету
+        window.addEventListener('load', () => {
+            const isInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (!isInstalled) {
+                setTimeout(() => {
+                    document.getElementById('installContainer').style.display = 'block';
+                }, 3000);
+            }
         });
 
         document.getElementById('installBtn').addEventListener('click', async () => {
@@ -200,12 +212,17 @@
                     document.getElementById('installContainer').style.display = 'none';
                 }
                 deferredPrompt = null;
+            } else {
+                // Егер браузер автоматты орнатуды қолдамаса (Samsung сияқты)
+                alert(translations[currentLang].installGuide);
             }
         });
 
         window.addEventListener('appinstalled', () => {
             document.getElementById('installContainer').style.display = 'none';
+            deferredPrompt = null;
         });
+        // --- ЛОГИКА АЯҚТАЛДЫ ---
 
         function changeLang(lang) {
             currentLang = lang;
