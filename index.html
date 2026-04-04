@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate">
     <title>BATYR INFO</title>
     
     <link rel="manifest" href="manifest.json">
@@ -54,6 +55,10 @@
         footer { text-align: center; padding: 30px 20px; background: white; margin-top: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; }
         .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 20px; }
         .copy { color: #000; font-size: 14px; font-weight: 800; }
+
+        /* Орнату батырмасының стилі */
+        #installContainer { display: none; margin-bottom: 20px; }
+        #installBtn { background: #007aff; color: white; border: none; padding: 15px; border-radius: 18px; font-weight: 800; width: 100%; font-size: 14px; box-shadow: 0 4px 15px rgba(0,122,255,0.3); cursor: pointer; }
 
         #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
         #locationSheet.active { bottom: 0; }
@@ -123,6 +128,10 @@
             <div class="header-title" data-key="navProfile">ПРОФИЛЬ</div>
         </div>
         <div style="padding: 20px; text-align: center;">
+            <div id="installContainer">
+                <button id="installBtn"><i class="fas fa-download"></i> Қолданбаны орнату</button>
+            </div>
+            
             <footer style="background: transparent;">
                 <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
                 <div class="copy">2026 BAIX</div>
@@ -153,7 +162,8 @@
                 search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
                 catalogTitle: "Каталогтар", catalogDesc: "Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.",
                 promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер",
-                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" }
+                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" },
+                installBtn: "Қолданбаны орнату"
             },
             ru: {
                 ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
@@ -162,11 +172,35 @@
                 search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
                 catalogTitle: "Каталоги", catalogDesc: "Здесь будут ваши объявления и каталоги.",
                 promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню",
-                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" }
+                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" },
+                installBtn: "Установить приложение"
             }
         };
 
         let currentLang = 'kk';
+        let deferredPrompt;
+
+        // PWA Орнату логикасы
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installContainer').style.display = 'block';
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('installContainer').style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            document.getElementById('installContainer').style.display = 'none';
+        });
 
         function changeLang(lang) {
             currentLang = lang;
@@ -182,8 +216,8 @@
             document.getElementById('sheetTitle').textContent = translations[lang].locTitle;
             document.getElementById('promoTitle').textContent = translations[lang].promoTitle;
             document.getElementById('promoDesc').textContent = translations[lang].promoDesc;
+            document.getElementById('installBtn').innerHTML = `<i class="fas fa-download"></i> ${translations[lang].installBtn}`;
             
-            // Тіл ауысқанда намаз уақытының атауын бірден жаңарту
             getPrayerTimes(lang);
         }
 
@@ -217,7 +251,6 @@
                     return (parseInt(h) * 60 + parseInt(m)) > currentTime;
                 });
 
-                // Егер бүгінгі намаздар өтіп кетсе, ертеңгі Таң намазын көрсету
                 const nextPrayer = next ? next.name : "Fajr";
                 const label = translations[lang].prayerNames[nextPrayer];
                 const time = timings[nextPrayer];
