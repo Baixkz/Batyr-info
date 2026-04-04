@@ -1,20 +1,26 @@
-// Кэш нұсқасын v3-ке көтердік, бұл браузерге "жаңа нұсқа келді" деген белгі
-const CACHE_NAME = 'batyr-info-v3';
+// Кэш нұсқасын v4-ке көтердік (өзгеріс енуі үшін)
+const CACHE_NAME = 'batyr-info-v4';
 
-// Кэштелетін негізгі файлдар
+// Кэштелетін файлдар тізімі (Нақты жолдарды көрсету маңызды)
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 // Орнату кезеңі
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Жаңа SW-ны кезекке қоймай, бірден іске қосу
+  self.skipWaiting(); 
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Кэш ашылды');
-      return cache.addAll(urlsToCache).catch(err => console.log('Кэштеу қатесі:', err));
+      // Кэштеу кезінде қате кетпеуі үшін әр файлды жеке тексерген дұрыс
+      return Promise.all(
+        urlsToCache.map(url => {
+          return cache.add(url).catch(err => console.error('Кэштеу қатесі (файл табылмады):', url, err));
+        })
+      );
     })
   );
 });
@@ -26,23 +32,29 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Ескі кэш жойылды:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
   );
-  return self.clients.claim(); // Барлық ашық беттерді бақылауға алу
+  return self.clients.claim();
 });
 
-// Ақпаратты алу (Fetch) - "Stale-while-revalidate" стратегиясы
+// Fetch оқиғасы - Samsung Internet үшін "Network-first" немесе "Cache-first" стратегиясы анық болуы керек
 self.addEventListener('fetch', (event) => {
+  // Тек GET сұраныстарын өңдейміз
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // Кэште бар болса - соны қайтару, бірақ параллельді түрде желіден жаңарту
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
+      if (cachedResponse) {
+        return cachedResponse; // Кэште болса, соны береміз
+      }
+
+      return fetch(event.request).then((networkResponse) => {
+        // Желіден келген жауапты кэшке сақтаймыз
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
@@ -50,10 +62,8 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-        // Интернет жоқ болса, ештеңе істемейді (кэш қайтарылып қойған)
+        // Интернет те, кэш те жоқ болса (offline)
       });
-
-      return cachedResponse || fetchPromise;
     })
   );
 });
