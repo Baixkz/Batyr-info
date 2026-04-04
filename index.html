@@ -58,6 +58,9 @@
 
         #installContainer { display: none; margin: 0 20px 20px; }
         #installBtn { background: #007aff; color: white; border: none; padding: 15px; border-radius: 18px; font-weight: 800; width: 100%; font-size: 14px; box-shadow: 0 4px 15px rgba(0,122,255,0.3); cursor: pointer; }
+        
+        /* Samsung/Android нұсқаулық стилі */
+        #install-guide { display: none; margin: 15px 20px; padding: 15px; background: #fff4e5; border-left: 5px solid #ffa500; border-radius: 12px; font-size: 13px; line-height: 1.5; color: #664d03; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
         #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
         #locationSheet.active { bottom: 0; }
@@ -113,34 +116,16 @@
 
         <div id="installContainer">
             <button id="installBtn"><i class="fas fa-download"></i> Қолданбаны орнату</button>
+            <div id="install-guide">
+                <strong id="guideTitle">⚠️ МАҢЫЗДЫ:</strong>
+                <span id="guideText">Егер орнату кезінде "Подозрительное приложение" шықса, <b>"Подробнее"</b> басып, <b>"Все равно установить"</b> таңдаңыз.</span>
+            </div>
         </div>
 
         <footer>
             <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
             <div class="copy">2026 BAIX</div>
         </footer>
-    </div>
-
-    <div id="page-market" class="page">
-        <div class="header-section" style="padding-bottom: 20px; border-radius: 0 0 25px 25px;">
-            <div class="header-title" data-key="navMarket">МАРКЕТ</div>
-        </div>
-        <div style="padding: 20px; text-align: center; color: #666;">
-            <h3 data-key="catalogTitle">Каталогтар</h3>
-            <p data-key="catalogDesc">Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.</p>
-        </div>
-    </div>
-
-    <div id="page-profile" class="page">
-        <div class="header-section" style="padding-bottom: 20px; border-radius: 0 0 25px 25px;">
-            <div class="header-title" data-key="navProfile">ПРОФИЛЬ</div>
-        </div>
-        <div style="padding: 20px; text-align: center;">
-            <footer style="background: transparent;">
-                <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
-                <div class="copy">2026 BAIX</div>
-            </footer>
-        </div>
     </div>
 
     <div class="bottom-nav">
@@ -168,7 +153,8 @@
                 promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер",
                 prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" },
                 installBtn: "Қолданбаны орнату",
-                installGuide: "Орнату үшін: Браузер мәзірін ашып (≡), 'Қолданбаны орнату' немесе 'Басты экранға қосу' батырмасын басыңыз."
+                guideTitle: "⚠️ МАҢЫЗДЫ:",
+                guideText: "Егер орнату кезінде 'Подозрительное приложение' шықса, 'Подробнее' басып, 'Все равно установить' таңдаңыз."
             },
             ru: {
                 ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
@@ -179,7 +165,8 @@
                 promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню",
                 prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" },
                 installBtn: "Установить приложение",
-                installGuide: "Для установки: Откройте меню браузера (≡) и выберите 'Установить приложение' или 'Добавить на главный экран'."
+                guideTitle: "⚠️ ВАЖНО:",
+                guideText: "Если при установке выйдет 'Подозрительное приложение', нажмите 'Подробнее', а затем 'Все равно установить'."
             }
         };
 
@@ -190,7 +177,9 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            // Батырманы және нұсқаулықты бірге көрсетеміз
             document.getElementById('installContainer').style.display = 'block';
+            document.getElementById('install-guide').style.display = 'block';
         });
 
         document.getElementById('installBtn').addEventListener('click', async () => {
@@ -202,8 +191,8 @@
                 }
                 deferredPrompt = null;
             } else {
-                // Samsung немесе басқа автоматты prompt бермейтін браузерлер үшін
-                alert(translations[currentLang].installGuide);
+                // Samsung немесе басқа браузерлер үшін
+                alert(translations[currentLang].guideText);
             }
         });
 
@@ -227,9 +216,13 @@
             document.getElementById('promoTitle').textContent = translations[lang].promoTitle;
             document.getElementById('promoDesc').textContent = translations[lang].promoDesc;
             document.getElementById('installBtn').innerHTML = `<i class="fas fa-download"></i> ${translations[lang].installBtn}`;
+            document.getElementById('guideTitle').textContent = translations[lang].guideTitle;
+            document.getElementById('guideText').innerHTML = translations[lang].guideText;
             
             getPrayerTimes(lang);
         }
+
+        // --- ҚАЛҒАН ФУНКЦИЯЛАР (getPrayerTimes, showPage т.б.) ---
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -294,9 +287,10 @@
             getPrayerTimes(currentLang);
         });
 
+        // SERVICE WORKER ТІРКЕУ (SCOPE ТҮЗЕТІЛДІ)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: '/' }).catch(err => console.log("SW error", err));
+                navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(err => console.log("SW error", err));
             });
         }
     </script>
