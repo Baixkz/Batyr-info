@@ -3,7 +3,7 @@
   "short_name": "BATYR",
   "id": "batyr-info-pwa",
   "description": "Батыр ауылының ақпараттық және қызмет көрсету порталы",
-  "start_url": "/",
+  "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -39,18 +39,11 @@
   ],
   "screenshots": [
     {
-      "src": "https://raw.githubusercontent.com/Baixkz/Batyr-info/main/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "BATYR INFO Mobile"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/Baixkz/Batyr-info/main/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "BATYR INFO Desktop"
     }
   ],
   "categories": ["news", "utilities", "business", "shopping"],
