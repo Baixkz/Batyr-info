@@ -3,7 +3,7 @@
   "short_name": "BATYR",
   "id": "batyr-info-pwa",
   "description": "Батыр ауылының ақпараттық және қызмет көрсету порталы",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -16,31 +16,19 @@
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "icon-512.png",
-      "sizes": "512x512",
+      "src": "screenshot-1.png",
+      "sizes": "1080x2400",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "BATYR INFO интерфейсі"
@@ -51,12 +39,12 @@
   "shortcuts": [
     {
       "name": "Хабарландыру",
-      "url": "/olx.html",
+      "url": "./olx.html",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Маркет",
-      "url": "/#page-market",
+      "url": "./#page-market",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     }
   ]
