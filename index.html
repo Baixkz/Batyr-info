@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kk">
+<html lang="kk" class="notranslate" translate="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -10,61 +10,45 @@
     <meta name="theme-color" content="#007aff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="BATYR INFO">
     <link rel="apple-touch-icon" href="icon-192.png">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding: 0; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
         
-        .page { display: none; }
+        .page { display: none; min-height: 100vh; }
         .page.active { display: block; }
 
+        /* Header */
         .header-section { background: #007aff; padding: 15px 20px 35px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .location-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
-        .lang-switcher { display: flex; gap: 5px; }
-        .lang-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
-        .lang-btn.active { background: white !important; color: #007aff !important; }
         .header-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
-        .live-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
-        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; min-width: 80px; justify-content: center; }
-        .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
         
-        .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
-        .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
-        .promo-slide img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
-        .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
-        .promo-text p { margin: 1px 0 0; font-size: 10px; color: #666; }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
-        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; }
-        .card:active { transform: scale(0.96); }
-        .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; height: 32px; display: flex; align-items: center; }
+        /* Grid */
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
+        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 95px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; }
+        .card i { font-size: 26px; color: var(--main-blue); margin-bottom: 8px; }
         .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
-        .badge-red { position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 7px; padding: 1px 5px; border-radius: 5px; font-weight: 900; }
 
+        /* Төменгі бөлім (Орнату + Шарттар) */
+        .footer-area { padding: 20px 15px 30px; text-align: center; }
+        #installContainer { display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        #installBtn { background: #007aff; color: white; border: none; padding: 14px; border-radius: 15px; font-weight: 800; width: 100%; font-size: 14px; cursor: pointer; }
+        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 10px; }
+        .copy { color: #000; font-size: 14px; font-weight: 900; }
+
+        /* Navigation */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
         .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
         .nav-item.active { color: var(--main-blue); }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
 
-        footer { text-align: center; padding: 30px 20px; background: white; margin-top: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; }
-        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 20px; }
-        .copy { color: #000; font-size: 14px; font-weight: 800; }
-
-        /* Орнату батырмасының стилі */
-        #installContainer { display: none; margin-bottom: 20px; }
-        #installBtn { background: #007aff; color: white; border: none; padding: 15px; border-radius: 18px; font-weight: 800; width: 100%; font-size: 14px; box-shadow: 0 4px 15px rgba(0,122,255,0.3); cursor: pointer; }
-
-        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
+        /* Локация парағы */
+        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-radius: 25px 25px 0 0; transition: 0.4s; z-index: 2000; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); }
         #locationSheet.active { bottom: 0; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1999; }
-        .sheet-header { padding: 20px 25px; font-weight: 900; font-size: 18px; color: var(--main-blue); border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; background: white; }
-        .loc-item { padding: 15px 25px; border-bottom: 1px solid #f9f9f9; font-weight: 600; color: #333; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -73,117 +57,82 @@
         <div class="header-section">
             <div class="top-bar">
                 <button class="location-btn" onclick="toggleSheet(true)">
-                    <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span> <i class="fas fa-chevron-down" style="font-size: 9px;"></i>
+                    <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span> <i class="fas fa-chevron-down"></i>
                 </button>
-                <div class="lang-switcher">
-                    <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
-                    <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
-                </div>
+                <div style="font-weight: 800; font-size: 12px;">KZ</div>
             </div>
             <div class="header-title">BATYR INFO</div>
-            <div class="live-bar">
-                <div class="live-item" id="prayerText"><i class="fas fa-mosque"></i> ...</div>
-                <div class="live-item" id="weatherText"><i class="fas fa-temperature-high"></i> ...°C</div>
-            </div>
-            <div class="search-box">
-                <i class="fas fa-search" style="color:#888"></i>
-                <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Іздеу...">
-            </div>
         </div>
 
-        <div class="promo-slider">
-            <div class="promo-track">
-                <div class="promo-slide">
-                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100" alt="Promo">
-                    <div class="promo-text"><h4 id="promoTitle">"Береке" Асханасы</h4><p id="promoDesc">Дәмді тағамдар мен мәзірлер</p></div>
-                </div>
-            </div>
+        <div class="grid">
+            <a href="olx.html" class="card"><i class="fas fa-bullhorn"></i><span>Хабарландыру</span></a>
+            <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
+            <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span>Жұмыс</span></a>
+            <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span>Такси</span></a>
+            <a href="food.html" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
+            <a href="bath.html" class="card"><i class="fas fa-tools"></i><span>Қызметтер</span></a>
         </div>
 
-        <div class="grid" id="mainGrid">
-            <a href="olx.html" class="card"><span class="badge-red">NEW</span><i class="fas fa-bullhorn"></i><span data-key="ads">Хабарландыру</span></a>
-            <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
-            <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
-            <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span data-key="trans">Көлік және Такси</span></a>
-            <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
-            <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span data-key="services">Қызмет көрсету</span></a>
-            <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
-            <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span data-key="org">Мекемелер</span></a>
-            <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span data-key="fun">Ойын-сауық</span></a>
+        <div class="footer-area">
+            <div id="installContainer">
+                <p style="margin-bottom: 12px; font-weight: 700; font-size: 13px; color: #555;">Қолданбаны орнатып, жылдам кіріңіз</p>
+                <button id="installBtn"><i class="fas fa-download"></i> ОРНАТУ</button>
+            </div>
+            
+            <a href="rules.html" class="footer-link">Пайдалану шарттары</a>
+            <div class="copy">2026 BAIX</div>
         </div>
     </div>
 
     <div id="page-market" class="page">
-        <div class="header-section" style="padding-bottom: 20px; border-radius: 0 0 25px 25px;">
-            <div class="header-title" data-key="navMarket">МАРКЕТ</div>
+        <div class="header-section" style="padding-bottom: 20px;">
+            <div class="header-title">МАРКЕТ</div>
         </div>
-        <div style="padding: 20px; text-align: center; color: #666;">
-            <h3 data-key="catalogTitle">Каталогтар</h3>
-            <p data-key="catalogDesc">Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.</p>
+        <div style="padding: 40px; text-align: center; color: #8e8e93;">
+            <i class="fas fa-store" style="font-size: 40px; margin-bottom: 10px;"></i>
+            <p>Бұл бөлім жақын арада толығады...</p>
         </div>
     </div>
 
     <div id="page-profile" class="page">
-        <div class="header-section" style="padding-bottom: 20px; border-radius: 0 0 25px 25px;">
-            <div class="header-title" data-key="navProfile">ПРОФИЛЬ</div>
+        <div class="header-section" style="padding-bottom: 20px;">
+            <div class="header-title">ПРОФИЛЬ</div>
         </div>
-        <div style="padding: 20px; text-align: center;">
-            <div id="installContainer">
-                <button id="installBtn"><i class="fas fa-download"></i> Қолданбаны орнату</button>
-            </div>
-            
-            <footer style="background: transparent;">
-                <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
-                <div class="copy">2026 BAIX</div>
-            </footer>
+        <div style="padding: 40px; text-align: center; color: #8e8e93;">
+            <i class="fas fa-user-circle" style="font-size: 40px; margin-bottom: 10px;"></i>
+            <p>Жеке кабинет жоспарда бар...</p>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="showPage('home')"><i class="fas fa-home"></i><span data-key="navHome">Басты</span></div>
-        <div class="nav-item" id="nav-market" onclick="showPage('market')"><i class="fas fa-store"></i><span data-key="navMarket">Маркет</span></div>
-        <div class="nav-item" id="nav-profile" onclick="showPage('profile')"><i class="fas fa-user"></i><span data-key="navProfile">Профиль</span></div>
+        <div class="nav-item active" id="nav-home" onclick="showPage('home')"><i class="fas fa-home"></i><span>Басты</span></div>
+        <div class="nav-item" id="nav-market" onclick="showPage('market')"><i class="fas fa-store"></i><span>Маркет</span></div>
+        <div class="nav-item" id="nav-profile" onclick="showPage('profile')"><i class="fas fa-user"></i><span>Профиль</span></div>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
-    <div id="locationSheet">
-        <div class="sheet-header" id="sheetTitle">Локация таңдаңыз</div>
-        <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
-        <div class="loc-item" onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
-        <div class="loc-item" onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
+    <div id="locationSheet" style="padding: 20px;">
+        <h3 style="color:#007aff">Локация таңдаңыз</h3>
+        <div style="padding: 15px 0; border-bottom: 1px solid #eee;" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
+        <div style="padding: 15px 0;" onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
     </div>
 
     <script>
-        const translations = {
-            kk: {
-                ads: "Хабарландыру", shops: "Дүкендер", jobs: "Жұмыс", trans: "Көлік және Такси",
-                food: "Тамақтану", services: "Қызмет көрсету", med: "Медицина", org: "Мекемелер",
-                fun: "Ойын-сауық", navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль",
-                search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
-                catalogTitle: "Каталогтар", catalogDesc: "Бұл жерде сіздің хабарландыруларыңыз бен каталогтарыңыз болады.",
-                promoTitle: '"Береке" Асханасы', promoDesc: "Дәмді тағамдар мен мәзірлер",
-                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" },
-                installBtn: "Қолданбаны орнату"
-            },
-            ru: {
-                ads: "Объявления", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
-                food: "Питание", services: "Услуги", med: "Медицина", org: "Учреждения",
-                fun: "Развлечения", navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль",
-                search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
-                catalogTitle: "Каталоги", catalogDesc: "Здесь будут ваши объявления и каталоги.",
-                promoTitle: 'Столовая "Береке"', promoDesc: "Вкусные блюда и меню",
-                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" },
-                installBtn: "Установить приложение"
-            }
-        };
+        // Беттерді ауыстыру
+        function showPage(p) {
+            document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+            document.getElementById('page-'+p).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-'+p).classList.add('active');
+            window.scrollTo(0,0);
+        }
 
-        let currentLang = 'kk';
+        // PWA Орнату логикасы (Samsung + Chrome)
         let deferredPrompt;
-
-        // PWA Орнату логикасы
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            // Батырманы тек Басты бетте көрсетеміз
             document.getElementById('installContainer').style.display = 'block';
         });
 
@@ -191,113 +140,25 @@
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('installContainer').style.display = 'none';
-                }
+                if (outcome === 'accepted') document.getElementById('installContainer').style.display = 'none';
                 deferredPrompt = null;
+            } else {
+                alert("Орнату үшін браузер менюінен 'Добавить на главный экран' таңдаңыз.");
             }
         });
 
-        window.addEventListener('appinstalled', () => {
-            document.getElementById('installContainer').style.display = 'none';
-        });
-
-        function changeLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-            
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[lang][key]) el.textContent = translations[lang][key];
-            });
-
-            document.getElementById('searchInput').placeholder = translations[lang].search;
-            document.getElementById('sheetTitle').textContent = translations[lang].locTitle;
-            document.getElementById('promoTitle').textContent = translations[lang].promoTitle;
-            document.getElementById('promoDesc').textContent = translations[lang].promoDesc;
-            document.getElementById('installBtn').innerHTML = `<i class="fas fa-download"></i> ${translations[lang].installBtn}`;
-            
-            getPrayerTimes(lang);
+        function toggleSheet(s) {
+            document.getElementById('locationSheet').classList.toggle('active', s);
+            document.getElementById('overlay').style.display = s ? 'block' : 'none';
         }
 
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('nav-' + pageId).classList.add('active');
-            window.scrollTo(0,0);
+        function selectLoc(c) {
+            document.getElementById('currentLocText').innerText = c;
+            toggleSheet(false);
         }
-
-        async function getPrayerTimes(lang) {
-            try {
-                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
-                const data = await res.json();
-                const timings = data.data.timings;
-                
-                const now = new Date();
-                const currentTime = now.getHours() * 60 + now.getMinutes();
-                
-                const schedule = [
-                    { name: "Fajr", time: timings.Fajr },
-                    { name: "Dhuhr", time: timings.Dhuhr },
-                    { name: "Asr", time: timings.Asr },
-                    { name: "Maghrib", time: timings.Maghrib },
-                    { name: "Isha", time: timings.Isha }
-                ];
-
-                let next = schedule.find(p => {
-                    const [h, m] = p.time.split(':');
-                    return (parseInt(h) * 60 + parseInt(m)) > currentTime;
-                });
-
-                const nextPrayer = next ? next.name : "Fajr";
-                const label = translations[lang].prayerNames[nextPrayer];
-                const time = timings[nextPrayer];
-                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${label}: ${time}`;
-            } catch (e) { 
-                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> --:--`;
-            }
-        }
-
-        async function getWeather() {
-            try {
-                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
-                const data = await res.json();
-                document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(data.current_weather.temperature)}°C`;
-            } catch (e) { 
-                document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> --°C`;
-            }
-        }
-
-        function searchCards() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementById('mainGrid').getElementsByClassName('card');
-            for (let i = 0; i < cards.length; i++) {
-                let txtValue = cards[i].innerText;
-                cards[i].style.display = txtValue.toLowerCase().indexOf(input) > -1 ? "" : "none";
-            }
-        }
-
-        function toggleSheet(show) { 
-            document.getElementById('locationSheet').classList.toggle('active', show); 
-            document.getElementById('overlay').style.display = show ? 'block' : 'none'; 
-        }
-
-        function selectLoc(city) { 
-            document.getElementById('currentLocText').innerText = city; 
-            toggleSheet(false); 
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            getWeather();
-            getPrayerTimes(currentLang);
-        });
 
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
-            });
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
