@@ -3,49 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Жарнама қосу</title>
+    <title>Жарнама қосу - Batyrsity</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; }
-        .card { max-width: 450px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        input, select, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; }
+        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; color: #333; }
+        .card { max-width: 450px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 20px; color: #007bff; }
+        label { font-size: 14px; font-weight: bold; margin-top: 10px; display: block; }
+        input, select, textarea, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; }
         
-        /* СУРЕТ ЖҮКТЕУ БЛОГЫ - АНЫҚ КӨРІНЕТІН ҚЫЛДЫҚ */
         .upload-area { 
-            border: 3px dashed #007bff; 
-            background: #f8fbff;
-            padding: 30px; 
-            text-align: center; 
-            margin-top: 15px; 
-            cursor: pointer; 
-            color: #007bff; 
-            font-weight: bold;
-            border-radius: 15px;
+            border: 3px dashed #007bff; background: #f8fbff; padding: 25px; 
+            text-align: center; margin-top: 20px; cursor: pointer; 
+            color: #007bff; font-weight: bold; border-radius: 15px;
         }
-        #preview { width: 100%; margin-top: 10px; border-radius: 10px; display: none; }
-        #sendBtn { background: #007bff; color: white; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; }
-        #sendBtn:disabled { background: #ccc; }
+        #previewContainer { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
+        #previewContainer img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid #007bff; }
+        
+        #sendBtn { background: #007bff; color: white; border: none; font-size: 18px; font-weight: bold; margin-top: 25px; transition: 0.3s; }
+        #sendBtn:disabled { background: #ccc; cursor: not-allowed; }
+        .info-text { font-size: 12px; color: #777; text-align: center; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2 style="text-align:center;">Жарнама беру</h2>
+    <h2>Жаңа жарнама</h2>
     
+    <label>Бөлімді таңдаңыз:</label>
     <select id="mainCat">
+        <option value="">-- Таңдау --</option>
         <option value="market">🛒 Маркет</option>
         <option value="jobs">💼 Жұмыс</option>
         <option value="services">🛠 Сервистер</option>
     </select>
 
+    <label>Категория:</label>
+    <select id="subCat">
+        <option value="">-- Алдымен бөлімді таңдаңыз --</option>
+    </select>
+
     <input type="text" id="title" placeholder="Тауар атауы">
     <input type="number" id="price" placeholder="Бағасы (₸)">
-    <input type="tel" id="phone" placeholder="Телефон нөмірі">
+    <input type="tel" id="phone" placeholder="Телефон (мысалы: 8707...)">
+    <textarea id="desc" placeholder="Сипаттама (міндетті емес)" rows="3"></textarea>
 
     <div class="upload-area" onclick="document.getElementById('imgInp').click()">
-        📸 СУРЕТ ТАҢДАУ
-        <input type="file" id="imgInp" accept="image/*" hidden>
+        📸 СУРЕТ ТАҢДАУ (Макс: 3)
+        <input type="file" id="imgInp" accept="image/*" multiple hidden>
     </div>
-    <img id="preview">
+    <div id="previewContainer"></div>
+    <p class="info-text">Суреттер автоматты түрде оңтайландырылады</p>
 
     <button id="sendBtn">ЖАРИЯЛАУ</button>
 </div>
@@ -67,16 +74,47 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    // 1. СУРЕТТІ КӨРУ (PREVIEW)
-    document.getElementById('imgInp').onchange = (e) => {
-        const file = e.target.files[0];
-        if(file) {
-            document.getElementById('preview').src = URL.createObjectURL(file);
-            document.getElementById('preview').style.display = 'block';
-        }
+    let selectedFiles = [];
+
+    // 1. АВТОМАТТЫ КАТЕГОРИЯЛАР
+    document.getElementById('mainCat').onchange = async (e) => {
+        const subCat = document.getElementById('subCat');
+        const val = e.target.value;
+        subCat.innerHTML = "<option>Жүктелуде...</option>";
+        if(!val) return subCat.innerHTML = "";
+        try {
+            const doc = await db.collection("categories").doc(val).get();
+            if(doc.exists) {
+                const list = doc.data().list || [];
+                subCat.innerHTML = "";
+                list.forEach(item => {
+                    let opt = document.createElement('option');
+                    opt.value = item; opt.innerText = item;
+                    subCat.appendChild(opt);
+                });
+            }
+        } catch(err) { subCat.innerHTML = "<option>Қате кетті</option>"; }
     };
 
-    // 2. ИДЕЯЛ СЫҒУ ФУНКЦИЯСЫ (САПА САҚТАЛАДЫ, САЛМАҚ АЗАЯДЫ)
+    // 2. СУРЕТ ТАҢДАУ ЖӘНЕ 3-КЕ ШЕКТЕУ
+    document.getElementById('imgInp').onchange = (e) => {
+        const files = Array.from(e.target.files);
+        if(files.length > 3) {
+            alert("Ең көп дегенде 3 сурет таңдауға болады!");
+            e.target.value = "";
+            return;
+        }
+        selectedFiles = files;
+        const container = document.getElementById('previewContainer');
+        container.innerHTML = "";
+        selectedFiles.forEach(file => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            container.appendChild(img);
+        });
+    };
+
+    // 3. СУРЕТТІ ҚАТТЫ СЫҒУ (ТЕЗ ЖҮКТЕЛУ ҮШІН)
     async function compressImage(file) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -86,64 +124,64 @@
                 img.src = event.target.result;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 1200; // Оңтайлы ені
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
+                    const MAX = 1000;
+                    let w = img.width, h = img.height;
+                    if (w > MAX) { h *= MAX / w; w = MAX; }
+                    canvas.width = w; canvas.height = h;
                     const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // 0.8 - 80% сапа. Бұл өте жақсы көрсеткіш.
-                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.8);
+                    ctx.drawImage(img, 0, 0, w, h);
+                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.7);
                 };
             };
         });
     }
 
-    // 3. ЖІБЕРУ БАТЫРМАСЫ
+    // 4. ЖІБЕРУ
     document.getElementById('sendBtn').onclick = async function() {
-        const file = document.getElementById('imgInp').files[0];
-        if(!file || !document.getElementById('title').value) return alert("Сурет пен атауды жазыңыз!");
+        const title = document.getElementById('title').value;
+        if(!title || selectedFiles.length === 0) return alert("Атау мен сурет міндетті!");
 
         const btn = this;
         btn.disabled = true;
-        btn.innerText = "Оңтайландыру...";
+        let urls = [];
 
         try {
-            // Суретті сығу
-            const compressedFile = await compressImage(file);
-            
-            btn.innerText = "Жүктелуде...";
-            const ref = storage.ref('ads/' + Date.now() + ".jpg");
-            const uploadTask = ref.put(compressedFile);
+            for (let i = 0; i < selectedFiles.length; i++) {
+                btn.innerText = `Өңдеу: ${i+1}/${selectedFiles.length}`;
+                const compressed = await compressImage(selectedFiles[i]);
+                
+                const ref = storage.ref(`ads/${Date.now()}_${i}.jpg`);
+                const uploadTask = ref.put(compressed);
 
-            // Жүктелу пайызын көрсету
-            uploadTask.on('state_changed', (snap) => {
-                const prg = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-                btn.innerText = "Жүктелуде: " + prg + "%";
-            });
+                await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed', 
+                        (snap) => {
+                            const prg = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                            btn.innerText = `Жүктеу: ${i+1}/${selectedFiles.length} (${prg}%)`;
+                        }, 
+                        reject, 
+                        async () => {
+                            const url = await ref.getDownloadURL();
+                            urls.push(url);
+                            resolve();
+                        }
+                    );
+                });
+            }
 
-            await uploadTask;
-            const url = await ref.getDownloadURL();
-
-            // Базаға жазу
             await db.collection("ads").add({
-                title: document.getElementById('title').value,
+                mainCat: document.getElementById('mainCat').value,
+                subCat: document.getElementById('subCat').value,
+                title: title,
                 price: Number(document.getElementById('price').value),
                 phone: document.getElementById('phone').value,
-                mainCat: document.getElementById('mainCat').value,
-                img: url,
+                desc: document.getElementById('desc').value,
+                images: urls,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            alert("СӘТТІ ӨТТІ! ✅");
-            window.location.reload(); // Бетті жаңарту
+            alert("ЖАРНАМА СӘТТІ ҚОСЫЛДЫ! ✅");
+            window.location.href = "index.html";
         } catch (e) {
             alert("Қате: " + e.message);
             btn.disabled = false;
@@ -151,6 +189,5 @@
         }
     };
 </script>
-
 </body>
 </html>
