@@ -5,89 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Хабарландыру қосу - Batyr Info</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #1a73e8; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #333; }
-        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        textarea { height: 100px; resize: vertical; }
-        button { width: 100%; background-color: #28a745; color: white; border: none; padding: 15px; margin-top: 25px; border-radius: 8px; font-size: 18px; cursor: pointer; transition: 0.3s; }
-        button:hover { background-color: #218838; }
+        body { font-family: sans-serif; background-color: #f0f2f5; padding: 20px; }
+        .container { max-width: 450px; margin: auto; background: white; padding: 20px; border-radius: 12px; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Жаңа хабарландыру</h2>
-    
-    <label for="category">Бөлімді таңдаңыз:</label>
-    <select id="category">
-        <option value="shop">Дүкен тауары (Маркет)</option>
-        <option value="olx">Жеке хабарландыру (OLX)</option>
-        <option value="service">Қызмет көрсету (Услуга)</option>
-    </select>
-
-    <label for="title">Атауы:</label>
-    <input type="text" id="title" placeholder="Мысалы: Самсунг телефоны">
-
-    <label for="price">Бағасы (₸):</label>
-    <input type="number" id="price" placeholder="Бағасын жазыңыз">
-
-    <label for="description">Сипаттамасы:</label>
-    <textarea id="description" placeholder="Толық мәлімет..."></textarea>
-
-    <label for="phone">Байланыс нөмірі:</label>
-    <input type="text" id="phone" placeholder="87071234567">
-
+    <input type="text" id="title" placeholder="Атауы">
+    <input type="number" id="price" placeholder="Бағасы">
+    <textarea id="description" placeholder="Сипаттамасы"></textarea>
+    <input type="text" id="phone" placeholder="Телефон (мыс: 8707...)">
     <button id="submitBtn">Жариялауға жіберу</button>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-    // Сен жіберген Firebase конфигі
+<script>
+    // Сенің конфигің
     const firebaseConfig = {
         apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
         authDomain: "batyr-final.firebaseapp.com",
         projectId: "batyr-final",
         storageBucket: "batyr-final.firebasestorage.app",
         messagingSenderId: "621519255228",
-        appId: "1:621519255228:web:6087e026a6db84afa2c2b9",
-        measurementId: "G-73YT8RDF4W"
+        appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
     };
 
-    // Firebase-ті іске қосу
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    // Іске қосу
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    document.getElementById('submitBtn').addEventListener('click', async () => {
+    document.getElementById('submitBtn').onclick = function() {
         const title = document.getElementById('title').value;
         const price = document.getElementById('price').value;
         const phone = document.getElementById('phone').value;
+        const desc = document.getElementById('description').value;
 
         if(!title || !price || !phone) {
-            alert("Өтініш, міндетті жолақтарды толтырыңыз!");
+            alert("Бос орындарды толтырыңыз!");
             return;
         }
 
-        try {
-            await addDoc(collection(db, "ads"), {
-                category: document.getElementById('category').value,
-                title: title,
-                price: Number(price),
-                description: document.getElementById('description').value,
-                phone: phone,
-                status: "pending", 
-                createdAt: serverTimestamp()
-            });
-            alert("Сәтті жіберілді!");
-            window.location.href = "index.html"; 
-        } catch (e) {
-            alert("Қате шықты: " + e.message);
-            console.error(e);
-        }
-    });
+        // Батырманы уақытша өшіру (екі рет басылып кетпеу үшін)
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').innerText = "Жіберілуде...";
+
+        db.collection("ads").add({
+            title: title,
+            price: Number(price),
+            phone: phone,
+            description: desc,
+            status: "pending",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            alert("СӘТТІ ЖІБЕРІЛДІ!");
+            window.location.href = "index.html";
+        })
+        .catch((error) => {
+            alert("ҚАТЕ ШЫҚТЫ: " + error.message);
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').innerText = "Қайта көру";
+        });
+    };
 </script>
 
 </body>
