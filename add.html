@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -52,25 +51,28 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 <script>
+    // 1. FIREBASE КОНФИГУРАЦИЯСЫ
     const firebaseConfig = {
         apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
         authDomain: "batyr-final.firebaseapp.com",
         projectId: "batyr-final",
-        storageBucket: "batyr-final.appspot.com", // ТҮЗЕТІЛДІ: .appspot.com қолдан
+        storageBucket: "batyr-final.appspot.com",
         messagingSenderId: "621519255228",
         appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
     };
 
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
+
+    // 2. CLOUDINARY ПАРАМЕТРЛЕРІ (Сенің деректерің)
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drfeyzyzb/image/upload";
+    const CLOUDINARY_PRESET = "ml_default";
 
     let selectedFiles = [];
 
-    // 1. Категорияларды алу (Firestore-да 'categories' коллекциясы болуы керек)
+    // Категорияларды алу
     document.getElementById('mainCat').onchange = async (e) => {
         const subCat = document.getElementById('subCat');
         const val = e.target.value;
@@ -90,7 +92,7 @@
         }
     };
 
-    // 2. Суретті алдын ала көру
+    // Суретті алдын ала көру
     document.getElementById('imgInp').onchange = (e) => {
         selectedFiles = Array.from(e.target.files).slice(0, 3);
         const container = document.getElementById('previewContainer');
@@ -102,9 +104,13 @@
         });
     };
 
-    // 3. Жіберу функциясы
+    // 3. ЖІБЕРУ ФУНКЦИЯСЫ (CLOUDINARY + FIRESTORE)
     document.getElementById('sendBtn').onclick = async function() {
         const title = document.getElementById('title').value;
+        const price = document.getElementById('price').value;
+        const phone = document.getElementById('phone').value;
+        const desc = document.getElementById('desc').value;
+
         if(!title || selectedFiles.length === 0) return alert("Атауы мен сурет міндетті!");
 
         const btn = this;
@@ -112,37 +118,35 @@
         let urls = [];
 
         try {
+            // СУРЕТТЕРДІ CLOUDINARY-ГЕ ЖҮКТЕУ
             for (let i = 0; i < selectedFiles.length; i++) {
-                const file = selectedFiles[i];
-                const ref = storage.ref().child(`ads/${Date.now()}_${i}.jpg`);
+                btn.innerText = `Жүктеу: ${i+1}/${selectedFiles.length}...`;
                 
-                // Жүктеу басталды
-                const uploadTask = ref.put(file);
+                const formData = new FormData();
+                formData.append('file', selectedFiles[i]);
+                formData.append('upload_preset', CLOUDINARY_PRESET);
 
-                await new Promise((resolve, reject) => {
-                    uploadTask.on('state_changed', 
-                        (snap) => {
-                            const prg = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-                            btn.innerText = `Жүктеу: ${i+1}/${selectedFiles.length} (${prg}%)`;
-                        }, 
-                        (err) => reject(err), 
-                        async () => {
-                            const url = await ref.getDownloadURL();
-                            urls.push(url);
-                            resolve();
-                        }
-                    );
+                const res = await fetch(CLOUDINARY_URL, {
+                    method: 'POST',
+                    body: formData
                 });
+                
+                const data = await res.json();
+                if (data.secure_url) {
+                    urls.push(data.secure_url);
+                } else {
+                    throw new Error(data.error ? data.error.message : "Cloudinary қатесі");
+                }
             }
 
-            // Мәліметтерді базаға сақтау
+            // МӘЛІМЕТТЕРДІ FIRESTORE-ҒА САҚТАУ
             await db.collection("ads").add({
                 mainCat: document.getElementById('mainCat').value,
                 subCat: document.getElementById('subCat').value,
                 title: title,
-                price: Number(document.getElementById('price').value),
-                phone: document.getElementById('phone').value,
-                desc: document.getElementById('desc').value,
+                price: Number(price),
+                phone: phone,
+                desc: desc,
                 images: urls,
                 status: "active",
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -151,7 +155,8 @@
             alert("ЖАРНАМА СӘТТІ ҚОСЫЛДЫ! ✅");
             window.location.reload();
         } catch (e) {
-            alert("Қате: " + e.message + "\n(Storage қосулы екенін тексеріңіз)");
+            console.error(e);
+            alert("Қате шықты: " + e.message);
             btn.disabled = false;
             btn.innerText = "ҚАЙТА КӨРУ";
         }
