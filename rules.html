@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оферта - BATYR INFO</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -38,7 +40,6 @@
         h2 { color: #d9534f; text-align: center; font-size: 22px; margin-bottom: 25px; font-weight: 800; }
         h4 { color: #007bff; margin-top: 25px; font-size: 18px; font-weight: 700; }
         
-        /* Қара шрифт пен ерекшелеу */
         p { font-size: 15px; margin-bottom: 15px; text-align: justify; color: #222; }
         b, strong { color: #000; font-weight: 800; }
 
@@ -51,6 +52,43 @@
             margin-bottom: 20px;
         }
         .back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
+
+        /* Директор панелінің стилі */
+        #admin-panel {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 3px solid #d9534f;
+            background: #fff;
+        }
+        .ad-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+        }
+        .ad-card img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-approve { background: #28a745; color: white; border: none; padding: 8px; border-radius: 8px; flex: 1; }
+        .btn-delete { background: #dc3545; color: white; border: none; padding: 8px; border-radius: 8px; flex: 1; }
+        
+        .version-text {
+            text-align: center; 
+            font-size: 12px; 
+            color: #ccc; 
+            margin-top: 30px; 
+            cursor: default;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -58,53 +96,118 @@
 <div class="container">
     <a href="index.html" class="back">← Артқа / Назад</a>
     
-    <div class="lang-switch">
-        <button class="lang-btn active" onclick="setLang('kz')">ҚАЗАҚША</button>
-        <button class="lang-btn" onclick="setLang('ru')">РУССКИЙ</button>
+    <div id="main-rules">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('kz')">ҚАЗАҚША</button>
+            <button class="lang-btn" onclick="setLang('ru')">РУССКИЙ</button>
+        </div>
+
+        <div id="kz" class="content active">
+            <h2>ПАЙДАЛАНУ ШАРТТАРЫ</h2>
+            <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
+            <h4>1. Платформаның мақсаты</h4>
+            <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>.</p>
+            <h4>2. Жауапкершіліктен бас тарту</h4>
+            <p>Сайттың Иесі үшінші тұлғалардың іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
+        </div>
+
+        <div id="ru" class="content">
+            <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
+            <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
+            <h4>1. Статус платформы</h4>
+            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги.</p>
+        </div>
     </div>
 
-    <div id="kz" class="content active">
-        <h2>ПАЙДАЛАНУ ШАРТТАРЫ</h2>
-        <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
-        
-        <h4>1. Платформаның мақсаты</h4>
-        <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда немесе өзге де ақылы қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
-        
-        <h4>2. Жауапкершіліктен бас тарту</h4>
-        <p>Сайттың Иесі және Әзірлеушісі үшінші тұлғалардың (таксистер, сатушылар, жеткізушілер, шеберлер және т.б.) қызмет сапасына, бағасына және іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
-        
-        <h4>3. Деректерді жою және қателер</h4>
-        <p>Егер сайтта <b>қате мәлімет</b> тапсаңыз немесе өз нөміріңізді <b>өшіргіңіз келсе</b>, дереу Админге хабарласыңыз. Мәліметтер 24 сағат ішінде түзетіледі немесе толық өшіріледі.</p>
-        
-        <h4>4. Техникалық рөл</h4>
-        <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты. Ол пайдаланушылар мен қызмет көрсетушілер арасындағы келіспеушіліктерге қатыспайды.</p>
-    </div>
-
-    <div id="ru" class="content">
-        <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
-        <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
-        
-        <h4>1. Статус платформы</h4>
-        <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги перевозки (такси), торговли или иные платные услуги. Мы агрегатор открытых данных.</p>
-        
-        <h4>2. Отказ от ответственности</h4>
-        <p>Владелец и Разработчик сайта <b>не несут никакой ответственности</b> за качество, стоимость и действия третьих лиц (таксистов, продавцов, курьеров, мастеров и т.д.).</p>
-        
-        <h4>3. Удаление данных и ошибки</h4>
-        <p>Если вы нашли <b>ошибку</b> или хотите <b>удалить свои данные</b>, немедленно свяжитесь с Админом. Информация будет исправлена или удалена в течение 24 часов.</p>
+    <div id="admin-panel">
+        <h2 style="color: #000;">ДИРЕКТОР ПАНЕЛІ</h2>
+        <div id="ads-list">Жарнамалар жүктелуде...</div>
     </div>
 
     <p style="text-align: center; font-size: 12px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
         © 2026 BATYR INFO | Барлық құқықтар қорғалған.
     </p>
+    
+    <div class="version-text" id="version-trigger">Версия 1.0.4</div>
 </div>
 
 <script>
+    // 1. Тіл ауыстыру
     function setLang(lang) {
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(lang).classList.add('active');
         event.currentTarget.classList.add('active');
+    }
+
+    // 2. Жасырын Админ Панель логикасы
+    let clickCount = 0;
+    const trigger = document.getElementById('version-trigger');
+
+    trigger.addEventListener('click', () => {
+        clickCount++;
+        if (clickCount === 5) {
+            let pass = prompt("Кілтті енгізіңіз (Пароль):");
+            if (pass === "777") { // ПАРОЛЬ ОСЫ ЖЕРДЕ
+                alert("Қош келдіңіз, Директор!");
+                document.getElementById('main-rules').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadAds(); // Жарнамаларды жүктеу
+            } else {
+                alert("Қате код!");
+                clickCount = 0;
+            }
+        }
+        // 3 секундтан кейін кликтерді нөлге түсіру
+        setTimeout(() => { clickCount = 0; }, 3000);
+    });
+
+    // 3. Firebase арқылы жарнамаларды басқару (Мұнда өз Firebase Config-іңді қой)
+    const firebaseConfig = {
+        apiKey: "СЕНІҢ_API_KEY",
+        projectId: "СЕНІҢ_PROJECT_ID",
+        appId: "СЕНІҢ_APP_ID"
+    };
+    
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    function loadAds() {
+        const adsList = document.getElementById('ads-list');
+        db.collection("ads").where("status", "==", "pending").onSnapshot((snapshot) => {
+            adsList.innerHTML = "";
+            if (snapshot.empty) {
+                adsList.innerHTML = "Жаңа жарнамалар жоқ.";
+                return;
+            }
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                adsList.innerHTML += `
+                    <div class="ad-card">
+                        <img src="${data.image_url}" alt="photo">
+                        <p><b>Сипаттама:</b> ${data.description}</p>
+                        <p><b>Бағасы:</b> ${data.price} тг</p>
+                        <div class="btn-group">
+                            <button class="btn-approve" onclick="approveAd('${doc.id}')">Мақұлдау</button>
+                            <button class="btn-delete" onclick="deleteAd('${doc.id}')">Өшіру</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    }
+
+    function approveAd(id) {
+        db.collection("ads").doc(id).update({ status: "active" })
+        .then(() => alert("Жарнама сайтқа шықты!"));
+    }
+
+    function deleteAd(id) {
+        if(confirm("Өшіруге сенімдісіз бе?")) {
+            db.collection("ads").doc(id).delete();
+        }
     }
 </script>
 
