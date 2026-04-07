@@ -19,7 +19,7 @@
         #previewContainer { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
         #previewContainer img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid #007bff; }
         
-        #sendBtn { background: #007bff; color: white; border: none; font-size: 18px; font-weight: bold; margin-top: 25px; transition: 0.3s; }
+        #sendBtn { background: #007bff; color: white; border: none; font-size: 18px; font-weight: bold; margin-top: 25px; transition: 0.3s; height: 55px; }
         #sendBtn:disabled { background: #ccc; cursor: not-allowed; }
         .info-text { font-size: 12px; color: #777; text-align: center; margin-top: 8px; }
     </style>
@@ -29,7 +29,7 @@
 <div class="card">
     <h2>Жаңа жарнама</h2>
     
-    <label>Бөлімді таңдаңыз:</label>
+    <label>Бөлім:</label>
     <select id="mainCat">
         <option value="">-- Таңдау --</option>
         <option value="market">🛒 Маркет</option>
@@ -39,12 +39,12 @@
 
     <label>Категория:</label>
     <select id="subCat">
-        <option value="">-- Алдымен бөлімді таңдаңыз --</option>
+        <option value="">-- Бөлімді таңдаңыз --</option>
     </select>
 
-    <input type="text" id="title" placeholder="Тауар атауы">
+    <input type="text" id="title" placeholder="Не сатасыз?">
     <input type="number" id="price" placeholder="Бағасы (₸)">
-    <input type="tel" id="phone" placeholder="Телефон (мысалы: 8707...)">
+    <input type="tel" id="phone" placeholder="87071234567">
     <textarea id="desc" placeholder="Сипаттама (міндетті емес)" rows="3"></textarea>
 
     <div class="upload-area" onclick="document.getElementById('imgInp').click()">
@@ -52,7 +52,7 @@
         <input type="file" id="imgInp" accept="image/*" multiple hidden>
     </div>
     <div id="previewContainer"></div>
-    <p class="info-text">Суреттер автоматты түрде оңтайландырылады</p>
+    <p class="info-text">Суреттер 3-тен аспауы керек</p>
 
     <button id="sendBtn">ЖАРИЯЛАУ</button>
 </div>
@@ -62,48 +62,48 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 <script>
+    // КОНФИГУРАЦИЯ (ОСЫНЫ ТЕКСЕРІП ШЫҚ)
     const firebaseConfig = {
         apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
         authDomain: "batyr-final.firebaseapp.com",
         projectId: "batyr-final",
-        storageBucket: "batyr-final.appspot.com",
+        storageBucket: "batyr-final.firebasestorage.app", // ЕСКЕРТУ: .firebasestorage.app деп өзгертілді
         messagingSenderId: "621519255228",
         appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
     };
-    firebase.initializeApp(firebaseConfig);
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.firestore();
     const storage = firebase.storage();
 
     let selectedFiles = [];
 
-    // 1. АВТОМАТТЫ КАТЕГОРИЯЛАР
+    // 1. КАТЕГОРИЯЛАРДЫ БАЗАДАН АЛУ
     document.getElementById('mainCat').onchange = async (e) => {
         const subCat = document.getElementById('subCat');
         const val = e.target.value;
+        if(!val) { subCat.innerHTML = "<option>-- Бөлімді таңдаңыз --</option>"; return; }
+        
         subCat.innerHTML = "<option>Жүктелуде...</option>";
-        if(!val) return subCat.innerHTML = "";
         try {
             const doc = await db.collection("categories").doc(val).get();
             if(doc.exists) {
                 const list = doc.data().list || [];
-                subCat.innerHTML = "";
-                list.forEach(item => {
-                    let opt = document.createElement('option');
-                    opt.value = item; opt.innerText = item;
-                    subCat.appendChild(opt);
-                });
+                subCat.innerHTML = list.map(item => `<option value="${item}">${item}</option>`).join('');
+            } else {
+                subCat.innerHTML = "<option value='Жалпы'>Жалпы</option>";
             }
-        } catch(err) { subCat.innerHTML = "<option>Қате кетті</option>"; }
+        } catch(err) { 
+            console.error(err);
+            subCat.innerHTML = "<option>Категория табылмады</option>"; 
+        }
     };
 
-    // 2. СУРЕТ ТАҢДАУ ЖӘНЕ 3-КЕ ШЕКТЕУ
+    // 2. СУРЕТ ТАҢДАУ
     document.getElementById('imgInp').onchange = (e) => {
-        const files = Array.from(e.target.files);
-        if(files.length > 3) {
-            alert("Ең көп дегенде 3 сурет таңдауға болады!");
-            e.target.value = "";
-            return;
-        }
+        const files = Array.from(e.target.files).slice(0, 3); // Тек алғашқы 3 сурет
         selectedFiles = files;
         const container = document.getElementById('previewContainer');
         container.innerHTML = "";
@@ -114,7 +114,7 @@
         });
     };
 
-    // 3. СУРЕТТІ ҚАТТЫ СЫҒУ (ТЕЗ ЖҮКТЕЛУ ҮШІН)
+    // 3. СУРЕТТІ СЫҒУ
     async function compressImage(file) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -136,10 +136,10 @@
         });
     }
 
-    // 4. ЖІБЕРУ
+    // 4. ЖАРНАМАНЫ ЖІБЕРУ
     document.getElementById('sendBtn').onclick = async function() {
         const title = document.getElementById('title').value;
-        if(!title || selectedFiles.length === 0) return alert("Атау мен сурет міндетті!");
+        if(!title || selectedFiles.length === 0) return alert("Атауы мен суреті міндетті!");
 
         const btn = this;
         btn.disabled = true;
@@ -150,7 +150,8 @@
                 btn.innerText = `Өңдеу: ${i+1}/${selectedFiles.length}`;
                 const compressed = await compressImage(selectedFiles[i]);
                 
-                const ref = storage.ref(`ads/${Date.now()}_${i}.jpg`);
+                // СУРЕТТІ STORAGE-ГЕ САҚТАУ
+                const ref = storage.ref().child(`ads/${Date.now()}_${i}.jpg`);
                 const uploadTask = ref.put(compressed);
 
                 await new Promise((resolve, reject) => {
@@ -159,7 +160,11 @@
                             const prg = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
                             btn.innerText = `Жүктеу: ${i+1}/${selectedFiles.length} (${prg}%)`;
                         }, 
-                        reject, 
+                        (err) => {
+                            console.error("Storage Error:", err);
+                            alert("Сурет жүктелмеді: " + err.message);
+                            reject(err);
+                        }, 
                         async () => {
                             const url = await ref.getDownloadURL();
                             urls.push(url);
@@ -169,6 +174,7 @@
                 });
             }
 
+            // FIRESTORE-ҒА ЖАЗУ
             await db.collection("ads").add({
                 mainCat: document.getElementById('mainCat').value,
                 subCat: document.getElementById('subCat').value,
@@ -180,10 +186,11 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            alert("ЖАРНАМА СӘТТІ ҚОСЫЛДЫ! ✅");
+            alert("ЖАРНАМА ЖАРИЯЛАНДЫ! ✅");
             window.location.href = "index.html";
         } catch (e) {
-            alert("Қате: " + e.message);
+            console.error("Final Error:", e);
+            alert("Қате шықты: " + e.message);
             btn.disabled = false;
             btn.innerText = "ҚАЙТА КӨРУ";
         }
