@@ -9,59 +9,34 @@
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: #f8f9fa; 
-            padding: 20px; 
-            color: #1a1a1a; 
-            line-height: 1.7;
+            background: #f8f9fa; padding: 20px; color: #1a1a1a; line-height: 1.7;
         }
         .container { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 24px; 
-            max-width: 650px; 
-            margin: auto; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            background: white; padding: 30px; border-radius: 24px; 
+            max-width: 650px; margin: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
         }
         .lang-switch { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
         .lang-btn { 
-            padding: 10px 20px; 
-            border: 2px solid #007bff; 
-            background: white; 
-            color: #007bff; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 14px;
+            padding: 10px 20px; border: 2px solid #007bff; background: white; 
+            color: #007bff; border-radius: 12px; cursor: pointer; font-weight: bold; 
         }
         .lang-btn.active { background: #007bff; color: white; }
         .content { display: none; }
         .content.active { display: block; }
-        
         h2 { color: #d9534f; text-align: center; font-size: 22px; margin-bottom: 25px; font-weight: 800; }
         h4 { color: #007bff; margin-top: 25px; font-size: 18px; font-weight: 700; }
-        
         p { font-size: 15px; margin-bottom: 15px; text-align: justify; color: #222; }
-        b, strong { color: #000; font-weight: 800; }
-
-        .warning-box { 
-            background: #fff8e1; 
-            padding: 15px; 
-            border-radius: 12px; 
-            border-left: 5px solid #ffc107; 
-            font-weight: 600; 
-            margin-bottom: 20px;
-        }
+        .warning-box { background: #fff8e1; padding: 15px; border-radius: 12px; border-left: 5px solid #ffc107; margin-bottom: 20px; }
         .back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
-
-        /* Директор панелі стилдері */
-        #admin-panel { display: none; margin-top: 20px; border-top: 2px solid #000; padding-top: 20px; }
-        .ad-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 15px; background: #fdfdfd; }
-        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
-        .btn-group { display: flex; gap: 10px; }
-        .btn-ok { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
-        .btn-del { background: #dc3545; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
         
-        .version-tag { text-align: center; font-size: 12px; color: #ccc; margin-top: 30px; cursor: default; user-select: none; }
+        /* Админ панель стилі */
+        #admin-panel { display: none; margin-top: 20px; border-top: 3px solid #000; padding-top: 20px; }
+        .ad-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 15px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; max-height: 300px; object-fit: cover; }
+        .btn-group { display: flex; gap: 10px; }
+        .btn-ok { background: #28a745; color: white; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
+        .btn-del { background: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
+        .version-tag { text-align: center; font-size: 12px; color: #ccc; margin-top: 40px; cursor: pointer; user-select: none; }
     </style>
 </head>
 <body>
@@ -78,41 +53,30 @@
         <div id="kz" class="content active">
             <h2>ПАЙДАЛАНУ ШАРТТАРЫ</h2>
             <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
-            
             <h4>1. Платформаның мақсаты</h4>
-            <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда немесе өзге де ақылы қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
-            
+            <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>.</p>
             <h4>2. Жауапкершіліктен бас тарту</h4>
-            <p>Сайттың Иесі және Әзірлеушісі үшінші тұлғалардың (таксистер, сатушылар, жеткізушілер, шеберлер және т.б.) қызмет сапасына, бағасына және іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
-            
-            <h4>3. Деректерді жою және қателер</h4>
-            <p>Егер сайтта <b>қате мәлімет</b> тапсаңыз немесе өз нөміріңізді <b>өшіргіңіз келсе</b>, дереу Админге хабарласыңыз. Мәліметтер 24 сағат ішінде түзетіледі немесе толық өшіріледі.</p>
-            
-            <h4>4. Техникалық рөл</h4>
-            <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты. Ол пайдаланушылар мен қызмет көрсетушілер арасындағы келіспеушіліктерге қатыспайды.</p>
+            <p>Сайттың Иесі үшінші тұлғалардың қызмет сапасына <b>жауапкершілік көтермейді.</b></p>
+            <h4>3. Деректерді жою</h4>
+            <p>Қате мәлімет тапсаңыз немесе нөміріңізді өшіргіңіз келсе, Админге хабарласыңыз.</p>
         </div>
 
         <div id="ru" class="content">
             <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
             <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
-            
             <h4>1. Статус платформы</h4>
-            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги перевозки (такси), торговли или иные платные услуги. Мы агрегатор открытых данных.</p>
-            
+            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги.</p>
             <h4>2. Отказ от ответственности</h4>
-            <p>Владелец и Разработчик сайта <b>не несут никакой ответственности</b> за качество, стоимость и действия третьих лиц (таксистов, продавцов, курьеров, мастеров и т.д.).</p>
-            
-            <h4>3. Удаление данных и ошибки</h4>
-            <p>Если вы нашли <b>ошибку</b> или хотите <b>удалить свои данные</b>, немедленно свяжитесь с Админом. Информация будет исправлена или удалена в течение 24 часов.</p>
+            <p>Владелец сайта <b>не несет никакой ответственности</b> за действия третьих лиц.</p>
         </div>
     </div>
 
     <div id="admin-panel">
-        <h2 style="color: #000;">ДИРЕКТОР ПАНЕЛІ</h2>
-        <div id="ads-list">Жүктелуде...</div>
+        <h2 style="color: #000; text-align: center;">ДИРЕКТОР ПАНЕЛІ</h2>
+        <div id="ads-list">Тексерілетін жарнамалар жүктелуде...</div>
     </div>
 
-    <p style="text-align: center; font-size: 12px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+    <p style="text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
         © 2026 BATYR INFO | Барлық құқықтар қорғалған.
     </p>
 
@@ -120,7 +84,6 @@
 </div>
 
 <script>
-    // 1. Тілдерді ауыстыру функциясы
     function setLang(lang) {
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -128,48 +91,51 @@
         event.currentTarget.classList.add('active');
     }
 
-    // 2. Жасырын кіру логикасы (5 рет басу)
-    let clicks = 0;
-    document.getElementById('secret-trigger').addEventListener('click', function() {
-        clicks++;
-        if (clicks === 5) {
-            let p = prompt("Құпия кілтті енгізіңіз:");
-            if (p === "01012027") { // ЖАҢА ПАРОЛЬ ОСЫНДА
-                document.getElementById('user-view').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                loadAds();
-            } else {
-                alert("Қате код!");
-                clicks = 0;
-            }
-        }
-        setTimeout(() => { clicks = 0; }, 3000); // 3 секундта басып үлгеру керек
-    });
-
-    // 3. Firebase Баптаулары (ОСЫ ЖЕРГЕ ӨЗ ДЕРЕКТЕРІҢДІ ҚОЙ!)
+    // FIREBASE БАПТАУЛАРЫ (ЕНГІЗІЛДІ)
     const firebaseConfig = {
-        apiKey: "API_KEY_ОСЫНДА",
-        projectId: "PROJECT_ID_ОСЫНДА",
-        appId: "APP_ID_ОСЫНДА"
+      apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
+      authDomain: "batyr-final.firebaseapp.com",
+      projectId: "batyr-final",
+      storageBucket: "batyr-final.firebasestorage.app",
+      messagingSenderId: "621519255228",
+      appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
     };
 
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // 4. Жарнамаларды жүктеу
+    // ҚҰПИЯ КІРУ (01012027)
+    let clicks = 0;
+    document.getElementById('secret-trigger').addEventListener('click', function() {
+        clicks++;
+        if (clicks === 5) {
+            let p = prompt("Құпия кілтті енгізіңіз:");
+            if (p === "01012027") {
+                document.getElementById('user-view').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadAds();
+            } else {
+                alert("Қате код!");
+            }
+            clicks = 0;
+        }
+        setTimeout(() => { clicks = 0; }, 3000);
+    });
+
+    // ЖАРНАМАЛАРДЫ ЖҮКТЕУ (Тек 'pending' статусы)
     function loadAds() {
         const list = document.getElementById('ads-list');
         db.collection("ads").where("status", "==", "pending").onSnapshot(snap => {
-            list.innerHTML = snap.empty ? "Тексеретін жаңа жарнама жоқ." : "";
+            list.innerHTML = snap.empty ? "<p style='text-align:center;'>Жаңа жарнамалар жоқ.</p>" : "";
             snap.forEach(doc => {
                 const ad = doc.data();
                 list.innerHTML += `
                     <div class="ad-card">
-                        <img src="${ad.image_url || 'https://via.placeholder.com/200'}" alt="photo">
+                        <img src="${ad.image_url}" onerror="this.src='https://via.placeholder.com/300?text=Сурет+жоқ'">
                         <p><b>Сипаттама:</b> ${ad.description || 'Жоқ'}</p>
                         <p><b>Баға:</b> ${ad.price || 0} тг</p>
                         <div class="btn-group">
-                            <button class="btn-ok" onclick="updateAd('${doc.id}', 'active')">Мақұлдау</button>
+                            <button class="btn-ok" onclick="updateStatus('${doc.id}', 'active')">Мақұлдау</button>
                             <button class="btn-del" onclick="deleteAd('${doc.id}')">Өшіру</button>
                         </div>
                     </div>`;
@@ -177,14 +143,14 @@
         });
     }
 
-    function updateAd(id, status) {
-        db.collection("ads").doc(id).update({ status: status })
-        .then(() => alert("Жарнама сәтті мақұлданды!"));
+    function updateStatus(id, newStatus) {
+        db.collection("ads").doc(id).update({ status: newStatus })
+        .then(() => alert("Жарнама сайтқа шықты!"));
     }
 
     function deleteAd(id) {
-        if(confirm("Бұл жарнаманы өшіруге сенімдісіз бе?")) {
-            db.collection("ads").doc(id).delete();
+        if(confirm("Өшіруге сенімдісіз бе?")) {
+            db.collection("ads").doc(id).delete().then(() => alert("Өшірілді!"));
         }
     }
 </script>
