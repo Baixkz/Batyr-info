@@ -58,8 +58,8 @@
         .ad-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 15px; background: #fdfdfd; }
         .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
         .btn-group { display: flex; gap: 10px; }
-        .btn-ok { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; }
-        .btn-del { background: #dc3545; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; }
+        .btn-ok { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
+        .btn-del { background: #dc3545; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
         
         .version-tag { text-align: center; font-size: 12px; color: #ccc; margin-top: 30px; cursor: default; user-select: none; }
     </style>
@@ -83,13 +83,13 @@
             <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда немесе өзге де ақылы қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
             
             <h4>2. Жауапкершіліктен бас тарту</h4>
-            <p>Сайттың Иесі және Әзірлеушісі үшінші тұлғалардың қызмет сапасына, бағасына және іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
+            <p>Сайттың Иесі және Әзірлеушісі үшінші тұлғалардың (таксистер, сатушылар, жеткізушілер, шеберлер және т.б.) қызмет сапасына, бағасына және іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
             
             <h4>3. Деректерді жою және қателер</h4>
             <p>Егер сайтта <b>қате мәлімет</b> тапсаңыз немесе өз нөміріңізді <b>өшіргіңіз келсе</b>, дереу Админге хабарласыңыз. Мәліметтер 24 сағат ішінде түзетіледі немесе толық өшіріледі.</p>
             
             <h4>4. Техникалық рөл</h4>
-            <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты.</p>
+            <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты. Ол пайдаланушылар мен қызмет көрсетушілер арасындағы келіспеушіліктерге қатыспайды.</p>
         </div>
 
         <div id="ru" class="content">
@@ -97,13 +97,13 @@
             <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
             
             <h4>1. Статус платформы</h4>
-            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги перевозки (такси), торговли или иные платные услуги.</p>
+            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги перевозки (такси), торговли или иные платные услуги. Мы агрегатор открытых данных.</p>
             
             <h4>2. Отказ от ответственности</h4>
-            <p>Владелец и Разработчик сайта <b>не несут никакой ответственности</b> за качество, стоимость и действия третьих лиц.</p>
+            <p>Владелец и Разработчик сайта <b>не несут никакой ответственности</b> за качество, стоимость и действия третьих лиц (таксистов, продавцов, курьеров, мастеров и т.д.).</p>
             
             <h4>3. Удаление данных и ошибки</h4>
-            <p>Если вы нашли <b>ошибку</b> или хотите <b>удалить свои данные</b>, немедленно свяжитесь с Админом.</p>
+            <p>Если вы нашли <b>ошибку</b> или хотите <b>удалить свои данные</b>, немедленно свяжитесь с Админом. Информация будет исправлена или удалена в течение 24 часов.</p>
         </div>
     </div>
 
@@ -120,7 +120,7 @@
 </div>
 
 <script>
-    // 1. Тілдерді ауыстыру
+    // 1. Тілдерді ауыстыру функциясы
     function setLang(lang) {
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -128,13 +128,13 @@
         event.currentTarget.classList.add('active');
     }
 
-    // 2. Жасырын кіру логикасы
+    // 2. Жасырын кіру логикасы (5 рет басу)
     let clicks = 0;
     document.getElementById('secret-trigger').addEventListener('click', function() {
         clicks++;
         if (clicks === 5) {
             let p = prompt("Құпия кілтті енгізіңіз:");
-            if (p === "01012027") { // Парольді осы жерден өзгертесің
+            if (p === "01012027") { // ЖАҢА ПАРОЛЬ ОСЫНДА
                 document.getElementById('user-view').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 loadAds();
@@ -143,10 +143,10 @@
                 clicks = 0;
             }
         }
-        setTimeout(() => { clicks = 0; }, 3000);
+        setTimeout(() => { clicks = 0; }, 3000); // 3 секундта басып үлгеру керек
     });
 
-    // 3. Firebase Баптаулары (Осы жерге өз деректеріңді сал!)
+    // 3. Firebase Баптаулары (ОСЫ ЖЕРГЕ ӨЗ ДЕРЕКТЕРІҢДІ ҚОЙ!)
     const firebaseConfig = {
         apiKey: "API_KEY_ОСЫНДА",
         projectId: "PROJECT_ID_ОСЫНДА",
@@ -156,17 +156,18 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    // 4. Жарнамаларды жүктеу
     function loadAds() {
         const list = document.getElementById('ads-list');
         db.collection("ads").where("status", "==", "pending").onSnapshot(snap => {
-            list.innerHTML = snap.empty ? "Жаңа жарнама жоқ" : "";
+            list.innerHTML = snap.empty ? "Тексеретін жаңа жарнама жоқ." : "";
             snap.forEach(doc => {
                 const ad = doc.data();
                 list.innerHTML += `
                     <div class="ad-card">
-                        <img src="${ad.image_url}">
-                        <p><b>Сипаттама:</b> ${ad.description}</p>
-                        <p><b>Баға:</b> ${ad.price} тг</p>
+                        <img src="${ad.image_url || 'https://via.placeholder.com/200'}" alt="photo">
+                        <p><b>Сипаттама:</b> ${ad.description || 'Жоқ'}</p>
+                        <p><b>Баға:</b> ${ad.price || 0} тг</p>
                         <div class="btn-group">
                             <button class="btn-ok" onclick="updateAd('${doc.id}', 'active')">Мақұлдау</button>
                             <button class="btn-del" onclick="deleteAd('${doc.id}')">Өшіру</button>
@@ -177,11 +178,14 @@
     }
 
     function updateAd(id, status) {
-        db.collection("ads").doc(id).update({ status: status }).then(() => alert("Мақұлданды!"));
+        db.collection("ads").doc(id).update({ status: status })
+        .then(() => alert("Жарнама сәтті мақұлданды!"));
     }
 
     function deleteAd(id) {
-        if(confirm("Өшіресіз бе?")) db.collection("ads").doc(id).delete();
+        if(confirm("Бұл жарнаманы өшіруге сенімдісіз бе?")) {
+            db.collection("ads").doc(id).delete();
+        }
     }
 </script>
 
