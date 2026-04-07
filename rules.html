@@ -53,42 +53,15 @@
         }
         .back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
 
-        /* Директор панелінің стилі */
-        #admin-panel {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            border-top: 3px solid #d9534f;
-            background: #fff;
-        }
-        .ad-card {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-        }
-        .ad-card img {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .btn-approve { background: #28a745; color: white; border: none; padding: 8px; border-radius: 8px; flex: 1; }
-        .btn-delete { background: #dc3545; color: white; border: none; padding: 8px; border-radius: 8px; flex: 1; }
+        /* Директор панелі стилдері */
+        #admin-panel { display: none; margin-top: 20px; border-top: 2px solid #000; padding-top: 20px; }
+        .ad-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 15px; background: #fdfdfd; }
+        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+        .btn-group { display: flex; gap: 10px; }
+        .btn-ok { background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; }
+        .btn-del { background: #dc3545; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; }
         
-        .version-text {
-            text-align: center; 
-            font-size: 12px; 
-            color: #ccc; 
-            margin-top: 30px; 
-            cursor: default;
-            user-select: none;
-        }
+        .version-tag { text-align: center; font-size: 12px; color: #ccc; margin-top: 30px; cursor: default; user-select: none; }
     </style>
 </head>
 <body>
@@ -96,7 +69,7 @@
 <div class="container">
     <a href="index.html" class="back">← Артқа / Назад</a>
     
-    <div id="main-rules">
+    <div id="user-view">
         <div class="lang-switch">
             <button class="lang-btn active" onclick="setLang('kz')">ҚАЗАҚША</button>
             <button class="lang-btn" onclick="setLang('ru')">РУССКИЙ</button>
@@ -105,34 +78,49 @@
         <div id="kz" class="content active">
             <h2>ПАЙДАЛАНУ ШАРТТАРЫ</h2>
             <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
+            
             <h4>1. Платформаның мақсаты</h4>
-            <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>.</p>
+            <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай тасымалдау (такси), сауда немесе өзге де ақылы қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>. Біз тек ашық мәліметтерді жинақтаушымыз.</p>
+            
             <h4>2. Жауапкершіліктен бас тарту</h4>
-            <p>Сайттың Иесі үшінші тұлғалардың іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
+            <p>Сайттың Иесі және Әзірлеушісі үшінші тұлғалардың қызмет сапасына, бағасына және іс-әрекеттеріне <b>ешқандай жауапкершілік көтермейді.</b></p>
+            
+            <h4>3. Деректерді жою және қателер</h4>
+            <p>Егер сайтта <b>қате мәлімет</b> тапсаңыз немесе өз нөміріңізді <b>өшіргіңіз келсе</b>, дереу Админге хабарласыңыз. Мәліметтер 24 сағат ішінде түзетіледі немесе толық өшіріледі.</p>
+            
+            <h4>4. Техникалық рөл</h4>
+            <p>Әзірлеуші (Разработчик) тек сайттың техникалық жұмыс істеуіне жауапты.</p>
         </div>
 
         <div id="ru" class="content">
             <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
             <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
+            
             <h4>1. Статус платформы</h4>
-            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги.</p>
+            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги перевозки (такси), торговли или иные платные услуги.</p>
+            
+            <h4>2. Отказ от ответственности</h4>
+            <p>Владелец и Разработчик сайта <b>не несут никакой ответственности</b> за качество, стоимость и действия третьих лиц.</p>
+            
+            <h4>3. Удаление данных и ошибки</h4>
+            <p>Если вы нашли <b>ошибку</b> или хотите <b>удалить свои данные</b>, немедленно свяжитесь с Админом.</p>
         </div>
     </div>
 
     <div id="admin-panel">
         <h2 style="color: #000;">ДИРЕКТОР ПАНЕЛІ</h2>
-        <div id="ads-list">Жарнамалар жүктелуде...</div>
+        <div id="ads-list">Жүктелуде...</div>
     </div>
 
     <p style="text-align: center; font-size: 12px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
         © 2026 BATYR INFO | Барлық құқықтар қорғалған.
     </p>
-    
-    <div class="version-text" id="version-trigger">Версия 1.0.4</div>
+
+    <div class="version-tag" id="secret-trigger">Версия 1.0.4</div>
 </div>
 
 <script>
-    // 1. Тіл ауыстыру
+    // 1. Тілдерді ауыстыру
     function setLang(lang) {
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -140,74 +128,60 @@
         event.currentTarget.classList.add('active');
     }
 
-    // 2. Жасырын Админ Панель логикасы
-    let clickCount = 0;
-    const trigger = document.getElementById('version-trigger');
-
-    trigger.addEventListener('click', () => {
-        clickCount++;
-        if (clickCount === 5) {
-            let pass = prompt("Кілтті енгізіңіз (Пароль):");
-            if (pass === "777") { // ПАРОЛЬ ОСЫ ЖЕРДЕ
-                alert("Қош келдіңіз, Директор!");
-                document.getElementById('main-rules').style.display = 'none';
+    // 2. Жасырын кіру логикасы
+    let clicks = 0;
+    document.getElementById('secret-trigger').addEventListener('click', function() {
+        clicks++;
+        if (clicks === 5) {
+            let p = prompt("Құпия кілтті енгізіңіз:");
+            if (p === "01012027") { // Парольді осы жерден өзгертесің
+                document.getElementById('user-view').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
-                loadAds(); // Жарнамаларды жүктеу
+                loadAds();
             } else {
                 alert("Қате код!");
-                clickCount = 0;
+                clicks = 0;
             }
         }
-        // 3 секундтан кейін кликтерді нөлге түсіру
-        setTimeout(() => { clickCount = 0; }, 3000);
+        setTimeout(() => { clicks = 0; }, 3000);
     });
 
-    // 3. Firebase арқылы жарнамаларды басқару (Мұнда өз Firebase Config-іңді қой)
+    // 3. Firebase Баптаулары (Осы жерге өз деректеріңді сал!)
     const firebaseConfig = {
-        apiKey: "СЕНІҢ_API_KEY",
-        projectId: "СЕНІҢ_PROJECT_ID",
-        appId: "СЕНІҢ_APP_ID"
+        apiKey: "API_KEY_ОСЫНДА",
+        projectId: "PROJECT_ID_ОСЫНДА",
+        appId: "APP_ID_ОСЫНДА"
     };
-    
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     function loadAds() {
-        const adsList = document.getElementById('ads-list');
-        db.collection("ads").where("status", "==", "pending").onSnapshot((snapshot) => {
-            adsList.innerHTML = "";
-            if (snapshot.empty) {
-                adsList.innerHTML = "Жаңа жарнамалар жоқ.";
-                return;
-            }
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                adsList.innerHTML += `
+        const list = document.getElementById('ads-list');
+        db.collection("ads").where("status", "==", "pending").onSnapshot(snap => {
+            list.innerHTML = snap.empty ? "Жаңа жарнама жоқ" : "";
+            snap.forEach(doc => {
+                const ad = doc.data();
+                list.innerHTML += `
                     <div class="ad-card">
-                        <img src="${data.image_url}" alt="photo">
-                        <p><b>Сипаттама:</b> ${data.description}</p>
-                        <p><b>Бағасы:</b> ${data.price} тг</p>
+                        <img src="${ad.image_url}">
+                        <p><b>Сипаттама:</b> ${ad.description}</p>
+                        <p><b>Баға:</b> ${ad.price} тг</p>
                         <div class="btn-group">
-                            <button class="btn-approve" onclick="approveAd('${doc.id}')">Мақұлдау</button>
-                            <button class="btn-delete" onclick="deleteAd('${doc.id}')">Өшіру</button>
+                            <button class="btn-ok" onclick="updateAd('${doc.id}', 'active')">Мақұлдау</button>
+                            <button class="btn-del" onclick="deleteAd('${doc.id}')">Өшіру</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         });
     }
 
-    function approveAd(id) {
-        db.collection("ads").doc(id).update({ status: "active" })
-        .then(() => alert("Жарнама сайтқа шықты!"));
+    function updateAd(id, status) {
+        db.collection("ads").doc(id).update({ status: status }).then(() => alert("Мақұлданды!"));
     }
 
     function deleteAd(id) {
-        if(confirm("Өшіруге сенімдісіз бе?")) {
-            db.collection("ads").doc(id).delete();
-        }
+        if(confirm("Өшіресіз бе?")) db.collection("ads").doc(id).delete();
     }
 </script>
 
