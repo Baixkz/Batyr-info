@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Қосу - Batyrsity</title>
+    <title>Жарнама қосу - Batyrsity</title>
     <style>
-        :root { --primary: #007bff; --bg: #f4f7f6; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .form-card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h2 { text-align: center; color: #333; margin-bottom: 25px; }
-        label { display: block; margin-top: 15px; font-size: 14px; font-weight: 600; color: #666; }
-        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; }
-        .upload-area { border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 15px; margin-top: 15px; cursor: pointer; }
-        #preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
-        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; margin-top: 30px; transition: 0.3s; }
+        :root { --blue: #007bff; --bg: #f8f9fa; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+        .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        label { display: block; margin-top: 15 shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        select, input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        .upload-btn { border: 2px dashed var(--blue); padding: 20px; text-align: center; border-radius: 15px; margin-top: 20px; cursor: pointer; color: var(--blue); font-weight: bold; }
+        #preview { width: 100%; border-radius: 10px; margin-top: 15px; display: none; }
+        button { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 25px; cursor: pointer; }
         button:disabled { background: #ccc; }
+        #status { text-align: center; font-size: 13px; color: #666; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="form-card">
+<div class="card">
     <h2>Жаңа хабарландыру</h2>
     
     <label>Бөлімді таңдаңыз:</label>
-    <select id="mainCat" onchange="updateSubCat()">
-        <option value="">-- Таңдау --</option>
-        <option value="market">🛒 Маркет (Сату-алу)</option>
+    <select id="mainCat">
+        <option value="">-- Бөлімді таңдау --</option>
+        <option value="market">🛒 Маркет</option>
         <option value="jobs">💼 Жұмыс</option>
-        <option value="services">🛠 Қызмет көрсету</option>
+        <option value="services">🛠 Сервистер</option>
     </select>
 
     <label>Категория:</label>
@@ -35,25 +36,19 @@
         <option value="">-- Алдымен бөлімді таңдаңыз --</option>
     </select>
 
-    <label>Атауы:</label>
-    <input type="text" id="title" placeholder="Не сатасыз?">
+    <input type="text" id="title" placeholder="Тауар немесе қызмет атауы" style="margin-top:20px;">
+    <input type="number" id="price" placeholder="Бағасы (₸)">
+    <input type="tel" id="phone" placeholder="Телефон (мысалы: 8707...)">
+    <textarea id="desc" placeholder="Толық сипаттамасы (міндетті емес)" rows="3"></textarea>
 
-    <label>Бағасы:</label>
-    <input type="number" id="price" placeholder="Теңгемен">
-
-    <label>Сипаттама (міндетті емес):</label>
-    <textarea id="desc" rows="3"></textarea>
-
-    <label>Телефон:</label>
-    <input type="text" id="phone" placeholder="87071234567">
-
-    <div class="upload-area" onclick="document.getElementById('imgInp').click()">
-        <span>📸 Сурет жүктеу</span>
+    <div class="upload-btn" onclick="document.getElementById('imgInp').click()">
+        📸 Сурет жүктеу
         <input type="file" id="imgInp" accept="image/*" hidden>
-        <img id="preview">
     </div>
+    <img id="preview">
 
     <button id="sendBtn">Жариялау</button>
+    <div id="status"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -73,60 +68,102 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    // Категориялар базасы (Осы жерге жаңасын қоса бересің)
-    const categories = {
-        market: ["Мал базар", "Көлік сату", "Жер және Үй", "Құрылыс заттары", "Тұрмыстық заттар", "Киім", "Ет"],
-        jobs: ["Жұмыс іздеймін", "Бос жұмыс орны"],
-        services: ["Такси", "Жөндеу", "Тамақтану", "Медицина"]
+    // 1. КАТЕГОРИЯЛАРДЫ БАЗАДАН АВТОМАТТЫ ТҮРДЕ АЛУ
+    const mainSelect = document.getElementById('mainCat');
+    const subSelect = document.getElementById('subCat');
+
+    mainSelect.onchange = async () => {
+        const val = mainSelect.value;
+        subSelect.innerHTML = "<option>Жүктелуде...</option>";
+        if(!val) return subSelect.innerHTML = "";
+
+        try {
+            const doc = await db.collection("categories").doc(val).get();
+            if(doc.exists) {
+                const list = doc.data().list || [];
+                subSelect.innerHTML = "";
+                list.forEach(item => {
+                    let opt = document.createElement('option');
+                    opt.value = item; opt.innerText = item;
+                    subSelect.appendChild(opt);
+                });
+            } else {
+                subSelect.innerHTML = "<option>Тізім бос</option>";
+            }
+        } catch(e) { console.error(e); }
     };
 
-    function updateSubCat() {
-        const main = document.getElementById('mainCat').value;
-        const sub = document.getElementById('subCat');
-        sub.innerHTML = "";
-        if(main && categories[main]) {
-            categories[main].forEach(c => {
-                let opt = document.createElement('option');
-                opt.value = c; opt.innerText = c;
-                sub.appendChild(opt);
-            });
-        }
-    }
-
-    document.getElementById('imgInp').onchange = function(e) {
-        const [file] = this.files;
-        if (file) {
+    // 2. СУРЕТТІ КӨРУ
+    document.getElementById('imgInp').onchange = (e) => {
+        const [file] = e.target.files;
+        if(file) {
             document.getElementById('preview').src = URL.createObjectURL(file);
             document.getElementById('preview').style.display = 'block';
         }
     };
 
+    // 3. СУРЕТТІ СЫҒУ (САПАНЫ САҚТАП, САЛМАҚТЫ АЗАЙТУ)
+    async function compressImg(file) {
+        return new Promise((res) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.src = ev.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX = 1280; 
+                    let w = img.width, h = img.height;
+                    if (w > MAX) { h *= MAX / w; w = MAX; }
+                    canvas.width = w; canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    canvas.toBlob((blob) => res(blob), 'image/jpeg', 0.8);
+                };
+            };
+        });
+    }
+
+    // 4. ЖІБЕРУ
     document.getElementById('sendBtn').onclick = async function() {
-        const btn = this;
         const file = document.getElementById('imgInp').files[0];
-        const data = {
-            mainCat: document.getElementById('mainCat').value,
-            subCat: document.getElementById('subCat').value,
-            title: document.getElementById('title').value,
-            price: Number(document.getElementById('price').value),
-            phone: document.getElementById('phone').value,
-            desc: document.getElementById('desc').value,
-            status: "active",
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
+        const title = document.getElementById('title').value;
+        if(!file || !title) return alert("Сурет пен атау міндетті!");
 
-        if(!data.mainCat || !data.title || !file) return alert("Маңызды жерлерді толтыр!");
-
-        btn.disabled = true; btn.innerText = "Жүктелуде...";
+        const btn = this;
+        const status = document.getElementById('status');
+        btn.disabled = true;
+        status.innerText = "Сурет оңтайландырылуда...";
 
         try {
-            const ref = storage.ref('ads/' + Date.now() + "_" + file.name);
-            await ref.put(file);
-            data.img = await ref.getDownloadURL();
-            await db.collection("ads").add(data);
-            alert("Сәтті қосылды!");
+            const finalFile = await compressImg(file);
+            status.innerText = "Базаға жіберілуде...";
+            
+            const ref = storage.ref('ads/' + Date.now() + ".jpg");
+            const upload = ref.put(finalFile);
+
+            upload.on('state_changed', (snap) => {
+                const prg = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                btn.innerText = "Жүктелуде: " + prg + "%";
+            });
+
+            await upload;
+            const url = await ref.getDownloadURL();
+
+            await db.collection("ads").add({
+                mainCat: mainSelect.value,
+                subCat: subSelect.value,
+                title: title,
+                price: Number(document.getElementById('price').value),
+                phone: document.getElementById('phone').value,
+                desc: document.getElementById('desc').value,
+                img: url,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            alert("СӘТТІ ЖАРЫЯЛАНДЫ! ✅");
             window.location.href = "index.html";
-        } catch (e) { alert("Қате: " + e.message); btn.disabled = false; }
+        } catch(e) { alert("Қате: " + e.message); btn.disabled = false; }
     };
 </script>
 </body>
