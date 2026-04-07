@@ -3,77 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Хабарландыру қосу - Batyr Info</title>
+    <title>Қосу - Batyrsity</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .container { max-width: 450px; margin: auto; background: white; padding: 20px; border-radius: 12px; }
-        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        :root { --primary: #007bff; --bg: #f4f7f6; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .form-card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; }
+        label { display: block; margin-top: 15px; font-size: 14px; font-weight: 600; color: #666; }
+        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; }
+        .upload-area { border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 15px; margin-top: 15px; cursor: pointer; }
+        #preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; margin-top: 30px; transition: 0.3s; }
+        button:disabled { background: #ccc; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="form-card">
     <h2>Жаңа хабарландыру</h2>
-    <input type="text" id="title" placeholder="Атауы">
-    <input type="number" id="price" placeholder="Бағасы">
-    <textarea id="description" placeholder="Сипаттамасы"></textarea>
-    <input type="text" id="phone" placeholder="Телефон (мыс: 8707...)">
-    <button id="submitBtn">Жариялауға жіберу</button>
+    
+    <label>Бөлімді таңдаңыз:</label>
+    <select id="mainCat" onchange="updateSubCat()">
+        <option value="">-- Таңдау --</option>
+        <option value="market">🛒 Маркет (Сату-алу)</option>
+        <option value="jobs">💼 Жұмыс</option>
+        <option value="services">🛠 Қызмет көрсету</option>
+    </select>
+
+    <label>Категория:</label>
+    <select id="subCat">
+        <option value="">-- Алдымен бөлімді таңдаңыз --</option>
+    </select>
+
+    <label>Атауы:</label>
+    <input type="text" id="title" placeholder="Не сатасыз?">
+
+    <label>Бағасы:</label>
+    <input type="number" id="price" placeholder="Теңгемен">
+
+    <label>Сипаттама (міндетті емес):</label>
+    <textarea id="desc" rows="3"></textarea>
+
+    <label>Телефон:</label>
+    <input type="text" id="phone" placeholder="87071234567">
+
+    <div class="upload-area" onclick="document.getElementById('imgInp').click()">
+        <span>📸 Сурет жүктеу</span>
+        <input type="file" id="imgInp" accept="image/*" hidden>
+        <img id="preview">
+    </div>
+
+    <button id="sendBtn">Жариялау</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 <script>
-    // Сенің конфигің
     const firebaseConfig = {
         apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
         authDomain: "batyr-final.firebaseapp.com",
         projectId: "batyr-final",
-        storageBucket: "batyr-final.firebasestorage.app",
+        storageBucket: "batyr-final.appspot.com",
         messagingSenderId: "621519255228",
         appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
     };
-
-    // Іске қосу
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
-    document.getElementById('submitBtn').onclick = function() {
-        const title = document.getElementById('title').value;
-        const price = document.getElementById('price').value;
-        const phone = document.getElementById('phone').value;
-        const desc = document.getElementById('description').value;
+    // Категориялар базасы (Осы жерге жаңасын қоса бересің)
+    const categories = {
+        market: ["Мал базар", "Көлік сату", "Жер және Үй", "Құрылыс заттары", "Тұрмыстық заттар", "Киім", "Ет"],
+        jobs: ["Жұмыс іздеймін", "Бос жұмыс орны"],
+        services: ["Такси", "Жөндеу", "Тамақтану", "Медицина"]
+    };
 
-        if(!title || !price || !phone) {
-            alert("Бос орындарды толтырыңыз!");
-            return;
+    function updateSubCat() {
+        const main = document.getElementById('mainCat').value;
+        const sub = document.getElementById('subCat');
+        sub.innerHTML = "";
+        if(main && categories[main]) {
+            categories[main].forEach(c => {
+                let opt = document.createElement('option');
+                opt.value = c; opt.innerText = c;
+                sub.appendChild(opt);
+            });
         }
+    }
 
-        // Батырманы уақытша өшіру (екі рет басылып кетпеу үшін)
-        document.getElementById('submitBtn').disabled = true;
-        document.getElementById('submitBtn').innerText = "Жіберілуде...";
+    document.getElementById('imgInp').onchange = function(e) {
+        const [file] = this.files;
+        if (file) {
+            document.getElementById('preview').src = URL.createObjectURL(file);
+            document.getElementById('preview').style.display = 'block';
+        }
+    };
 
-        db.collection("ads").add({
-            title: title,
-            price: Number(price),
-            phone: phone,
-            description: desc,
-            status: "pending",
+    document.getElementById('sendBtn').onclick = async function() {
+        const btn = this;
+        const file = document.getElementById('imgInp').files[0];
+        const data = {
+            mainCat: document.getElementById('mainCat').value,
+            subCat: document.getElementById('subCat').value,
+            title: document.getElementById('title').value,
+            price: Number(document.getElementById('price').value),
+            phone: document.getElementById('phone').value,
+            desc: document.getElementById('desc').value,
+            status: "active",
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            alert("СӘТТІ ЖІБЕРІЛДІ!");
+        };
+
+        if(!data.mainCat || !data.title || !file) return alert("Маңызды жерлерді толтыр!");
+
+        btn.disabled = true; btn.innerText = "Жүктелуде...";
+
+        try {
+            const ref = storage.ref('ads/' + Date.now() + "_" + file.name);
+            await ref.put(file);
+            data.img = await ref.getDownloadURL();
+            await db.collection("ads").add(data);
+            alert("Сәтті қосылды!");
             window.location.href = "index.html";
-        })
-        .catch((error) => {
-            alert("ҚАТЕ ШЫҚТЫ: " + error.message);
-            document.getElementById('submitBtn').disabled = false;
-            document.getElementById('submitBtn').innerText = "Қайта көру";
-        });
+        } catch (e) { alert("Қате: " + e.message); btn.disabled = false; }
     };
 </script>
-
 </body>
 </html>
