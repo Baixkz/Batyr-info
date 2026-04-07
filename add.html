@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -29,30 +30,43 @@
     </select>
 
     <label for="title">Атауы:</label>
-    <input type="text" id="title" placeholder="Мысалы: Самсунг телефоны немесе Таза ет">
+    <input type="text" id="title" placeholder="Мысалы: Самсунг телефоны">
 
     <label for="price">Бағасы (₸):</label>
     <input type="number" id="price" placeholder="Бағасын жазыңыз">
 
     <label for="description">Сипаттамасы:</label>
-    <textarea id="description" placeholder="Тауар немесе қызмет туралы толық мәлімет..."></textarea>
+    <textarea id="description" placeholder="Толық мәлімет..."></textarea>
 
     <label for="phone">Байланыс нөмірі:</label>
     <input type="text" id="phone" placeholder="87071234567">
 
     <button id="submitBtn">Жариялауға жіберу</button>
-    <p class="note">Ескерту: Хабарландыру админ тексерісінен өткен соң сайтта пайда болады.</p>
 </div>
 
 <script type="module">
-    import { db } from "./firebase.js";
-    import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    // Firebase кітапханаларын тікелей интернеттен алу
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+    // СЕНІҢ Firebase Конфигің
+    const firebaseConfig = {
+        apiKey: "AIzaSyAs-XXXXXXXXXXXXXX", // Осы жерге Firebase-тен өз API Key-іңді қой
+        authDomain: "batyr-final.firebaseapp.com",
+        projectId: "batyr-final",
+        storageBucket: "batyr-final.firebasestorage.app",
+        messagingSenderId: "898516104192",
+        appId: "1:898516104192:web:xxxxxxxxxxxx" 
+    };
+
+    // Firebase-ті іске қосу
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Батырманы басқандағы әрекет
     document.getElementById('submitBtn').addEventListener('click', async () => {
-        const category = document.getElementById('category').value;
         const title = document.getElementById('title').value;
         const price = document.getElementById('price').value;
-        const description = document.getElementById('description').value;
         const phone = document.getElementById('phone').value;
 
         if(!title || !price || !phone) {
@@ -62,19 +76,18 @@
 
         try {
             await addDoc(collection(db, "ads"), {
-                category: category,
+                category: document.getElementById('category').value,
                 title: title,
                 price: Number(price),
-                description: description,
+                description: document.getElementById('description').value,
                 phone: phone,
-                status: "pending", // Әдепкі бойынша "күтуде" статусы
+                status: "pending", 
                 createdAt: serverTimestamp()
             });
-            alert("Сәтті жіберілді! Тексеруден өткен соң жарияланады.");
-            window.location.href = "index.html";
+            alert("Сәтті жіберілді!");
+            window.location.href = "index.html"; 
         } catch (e) {
-            console.error("Қате: ", e);
-            alert("Жіберу кезінде қате кетті.");
+            alert("Қате шықты: " + e.message);
         }
     });
 </script>
