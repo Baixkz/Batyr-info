@@ -33,6 +33,10 @@
         .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
         
+        /* ЖАҢА: Жарнама қосу батырмасының стилі */
+        .add-ad-btn { background: #007aff; color: white; margin: 15px 20px 0; padding: 12px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 14px; box-shadow: 0 4px 12px rgba(0,122,255,0.2); transition: 0.2s; }
+        .add-ad-btn:active { transform: scale(0.97); }
+
         .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
         .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
@@ -99,6 +103,10 @@
             </div>
         </div>
 
+        <a href="add.html" class="add-ad-btn">
+            <i class="fas fa-plus-circle"></i> <span data-key="addBtnText">Жарнама қосу</span>
+        </a>
+
         <div class="promo-slider">
             <div class="promo-track">
                 <div class="promo-slide">
@@ -139,6 +147,11 @@
         </div>
         
         <div class="grid" style="margin-top: 20px;">
+            <a href="add.html" class="market-header-btn" style="background: #28a745 !important; height: 80px !important;">
+                <i class="fas fa-plus-square" style="font-size: 30px !important;"></i>
+                <span data-key="addBtnText">Жарнама беру</span>
+            </a>
+
             <div class="market-header-btn" onclick="toggleOlx()">
                 <i class="fas fa-bullhorn"></i>
                 <span data-key="ads">ХАБАРЛАНДЫРУ</span>
@@ -151,9 +164,6 @@
                 <a href="olxdom.html" class="card olx-card"><i class="fa-solid fa-house-chimney-window"></i><span data-key="home">Жер және Үй</span></a>
                 <a href="olxstroy.html" class="card olx-card"><i class="fa-solid fa-screwdriver-wrench"></i><span data-key="tools">Құрылыс заттары</span></a>
                 <a href="olxhome.html" class="card olx-card"><i class="fa-solid fa-boxes-stacked"></i><span data-key="items">Тұрмыстық заттар</span></a>
-                <a href="https://wa.me/77XXXXXXXXX" class="card wa-market-btn">
-                    <i class="fab fa-whatsapp"></i> <span data-key="add">Хабарландыру беру</span>
-                </a>
             </div>
 
             <div style="grid-column: span 3; text-align: center; padding: 10px 0;">
@@ -191,7 +201,7 @@
                 search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
                 catalogTitle: "Каталогтар", catalogDesc: "Мұнда дүкендер тізімі болады",
                 mal: "Мал базар", auto: "Көлік сату", home: "Жер және Үй", 
-                tools: "Құрылыс заттары", items: "Тұрмыстық заттар", add: "Хабарландыру беру",
+                tools: "Құрылыс заттары", items: "Тұрмыстық заттар", addBtnText: "Жарнама қосу",
                 prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" },
                 installBtn: "Қолданбаны орнату", guideTitle: "⚠️ МАҢЫЗДЫ:",
                 guideText: "Егер орнату кезінде 'Подозрительное приложение' шықса, 'Подробнее' басып, 'Все равно установить' таңдаңыз."
@@ -203,7 +213,7 @@
                 search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
                 catalogTitle: "Каталоги", catalogDesc: "Здесь будет список магазинов",
                 mal: "Скотный рынок", auto: "Продажа авто", home: "Земля и дома", 
-                tools: "Стройматериалы", items: "Бытовые вещи", add: "Подать объявление",
+                tools: "Стройматериалы", items: "Бытовые вещи", addBtnText: "Подать объявление",
                 prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" },
                 installBtn: "Установить приложение", guideTitle: "⚠️ ВАЖНО:",
                 guideText: "Если при установке выйдет 'Подозрительное приложение', нажмите 'Подробнее', а затем 'Все равно установить'."
