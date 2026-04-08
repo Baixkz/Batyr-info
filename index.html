@@ -6,6 +6,8 @@
     <title>BATYR INFO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding-bottom: 80px; }
@@ -19,17 +21,18 @@
         .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; }
         .search-box input { border: none; outline: none; width: 100%; font-size: 16px; }
 
-        /* Категориялар торы */
+        /* Категориялар торы (Динамикалық) */
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 15px; }
         .card { 
             background: white; padding: 15px 5px; border-radius: 20px; 
             text-decoration: none; display: flex; flex-direction: column; 
-            align-items: center; height: 90px; justify-content: center; 
+            align-items: center; height: 95px; justify-content: center; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.2s;
+            cursor: pointer;
         }
         .card:active { transform: scale(0.95); }
-        .card i { font-size: 24px; margin-bottom: 8px; color: var(--main-blue); }
-        .card span { font-size: 10px; font-weight: 700; color: #1a1a1a; text-align: center; }
+        .card i { font-size: 26px; margin-bottom: 8px; color: var(--main-blue); }
+        .card span { font-size: 11px; font-weight: 700; color: #1a1a1a; text-align: center; padding: 0 5px; }
 
         /* Төменгі навигация */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 100; }
@@ -43,43 +46,22 @@
     <div class="header-section">
         <div class="header-title">BATYR INFO</div>
         <div class="live-bar">
-            <div class="live-item"><i class="fas fa-mosque"></i> <span id="prayerText">Намаз уақыты</span></div>
+            <div class="live-item"><i class="fas fa-mosque"></i> <span id="prayerText">Жүктелуде...</span></div>
             <div class="live-item"><i class="fas fa-temperature-high"></i> <span id="weatherText">...°C</span></div>
         </div>
         <div class="search-box">
             <i class="fas fa-search" style="color:#888"></i>
-            <input type="text" placeholder="Іздеу...">
+            <input type="text" id="searchInput" placeholder="Іздеу..." onkeyup="searchCards()">
         </div>
     </div>
 
-    <div class="grid" id="mainGrid">
-        <a href="category.html?type=taxi" class="card"><i class="fas fa-taxi"></i><span>Такси</span></a>
-        <a href="category.html?type=shops" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
-        <a href="category.html?type=jobs" class="card"><i class="fas fa-briefcase"></i><span>Жұмыс</span></a>
-        <a href="category.html?type=food" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
-        <a href="category.html?type=med" class="card"><i class="fas fa-hospital"></i><span>Медицина</span></a>
-        
-        <a href="category.html?type=mal-bazar" class="card"><i class="fa-solid fa-cow"></i><span>Мал базар</span></a>
-        <a href="category.html?type=feed" class="card"><i class="fa-solid fa-wheat-awn"></i><span>Жем-шөп</span></a>
-        <a href="category.html?type=meat" class="card"><i class="fa-solid fa-drumstick-bite"></i><span>Ет өнімдері</span></a>
-
-        <a href="category.html?type=avto" class="card"><i class="fa-solid fa-car"></i><span>Көлік сату</span></a>
-        <a href="category.html?type=uiler" class="card"><i class="fa-solid fa-house-chimney"></i><span>Жер және Үй</span></a>
-        <a href="category.html?type=stroy" class="card"><i class="fa-solid fa-screwdriver-wrench"></i><span>Құрылыс</span></a>
-        
-        <a href="category.html?type=market" class="card"><i class="fas fa-shopping-basket"></i><span>Маркет</span></a>
-        <a href="category.html?type=cloth" class="card"><i class="fas fa-tshirt"></i><span>Киімдер</span></a>
-        <a href="category.html?type=phone" class="card"><i class="fas fa-mobile-alt"></i><span>Телефондар</span></a>
-        
-        <a href="https://wa.me/77XXXXXXXXX" class="card" style="background: #e8f5e9; border: 1px solid #25D366;">
-            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-            <span style="color: #1b5e20;">Жарнама беру</span>
-        </a>
+    <div class="grid" id="categoryGrid">
+        <p style="grid-column: 1/-1; text-align: center; padding: 20px; color: #999;">Жүктелуде...</p>
     </div>
 
     <div class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Басты</span></a>
-        <a href="category.html?type=market" class="nav-item"><i class="fas fa-store"></i><span>Маркет</span></a>
+        <a href="#" class="nav-item"><i class="fas fa-star"></i><span>Таңдаулы</span></a>
         <a href="admin.html" class="nav-item"><i class="fas fa-user-shield"></i><span>Админ</span></a>
     </div>
 
