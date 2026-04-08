@@ -1,7 +1,7 @@
 {
   "name": "BATYR INFO",
   "short_name": "BATYR",
-  "id": "batyr-info-pwa-v12",
+  "id": "batyr-info-v2026",
   "description": "Батыр ауылының ақпараттық және қызмет көрсету порталы",
   "start_url": "./index.html",
   "scope": "./",
@@ -37,9 +37,15 @@
   "categories": ["news", "utilities", "business", "shopping"],
   "shortcuts": [
     {
-      "name": "Хабарландыру",
-      "short_name": "Хабарландыру",
-      "url": "./olx.html",
+      "name": "Маркет",
+      "short_name": "Маркет",
+      "url": "./category.html?type=market",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Такси",
+      "short_name": "Такси",
+      "url": "./category.html?type=taxi",
       "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
     }
   ]
