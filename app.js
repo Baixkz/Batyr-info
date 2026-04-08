@@ -148,3 +148,9 @@ function renderAdsWithImages(querySnapshot) {
         container.innerHTML += html;
     });
 }
+// langData-ның ішіне (кейін реттеп алу үшін астына жаза сал)
+'mal-bazar': 'Мал базар',
+'avto': 'Көлік сату',
+'uiler': 'Жер және Үй',
+'stroy': 'Құрылыс заттары',
+'turmys': 'Тұрмыстық заттар'
