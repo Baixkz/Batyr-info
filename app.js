@@ -164,3 +164,10 @@ function renderAdsWithImages(querySnapshot) {
 'land': 'Жер телімдері',
 'rent': 'Жалға алу',
 'commercial': 'Коммерциялық'
+// Тұрмыстық заттар аудармалары
+'mebel': 'Жиһаз',
+'tech': 'Техника',
+'gadgets': 'Электроника',
+'clothes': 'Киім мен сән',
+'kids-world': 'Балалар әлемі',
+'for-home': 'Үйге арналған'
