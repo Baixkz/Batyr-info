@@ -159,3 +159,8 @@ function renderAdsWithImages(querySnapshot) {
 'trucks': 'Жүк көліктері',
 'car-parts': 'Қосалқы бөлшектер',
 'other-veh': 'Басқа көліктер'
+// Жылжымайтын мүлік аудармалары
+'houses': 'Үйлер',
+'land': 'Жер телімдері',
+'rent': 'Жалға алу',
+'commercial': 'Коммерциялық'
