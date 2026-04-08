@@ -3,21 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ Панель - BATYR INFO</title>
+    <title>Оферта - BATYR INFO</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f8f9fa; padding: 20px; color: #1a1a1a; }
-        .container { background: white; padding: 30px; border-radius: 24px; max-width: 650px; margin: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        h2 { text-align: center; font-weight: 800; }
-        .back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
-        .ad-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 15px; background: #fff; }
-        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; max-height: 300px; object-fit: cover; background: #eee; }
-        .btn-group { display: flex; gap: 10px; }
-        .btn-ok { background: #28a745; color: white; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
-        .btn-del { background: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
-        .status-badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
-        .version-tag { text-align: center; font-size: 12px; color: #ccc; margin-top: 40px; cursor: pointer; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: #f0f2f5; padding: 15px; color: #1a1a1a; line-height: 1.6;
+        }
+        .container { 
+            background: white; padding: 25px; border-radius: 28px; 
+            max-width: 500px; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+        }
+        .lang-switch { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .lang-btn { 
+            padding: 8px 18px; border: none; background: #e9ecef; 
+            color: #495057; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px;
+        }
+        .lang-btn.active { background: #007bff; color: white; }
+        .content { display: none; }
+        .content.active { display: block; }
+        
+        h2 { color: #d9534f; text-align: center; font-size: 20px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; }
+        h4 { color: #007bff; margin-top: 20px; font-size: 16px; font-weight: 700; }
+        p { font-size: 14px; margin-bottom: 12px; text-align: justify; }
+        .warning-box { background: #fff8e1; padding: 15px; border-radius: 12px; border-left: 5px solid #ffc107; margin-bottom: 20px; font-size: 13px; }
+
+        /* Админ панель жинақы стиль */
+        #admin-panel { display: none; margin-top: 20px; }
+        .ad-card { 
+            border: 1px solid #eee; padding: 12px; margin-bottom: 15px; 
+            border-radius: 20px; background: #fff; position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .ad-card img { 
+            width: 100%; border-radius: 15px; margin-bottom: 12px; 
+            max-height: 250px; object-fit: cover; background: #f8f9fa; 
+        }
+        .status-tag { 
+            position: absolute; top: 20px; left: 20px; padding: 4px 12px; 
+            border-radius: 8px; color: white; font-size: 11px; font-weight: bold;
+        }
+        .ad-info p { margin: 4px 0; font-size: 14px; color: #333; }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-ok { background: #28a745; color: white; border: none; padding: 12px; border-radius: 12px; flex: 1; cursor: pointer; font-weight: bold; }
+        .btn-del { background: #dc3545; color: white; border: none; padding: 12px; border-radius: 12px; flex: 1; cursor: pointer; font-weight: bold; }
+        
+        .version-tag { text-align: center; font-size: 11px; color: #ccc; margin-top: 30px; cursor: pointer; padding: 10px; user-select: none; }
+        .back { display: block; text-align: center; text-decoration: none; color: #007bff; font-weight: bold; font-size: 14px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -25,20 +58,49 @@
 <div class="container">
     <a href="index.html" class="back">← Артқа / Назад</a>
     
-    <div id="user-view" style="text-align:center; padding: 50px 0;">
-        <h2>КҮТҮ ЖЕКЕСІ</h2>
-        <p>Админ панельге кіру үшін нұсқаны 5 рет басыңыз.</p>
+    <div id="user-view">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('kz')">ҚАЗАҚША</button>
+            <button class="lang-btn" onclick="setLang('ru')">РУССКИЙ</button>
+        </div>
+
+        <div id="kz" class="content active">
+            <h2>ПАЙДАЛАНУ ШАРТТАРЫ</h2>
+            <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
+            <h4>1. Платформаның мақсаты</h4>
+            <p><b>BATYR INFO</b> — бұл тек ақпараттық-анықтамалық каталог. Платформа ешқандай қызметтерді <b>ТІКЕЛЕЙ КӨРСЕТПЕЙДІ</b>.</p>
+            <h4>2. Жауапкершіліктен бас тарту</h4>
+            <p>Сайттың Иесі үшінші тұлғалардың қызмет сапасына <b>жауапкершілік көтермейді.</b></p>
+            <h4>3. Деректерді жою</h4>
+            <p>Қате мәлімет тапсаңыз немесе нөміріңізді өшіргіңіз келсе, Админге хабарласыңыз.</p>
+        </div>
+
+        <div id="ru" class="content">
+            <h2>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
+            <div class="warning-box">ВАЖНО: Используя сайт, вы полностью соглашаетесь с данными условиями.</div>
+            <h4>1. Статус платформы</h4>
+            <p><b>BATYR INFO</b> — это информационный каталог. Платформа <b>НАПРЯМУЮ НЕ ОКАЗЫВАЕТ</b> услуги.</p>
+            <h4>2. Отказ от ответственности</h4>
+            <p>Владелец сайта <b>не несет никакой ответственности</b> за действия третьих лиц.</p>
+        </div>
     </div>
 
-    <div id="admin-panel" style="display:none;">
+    <div id="admin-panel">
         <h2 style="color: #000;">ДИРЕКТОР ПАНЕЛІ</h2>
-        <div id="ads-list">Деректер жүктелуде...</div>
+        <div id="ads-list">Жарнамалар жүктелуде...</div>
     </div>
 
     <div class="version-tag" id="secret-trigger">Версия 1.0.4</div>
 </div>
 
 <script>
+    function setLang(lang) {
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(lang).classList.add('active');
+        if(window.event && window.event.currentTarget) window.event.currentTarget.classList.add('active');
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
       authDomain: "batyr-final.firebaseapp.com",
@@ -70,36 +132,34 @@
 
     function loadAds() {
         const list = document.getElementById('ads-list');
-        
-        // Мұнда .where() шартын алып тастадық, енді БАРЛЫҚ жарнама шығады
-        db.collection("ads").onSnapshot(snap => {
+        // Барлық жарнамаларды бақылау (жаңалары жоғарыда)
+        db.collection("ads").orderBy("createdAt", "desc").onSnapshot(snap => {
             if (snap.empty) {
-                list.innerHTML = "<p style='text-align:center;'>Жарнамалар табылмады.</p>";
+                list.innerHTML = "<p style='text-align:center;'>Жарнама табылмады.</p>";
                 return;
             }
             
             list.innerHTML = ""; 
             snap.forEach(doc => {
                 const ad = doc.data();
-                let photo = 'https://via.placeholder.com/300?text=Сурет+жоқ';
-                if (ad.images && Array.isArray(ad.images) && ad.images.length > 0) {
-                    photo = ad.images[0]; 
-                }
-
-                // Статус түсін анықтау
+                let photo = ad.images && ad.images[0] ? ad.images[0] : 'https://via.placeholder.com/300?text=Сурет+жоқ';
+                
                 const isPending = ad.status === 'pending';
-                const badgeColor = isPending ? '#ffc107' : '#28a745';
-                const badgeText = isPending ? 'КҮТУДЕ' : 'БЕЛСЕНДІ';
+                const statusColor = isPending ? '#ffc107' : '#28a745';
+                const statusText = isPending ? 'КҮТУДЕ' : 'БЕЛСЕНДІ';
 
                 list.innerHTML += `
                     <div class="ad-card">
-                        <span class="status-badge" style="background:${badgeColor}; color:white;">${badgeText}</span>
-                        <img src="${photo}" alt="photo">
-                        <p><b>Тақырыбы:</b> ${ad.title || 'Жоқ'}</p>
-                        <p><b>Телефон:</b> ${ad.phone || 'Жоқ'}</p>
-                        <p><b>Баға:</b> ${ad.price || 0} тг</p>
+                        <span class="status-tag" style="background:${statusColor}">${statusText}</span>
+                        <img src="${photo}" alt="ad-photo">
+                        <div class="ad-info">
+                            <p><b>Тақырыбы:</b> ${ad.title || '-'}</p>
+                            <p><b>Сипаттама:</b> ${ad.desc || '-'}</p>
+                            <p><b>Баға:</b> ${ad.price || 0} тг</p>
+                            <p><b>Телефон:</b> ${ad.phone || '-'}</p>
+                        </div>
                         <div class="btn-group">
-                            ${isPending ? `<button class="btn-ok" onclick="updateStatus('${doc.id}', 'active')">Мақұлдау</button>` : ''}
+                            ${isPending ? `<button class="btn-ok" onclick="updateStatus('${doc.id}', 'active')">Қалдыру</button>` : ''}
                             <button class="btn-del" onclick="deleteAd('${doc.id}')">Өшіру</button>
                         </div>
                     </div>`;
@@ -110,16 +170,20 @@
     }
 
     function updateStatus(id, newStatus) {
+        if (!confirm("Бұл жарнаманы мақұлдап, сайтқа шығарасыз ба?")) return;
         db.collection("ads").doc(id).update({ status: newStatus })
-        .then(() => alert("Жарнама мақұлданды!"))
+        .then(() => alert("Мақұлданды!"))
         .catch(err => alert("Қате: " + err.message));
     }
 
     function deleteAd(id) {
-        if(confirm("Өшіруге сенімдісіз бе?")) {
-            db.collection("ads").doc(id).delete();
+        if(confirm("Бұл жарнаманы біржола өшіруге сенімдісіз бе?")) {
+            db.collection("ads").doc(id).delete()
+            .then(() => alert("Өшірілді!"))
+            .catch(err => alert("Қате: " + err.message));
         }
     }
 </script>
+
 </body>
 </html>
