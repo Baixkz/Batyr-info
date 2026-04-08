@@ -6,36 +6,41 @@
     <title>BATYR INFO - Директор Панелі</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: -apple-system, sans-serif; background: #f4f7f9; padding: 15px; color: #1a1a1a; line-height: 1.6; margin: 0; }
         .container { background: white; padding: 25px; border-radius: 30px; max-width: 500px; margin: 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .back { display: block; text-decoration: none; color: #007bff; font-weight: bold; margin-bottom: 20px; font-size: 14px; }
+        .back { display: block; text-decoration: none; color: #007aff; font-weight: bold; margin-bottom: 20px; font-size: 14px; }
         
-        /* Тіл ауыстыру және Оферта */
+        /* Тіл және Оферта */
         .lang-switch { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
         .lang-btn { padding: 8px 18px; border: none; background: #eee; border-radius: 12px; cursor: pointer; font-weight: bold; color: #666; }
-        .lang-btn.active { background: #007bff; color: white; }
+        .lang-btn.active { background: #007aff; color: white; }
         .content { display: none; }
         .content.active { display: block; }
         h2.title { color: #d9534f; text-align: center; font-size: 22px; font-weight: 800; margin: 20px 0; text-transform: uppercase; }
-        .warning-box { background: #fff8e1; padding: 15px; border-radius: 12px; border-left: 5px solid #ffc107; margin-bottom: 25px; font-size: 14px; }
         
-        /* Админ Панель Стильдері */
+        /* Админ Панель */
         #admin-panel { display: none; }
-        .tabs { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid #eee; overflow-x: auto; padding-bottom: 5px; }
-        .tab { padding: 10px 15px; cursor: pointer; font-weight: bold; color: #999; font-size: 14px; white-space: nowrap; }
-        .tab.active { color: #007bff; border-bottom: 3px solid #007bff; }
+        .admin-nav { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid #eee; overflow-x: auto; padding-bottom: 5px; }
+        .nav-tab { padding: 10px 15px; cursor: pointer; font-weight: bold; color: #999; font-size: 13px; white-space: nowrap; }
+        .nav-tab.active { color: #007aff; border-bottom: 3px solid #007aff; }
 
+        /* Формалар стилі */
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+        .form-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        input, select, textarea { padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; font-size: 14px; }
+        .btn-main { background: #007aff; color: white; border: none; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        
+        /* Тізімдер стилі */
+        .list-item { background: #f9f9f9; padding: 12px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
+        .ad-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 20px; margin-bottom: 15px; }
         .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .btn { border: none; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: bold; flex: 1; }
+        .btn-sm { padding: 8px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; flex: 1; }
         .btn-ok { background: #e8f5e9; color: #2e7d32; }
         .btn-del { background: #ffebee; color: #c62828; }
 
-        /* Жарнама карточкасы */
-        .ad-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 20px; margin-bottom: 15px; }
-        .ad-card img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: #f0f0f0; }
-        .ad-header { display: flex; gap: 12px; align-items: center; }
-        
         .version-tag { text-align: center; font-size: 11px; color: #eee; margin-top: 40px; cursor: pointer; padding: 10px; }
         .copyright { text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
     </style>
@@ -43,61 +48,77 @@
 <body>
 
 <div class="container">
-    <a href="index.html" class="back">← Артқа / Назад</a>
+    <a href="index.html" class="back">← Артқа</a>
     
     <div id="user-view">
         <div class="lang-switch">
             <button class="lang-btn active" onclick="setLang('kz')">ҚАЗАҚША</button>
             <button class="lang-btn" onclick="setLang('ru')">РУССКИЙ</button>
         </div>
-
         <div id="kz" class="content active">
             <h2 class="title">ПАЙДАЛАНУ ШАРТТАРЫ</h2>
-            <div class="warning-box">МАҢЫЗДЫ: Сайтты пайдалану арқылы сіз осы шарттармен толық келісесіз.</div>
-            <p><b>BATYR INFO</b> — ақпараттық каталог. Біз қызмет сапасына жауап бермейміз.</p>
+            <p><b>BATYR INFO</b> — ақпараттық каталог. 2026.</p>
         </div>
-
         <div id="ru" class="content">
             <h2 class="title">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h2>
-            <div class="warning-box">ВАЖНО: Пользуясь сайтом, вы соглашаетесь с условиями.</div>
-            <p><b>BATYR INFO</b> — информационный каталог.</p>
+            <p><b>BATYR INFO</b> — информационный каталог. 2026.</p>
         </div>
     </div>
 
     <div id="admin-panel">
-        <h2 style="text-align:center; color: #007bff;">ДИРЕКТОР ПАНЕЛІ</h2>
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('pending', this)">Күтуде</div>
-            <div class="tab" onclick="switchTab('active', this)">Белсенді</div>
+        <h2 style="text-align:center; color: #007aff; margin-bottom:20px;">ДИРЕКТОР ПАНЕЛІ</h2>
+        
+        <div class="admin-nav">
+            <div class="nav-tab active" onclick="switchAdminTab('cats', this)">Бөлімдер</div>
+            <div class="nav-tab" onclick="switchAdminTab('ads-add', this)">Жарнама +</div>
+            <div class="nav-tab" onclick="switchAdminTab('pending', this)">Күтуде</div>
+            <div class="nav-tab" onclick="switchAdminTab('active-ads', this)">Белсенді</div>
         </div>
 
-        <div id="ads-list">Жүктелуде...</div>
+        <div id="cats" class="admin-section active">
+            <div class="form-group">
+                <input type="text" id="cat-name" placeholder="Категория аты">
+                <input type="text" id="cat-icon" placeholder="Иконка (Мысалы: fa-car)">
+                <select id="cat-parent">
+                    <option value="root">-- БАСТЫ БЕТ --</option>
+                </select>
+                <button class="btn-main" onclick="saveCategory()">ҚОСУ</button>
+            </div>
+            <div id="cats-list">Жүктелуде...</div>
+        </div>
+
+        <div id="ads-add" class="admin-section">
+            <div class="form-group">
+                <select id="ad-cat-select"><option value="">Бөлімді таңдаңыз...</option></select>
+                <input type="text" id="ad-title" placeholder="Тақырыбы">
+                <input type="number" id="ad-price" placeholder="Бағасы">
+                <input type="tel" id="ad-phone" placeholder="Телефон">
+                <textarea id="ad-desc" placeholder="Сипаттамасы"></textarea>
+                <button class="btn-main" onclick="saveAd()">ЖАРНАМАНЫ ШЫҒАРУ</button>
+            </div>
+        </div>
+
+        <div id="ads-manage" class="admin-section">
+            <div id="ads-display">Тізім бос...</div>
+        </div>
+
     </div>
 
-    <p class="copyright">© 2026 BATYR INFO | Барлық құқықтар қорғалған.</p>
-    <div class="version-tag" id="secret-trigger">Версия 1.0.6</div>
+    <p class="copyright">© 2026 BATYR INFO</p>
+    <div class="version-tag" id="secret-trigger">Версия 1.0.7</div>
 </div>
 
+<script src="app.js"></script>
 <script>
-    // 1. Firebase Баптаулары
-    const firebaseConfig = {
-      apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
-      authDomain: "batyr-final.firebaseapp.com",
-      projectId: "batyr-final",
-      storageBucket: "batyr-final.appspot.com",
-      messagingSenderId: "621519255228",
-      appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // 2. Тіл ауыстыру
+    // 1. Тіл ауыстыру
     function setLang(lang) {
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.getElementById(lang).classList.add('active');
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
     }
 
-    // 3. Құпия кіру (7 рет басу)
+    // 2. Құпия кіру (7 рет басу)
     let secretClicks = 0;
     document.getElementById('secret-trigger').addEventListener('click', function() {
         secretClicks++;
@@ -106,59 +127,101 @@
             if (pass === "01012027") {
                 document.getElementById('user-view').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
-                loadAds('pending');
+                syncAdminData();
             }
             secretClicks = 0;
         }
         setTimeout(() => secretClicks = 0, 5000);
     });
 
-    // 4. Жарнамаларды басқару
-    function switchTab(status, el) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    // 3. Табтарды ауыстыру
+    function switchAdminTab(target, el) {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
-        loadAds(status);
+        document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+        
+        if (target === 'pending' || target === 'active-ads') {
+            document.getElementById('ads-manage').classList.add('active');
+            loadAdsForManage(target === 'pending' ? 'pending' : 'active');
+        } else {
+            document.getElementById(target).classList.add('active');
+        }
     }
 
-    function loadAds(status) {
-        const list = document.getElementById('ads-list');
-        list.innerHTML = "Жүктелуде...";
-        db.collection("ads").where("status", "==", status).orderBy("createdAt", "desc").onSnapshot(snap => {
-            list.innerHTML = "";
-            if(snap.empty) {
-                list.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">Жарнама жоқ.</p>`;
-                return;
-            }
+    // 4. Категорияларды басқару логикасы
+    async function saveCategory() {
+        const name = document.getElementById('cat-name').value;
+        const icon = document.getElementById('cat-icon').value || 'fa-folder';
+        const parentId = document.getElementById('cat-parent').value;
+        if(!name) return alert("Атын жаз!");
+        await db.collection("categories").add({ name, icon, parentId, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        document.getElementById('cat-name').value = "";
+    }
+
+    function syncAdminData() {
+        // Селекттерді және тізімдерді жаңарту
+        db.collection("categories").onSnapshot(snap => {
+            const parentSelect = document.getElementById('cat-parent');
+            const adCatSelect = document.getElementById('ad-cat-select');
+            const catsList = document.getElementById('cats-list');
+            
+            parentSelect.innerHTML = '<option value="root">-- БАСТЫ БЕТ --</option>';
+            adCatSelect.innerHTML = '<option value="">Бөлімді таңдаңыз...</option>';
+            catsList.innerHTML = "";
+
+            snap.forEach(doc => {
+                const data = doc.data();
+                parentSelect.innerHTML += `<option value="${doc.id}">${data.name}</option>`;
+                adCatSelect.innerHTML += `<option value="${doc.id}">${data.name}</option>`;
+                catsList.innerHTML += `
+                    <div class="list-item">
+                        <span>${data.parentId === 'root' ? '🏠' : '↳'} ${data.name}</span>
+                        <button onclick="deleteDoc('categories', '${doc.id}')" style="color:red; border:none; background:none;">өшіру</button>
+                    </div>`;
+            });
+        });
+    }
+
+    // 5. Жарнама қосу (Админнен тікелей)
+    async function saveAd() {
+        const adData = {
+            category: document.getElementById('ad-cat-select').value,
+            title: document.getElementById('ad-title').value,
+            price: document.getElementById('ad-price').value,
+            phone: document.getElementById('ad-phone').value,
+            desc: document.getElementById('ad-desc').value,
+            status: "active", // Админ қосса бірден белсенді
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            images: []
+        };
+        if(!adData.category || !adData.title) return alert("Бөлім мен тақырыпты таңда!");
+        await db.collection("ads").add(adData);
+        alert("Жарнама шықты!");
+    }
+
+    // 6. Жарнамаларды басқару (Мақұлдау/Өшіру)
+    function loadAdsForManage(status) {
+        const container = document.getElementById('ads-display');
+        container.innerHTML = "Жүктелуде...";
+        db.collection("ads").where("status", "==", status).onSnapshot(snap => {
+            container.innerHTML = "";
             snap.forEach(doc => {
                 const ad = doc.data();
-                let photo = (ad.images && ad.images.length > 0) ? ad.images[0] : 'https://via.placeholder.com/80?text=No+Photo';
-
-                list.innerHTML += `
+                container.innerHTML += `
                     <div class="ad-card">
-                        <div class="ad-header">
-                            <img src="${photo}" onerror="this.src='https://via.placeholder.com/80?text=Error'">
-                            <div>
-                                <b>${ad.title || 'Атаусыз'}</b><br>
-                                <small>${ad.category || 'Санатсыз'}</small><br>
-                                <small>📞 ${ad.phone}</small>
-                            </div>
-                        </div>
+                        <b>${ad.title}</b> <small>(${ad.phone})</small>
                         <div class="btn-group">
-                            ${status === 'pending' ? `<button class="btn btn-ok" onclick="updateStatus('${doc.id}', 'active')">МАҚҰЛДАУ</button>` : ''}
-                            <button class="btn btn-del" onclick="deleteAd('${doc.id}')">ӨШІРУ</button>
+                            ${status === 'pending' ? `<button class="btn-sm btn-ok" onclick="updateAdStatus('${doc.id}', 'active')">МАҚҰЛДАУ</button>` : ''}
+                            <button class="btn-sm btn-del" onclick="deleteDoc('ads', '${doc.id}')">ӨШІРУ</button>
                         </div>
                     </div>`;
             });
         });
     }
 
-    function updateStatus(id, stat) {
-        db.collection("ads").doc(id).update({ status: stat });
-    }
+    function updateAdStatus(id, stat) { db.collection("ads").doc(id).update({ status: stat }); }
+    function deleteDoc(col, id) { if(confirm("Рассымен өшіресіз бе?")) db.collection(col).doc(id).delete(); }
 
-    function deleteAd(id) {
-        if(confirm("Өшіруді растайсыз ба?")) db.collection("ads").doc(id).delete();
-    }
 </script>
 </body>
 </html>
