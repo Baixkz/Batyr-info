@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate">
     <title>BATYR INFO</title>
     
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007aff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BATYR INFO">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding-bottom: 70px; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
         
         .page { display: none; }
         .page.active { display: block; }
@@ -19,23 +24,59 @@
         .header-section { background: #007aff; padding: 15px 20px 35px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .location-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
+        .lang-switcher { display: flex; gap: 5px; }
+        .lang-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
+        .lang-btn.active { background: white !important; color: #007aff !important; }
         .header-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
         .live-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
-        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-
+        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; min-width: 80px; justify-content: center; }
         .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
+        
+        /* ЖАҢА: Жарнама қосу батырмасының стилі */
+        .add-ad-btn { background: #007aff; color: white; margin: 15px 20px 0; padding: 12px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 14px; box-shadow: 0 4px 12px rgba(0,122,255,0.2); transition: 0.2s; }
+        .add-ad-btn:active { transform: scale(0.97); }
 
-        /* Тұрақты Grid (Скриншоттағыдай) */
-        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 20px 15px; }
-        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); height: 100px; box-sizing: border-box; }
-        .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; }
-        .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; }
+        .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
+        .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
+        .promo-slide img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+        .promo-text h4 { margin: 0; font-size: 13px; color: #1a1a1a; font-weight: 800; }
+        .promo-text p { margin: 1px 0 0; font-size: 10px; color: #666; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
+        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; }
+        .card:active { transform: scale(0.96); }
+        .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; height: 32px; display: flex; align-items: center; }
+        .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
+
+        /* Market Special */
+        .market-header-btn { grid-column: span 3; background: #007aff; color: white !important; height: 120px !important; margin-bottom: 10px; cursor: pointer; border: none; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .market-header-btn i { color: white !important; font-size: 40px !important; margin-bottom: 10px; }
+        .market-header-btn span { color: white !important; font-size: 16px !important; font-weight: 900; }
+        .olx-inner-grid { display: none; grid-column: span 3; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 20px; }
+        .olx-card { border: 1.5px solid #007aff; height: 110px; }
+        .wa-market-btn { grid-column: span 2; background: #25D366 !important; color: white !important; height: 60px !important; flex-direction: row !important; gap: 10px; }
+        .wa-market-btn i, .wa-market-btn span { color: white !important; margin: 0 !important; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
-        .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; text-decoration: none; }
-        .nav-item.active { color: var(--main-blue); }
+        .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-item.active { color: var(--main-blue); }
+
+        footer { text-align: center; padding: 30px 20px; background: white; margin-top: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; }
+        .footer-link { color: var(--main-blue); text-decoration: none; font-weight: 700; font-size: 13px; display: block; margin-bottom: 20px; }
+        .copy { color: #000; font-size: 14px; font-weight: 800; }
+
+        #installContainer { display: none; margin: 0 20px 20px; }
+        #installBtn { background: #007aff; color: white; border: none; padding: 15px; border-radius: 18px; font-weight: 800; width: 100%; font-size: 14px; box-shadow: 0 4px 15px rgba(0,122,255,0.3); cursor: pointer; }
+        #install-guide { display: none; margin: 15px 20px; padding: 15px; background: #fff4e5; border-left: 5px solid #ffa500; border-radius: 12px; font-size: 13px; color: #664d03; text-align: left; }
+
+        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding-bottom: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); max-height: 70vh; overflow-y: auto; }
+        #locationSheet.active { bottom: 0; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1999; }
+        .sheet-header { padding: 20px 25px; font-weight: 900; font-size: 18px; color: var(--main-blue); border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; background: white; }
+        .loc-item { padding: 15px 25px; border-bottom: 1px solid #f9f9f9; font-weight: 600; color: #333; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -43,10 +84,13 @@
     <div id="page-home" class="page active">
         <div class="header-section">
             <div class="top-bar">
-                <button class="location-btn">
-                    <i class="fas fa-map-marker-alt"></i> <span>Батыр ауылы</span>
+                <button class="location-btn" onclick="toggleSheet(true)">
+                    <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span> <i class="fas fa-chevron-down" style="font-size: 9px;"></i>
                 </button>
-                <div style="font-weight: 800;">KZ</div>
+                <div class="lang-switcher">
+                    <button class="lang-btn active" id="btnKZ" onclick="changeLang('kk')">KZ</button>
+                    <button class="lang-btn" id="btnRU" onclick="changeLang('ru')">RU</button>
+                </div>
             </div>
             <div class="header-title">BATYR INFO</div>
             <div class="live-bar">
@@ -55,58 +99,236 @@
             </div>
             <div class="search-box">
                 <i class="fas fa-search" style="color:#888"></i>
-                <input type="text" placeholder="Іздеу...">
+                <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Іздеу...">
             </div>
         </div>
 
-        <div class="grid">
-            <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
-            <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span>Жұмыс</span></a>
-            <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span>Такси</span></a>
-            <a href="food.html" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
-            <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span>Қызмет көрсету</span></a>
-            <a href="med.html" class="card"><i class="fas fa-hospital"></i><span>Медицина</span></a>
-            <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span>Мекемелер</span></a>
-            <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span>Ойын-сауық</span></a>
+        <a href="add.html" class="add-ad-btn">
+            <i class="fas fa-plus-circle"></i> <span data-key="addBtnText">Жарнама қосу</span>
+        </a>
+
+        <div class="promo-slider">
+            <div class="promo-track">
+                <div class="promo-slide">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100" alt="Promo">
+                    <div class="promo-text"><h4 id="promoTitle">"Береке" Асханасы</h4><p id="promoDesc">Дәмді тағамдар мен мәзірлер</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid" id="mainGrid">
+            <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
+            <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
+            <a href="trans.html" class="card"><i class="fas fa-taxi"></i><span data-key="trans">Көлік және Такси</span></a>
+            <a href="food.html" class="card"><i class="fas fa-utensils"></i><span data-key="food">Тамақтану</span></a>
+            <a href="bath.html" class="card"><i class="fas fa-th-large"></i><span data-key="services">Қызмет көрсету</span></a>
+            <a href="med.html" class="card"><i class="fas fa-hospital"></i><span data-key="med">Медицина</span></a>
+            <a href="edu.html" class="card"><i class="fas fa-landmark"></i><span data-key="org">Мекемелер</span></a>
+            <a href="fun.html" class="card"><i class="fas fa-gamepad"></i><span data-key="fun">Ойын-сауық</span></a>
+        </div>
+
+        <div id="installContainer">
+            <button id="installBtn"><i class="fas fa-download"></i> Қолданбаны орнату</button>
+            <div id="install-guide">
+                <strong id="guideTitle">⚠️ МАҢЫЗДЫ:</strong>
+                <span id="guideText">Егер орнату кезінде "Подозрительное приложение" шықса, <b>"Подробнее"</b> басып, <b>"Все равно установить"</b> таңдаңыз.</span>
+            </div>
+        </div>
+
+        <footer>
+            <a href="rules.html" class="footer-link" data-key="oferta">Пайдалану шарттары</a>
+            <div class="copy">2026 BAIX</div>
+        </footer>
+    </div>
+
+    <div id="page-market" class="page">
+        <div class="header-section" style="padding-bottom: 20px;">
+            <div class="header-title" data-key="navMarket">МАРКЕТ</div>
+        </div>
+        
+        <div class="grid" style="margin-top: 20px;">
+            <a href="add.html" class="market-header-btn" style="background: #28a745 !important; height: 80px !important;">
+                <i class="fas fa-plus-square" style="font-size: 30px !important;"></i>
+                <span data-key="addBtnText">Жарнама беру</span>
+            </a>
+
+            <div class="market-header-btn" onclick="toggleOlx()">
+                <i class="fas fa-bullhorn"></i>
+                <span data-key="ads">ХАБАРЛАНДЫРУ</span>
+                <i class="fas fa-chevron-down" id="olx-arrow" style="font-size: 14px; margin-top: 5px; color: white;"></i>
+            </div>
+
+            <div id="olx-content" class="olx-inner-grid">
+                <a href="mal-bazar.html" class="card olx-card"><i class="fa-solid fa-paw"></i><span data-key="mal">Мал базар</span></a>
+                <a href="olxavto.html" class="card olx-card"><i class="fa-solid fa-car"></i><span data-key="auto">Көлік сату</span></a>
+                <a href="olxdom.html" class="card olx-card"><i class="fa-solid fa-house-chimney-window"></i><span data-key="home">Жер және Үй</span></a>
+                <a href="olxstroy.html" class="card olx-card"><i class="fa-solid fa-screwdriver-wrench"></i><span data-key="tools">Құрылыс заттары</span></a>
+                <a href="olxhome.html" class="card olx-card"><i class="fa-solid fa-boxes-stacked"></i><span data-key="items">Тұрмыстық заттар</span></a>
+            </div>
+
+            <div style="grid-column: span 3; text-align: center; padding: 10px 0;">
+                <h3 data-key="catalogTitle">Каталогтар</h3>
+                <p data-key="catalogDesc" style="font-size: 12px; color: #666;">Мұнда дүкендер тізімі болады</p>
+            </div>
         </div>
     </div>
 
+    <div id="page-profile" class="page">
+        <div class="header-section"><div class="header-title" data-key="navProfile">ПРОФИЛЬ</div></div>
+        <div style="text-align:center; padding:50px;">Кіру жүйесі жақын арада...</div>
+    </div>
+
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('home')"><i class="fas fa-home"></i><span>Басты</span></div>
-        <div class="nav-item" onclick="showPage('market')"><i class="fas fa-store"></i><span>Маркет</span></div>
-        <div class="nav-item" onclick="showPage('profile')"><i class="fas fa-user"></i><span>Профиль</span></div>
+        <div class="nav-item active" id="nav-home" onclick="showPage('home')"><i class="fas fa-home"></i><span data-key="navHome">Басты</span></div>
+        <div class="nav-item" id="nav-market" onclick="showPage('market')"><i class="fas fa-store"></i><span data-key="navMarket">Маркет</span></div>
+        <div class="nav-item" id="nav-profile" onclick="showPage('profile')"><i class="fas fa-user"></i><span data-key="navProfile">Профиль</span></div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleSheet(false)"></div>
+    <div id="locationSheet">
+        <div class="sheet-header" id="sheetTitle">Локация таңдаңыз</div>
+        <div class="loc-item" onclick="selectLoc('Батыр ауылы')">Батыр ауылы</div>
+        <div class="loc-item" onclick="selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
+        <div class="loc-item" onclick="selectLoc('Жаңаөзен қаласы')">Жаңаөзен қаласы</div>
     </div>
 
     <script>
-        // Firebase баптаулары (Сенің деректерің)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
-            authDomain: "batyr-final.firebaseapp.com",
-            projectId: "batyr-final",
-            storageBucket: "batyr-final.appspot.com",
-            messagingSenderId: "621519255228",
-            appId: "1:621519255228:web:6087e026a6db84afa2c2b9"
+        const translations = {
+            kk: {
+                ads: "ХАБАРЛАНДЫРУ", shops: "Дүкендер", jobs: "Жұмыс", trans: "Көлік және Такси",
+                food: "Тамақтану", services: "Қызмет көрсету", med: "Медицина", org: "Мекемелер",
+                fun: "Ойын-сауық", navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль",
+                search: "Іздеу...", locTitle: "Локация таңдаңыз", oferta: "Пайдалану шарттары",
+                catalogTitle: "Каталогтар", catalogDesc: "Мұнда дүкендер тізімі болады",
+                mal: "Мал базар", auto: "Көлік сату", home: "Жер және Үй", 
+                tools: "Құрылыс заттары", items: "Тұрмыстық заттар", addBtnText: "Жарнама қосу",
+                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" },
+                installBtn: "Қолданбаны орнату", guideTitle: "⚠️ МАҢЫЗДЫ:",
+                guideText: "Егер орнату кезінде 'Подозрительное приложение' шықса, 'Подробнее' басып, 'Все равно установить' таңдаңыз."
+            },
+            ru: {
+                ads: "ОБЪЯВЛЕНИЯ", shops: "Магазины", jobs: "Работа", trans: "Транспорт и Такси",
+                food: "Питание", services: "Услуги", med: "Медицина", org: "Учреждения",
+                fun: "Развлечения", navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль",
+                search: "Поиск...", locTitle: "Выберите локацию", oferta: "Условия использования",
+                catalogTitle: "Каталоги", catalogDesc: "Здесь будет список магазинов",
+                mal: "Скотный рынок", auto: "Продажа авто", home: "Земля и дома", 
+                tools: "Стройматериалы", items: "Бытовые вещи", addBtnText: "Подать объявление",
+                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" },
+                installBtn: "Установить приложение", guideTitle: "⚠️ ВАЖНО:",
+                guideText: "Если при установке выйдет 'Подозрительное приложение', нажмите 'Подробнее', а затем 'Все равно установить'."
+            }
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+
+        let currentLang = 'kk';
+        let deferredPrompt;
+
+        function toggleOlx() {
+            const content = document.getElementById('olx-content');
+            const arrow = document.getElementById('olx-arrow');
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'grid';
+                arrow.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            } else {
+                content.style.display = 'none';
+                arrow.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installContainer').style.display = 'block';
+            document.getElementById('install-guide').style.display = 'block';
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') document.getElementById('installContainer').style.display = 'none';
+                deferredPrompt = null;
+            }
+        });
+
+        function changeLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+            document.getElementById('searchInput').placeholder = translations[lang].search;
+            document.getElementById('installBtn').innerHTML = `<i class="fas fa-download"></i> ${translations[lang].installBtn}`;
+            getPrayerTimes(lang);
+        }
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Егер Маркет беті болса, сол жаққа бағыттау немесе контентті ауыстыру
-            console.log("Бет ауысты:", pageId);
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('nav-' + pageId).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        async function getInfo() {
+        async function getPrayerTimes(lang) {
             try {
-                const w = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true').then(r => r.json());
-                document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(w.current_weather.temperature)}°C`;
-                
-                const p = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2').then(r => r.json());
-                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> Таң: ${p.data.timings.Fajr}`;
-            } catch (e) { console.log("Дерек қатесі"); }
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
+                const data = await res.json();
+                const timings = data.data.timings;
+                const now = new Date();
+                const currentTime = now.getHours() * 60 + now.getMinutes();
+                const schedule = [
+                    { name: "Fajr", time: timings.Fajr }, { name: "Dhuhr", time: timings.Dhuhr },
+                    { name: "Asr", time: timings.Asr }, { name: "Maghrib", time: timings.Maghrib }, { name: "Isha", time: timings.Isha }
+                ];
+                let next = schedule.find(p => {
+                    const [h, m] = p.time.split(':');
+                    return (parseInt(h) * 60 + parseInt(m)) > currentTime;
+                });
+                const nextPrayer = next ? next.name : "Fajr";
+                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${translations[lang].prayerNames[nextPrayer]}: ${timings[nextPrayer]}`;
+            } catch (e) { console.log(e); }
         }
 
-        window.onload = getInfo;
+        async function getWeather() {
+            try {
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
+                const data = await res.json();
+                document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(data.current_weather.temperature)}°C`;
+            } catch (e) { console.log(e); }
+        }
+
+        function searchCards() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementById('mainGrid').getElementsByClassName('card');
+            for (let i = 0; i < cards.length; i++) {
+                let txtValue = cards[i].innerText;
+                cards[i].style.display = txtValue.toLowerCase().indexOf(input) > -1 ? "" : "none";
+            }
+        }
+
+        function toggleSheet(show) { 
+            document.getElementById('locationSheet').classList.toggle('active', show); 
+            document.getElementById('overlay').style.display = show ? 'block' : 'none'; 
+        }
+
+        function selectLoc(city) { 
+            document.getElementById('currentLocText').innerText = city; 
+            toggleSheet(false); 
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            getWeather();
+            getPrayerTimes(currentLang);
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+            });
+        }
     </script>
 </body>
 </html>
