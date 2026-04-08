@@ -88,8 +88,7 @@
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(lang).classList.add('active');
-        // Добавлено исправление для event
-        if(window.event) window.event.currentTarget.classList.add('active');
+        if(window.event && window.event.currentTarget) window.event.currentTarget.classList.add('active');
     }
 
     const firebaseConfig = {
@@ -121,25 +120,27 @@
         setTimeout(() => { clicks = 0; }, 3000);
     });
 
-    // ЖАРНАМАЛАРДЫ ЖҮКТЕУ (Түзетілген нұсқа)
     function loadAds() {
         const list = document.getElementById('ads-list');
-        // Базадағы 'pending' статусын қадағалау
+        // ТЕК pending статусындағыларды бақылаймыз
         db.collection("ads").where("status", "==", "pending").onSnapshot(snap => {
             list.innerHTML = snap.empty ? "<p style='text-align:center;'>Тексеретін жаңа жарнама жоқ.</p>" : "";
             snap.forEach(doc => {
                 const ad = doc.data();
                 
-                // Скриншотыңа сәйкес images массивінен бірінші суретті алу
-                const photo = (ad.images && ad.images.length > 0) ? ad.images[0] : 'https://via.placeholder.com/300?text=Сурет+жоқ';
-                
+                // Cloudinary сілтемесін алу (скриншотта images массивінің 0-ші элементінде тұр)
+                let photo = 'https://via.placeholder.com/300?text=Сурет+жоқ';
+                if (ad.images && Array.isArray(ad.images) && ad.images.length > 0) {
+                    photo = ad.images[0]; 
+                }
+
                 list.innerHTML += `
                     <div class="ad-card">
                         <img src="${photo}" alt="ad-photo">
-                        <p><b>Тақырыбы:</b> ${ad.title || 'Тақырыпсыз'}</p>
-                        <p><b>Сипаттама:</b> ${ad.desc || 'Сипаттамасыз'}</p>
+                        <p><b>Тақырыбы:</b> ${ad.title || 'Жоқ'}</p>
+                        <p><b>Сипаттама:</b> ${ad.desc || 'Жоқ'}</p>
                         <p><b>Баға:</b> ${ad.price || 0} тг</p>
-                        <p><b>Телефон:</b> ${ad.phone || 'Көрсетілмеген'}</p>
+                        <p><b>Телефон:</b> ${ad.phone || 'Жоқ'}</p>
                         <div class="btn-group">
                             <button class="btn-ok" onclick="updateStatus('${doc.id}', 'active')">Мақұлдау</button>
                             <button class="btn-del" onclick="deleteAd('${doc.id}')">Өшіру</button>
@@ -151,7 +152,7 @@
 
     function updateStatus(id, newStatus) {
         db.collection("ads").doc(id).update({ status: newStatus })
-        .then(() => alert("Жарнама сайтқа шықты! (Status: active)"))
+        .then(() => alert("Мақұлданды! Енді бұл жарнама сайтта көрінеді."))
         .catch(err => alert("Қате: " + err));
     }
 
