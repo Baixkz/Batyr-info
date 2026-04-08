@@ -32,7 +32,7 @@
         /* Админ панель стилі */
         #admin-panel { display: none; margin-top: 20px; border-top: 3px solid #000; padding-top: 20px; }
         .ad-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 15px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; max-height: 300px; object-fit: cover; }
+        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; max-height: 300px; object-fit: cover; background: #eee; }
         .btn-group { display: flex; gap: 10px; }
         .btn-ok { background: #28a745; color: white; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
         .btn-del { background: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
@@ -88,10 +88,10 @@
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(lang).classList.add('active');
-        event.currentTarget.classList.add('active');
+        // Добавлено исправление для event
+        if(window.event) window.event.currentTarget.classList.add('active');
     }
 
-    // FIREBASE БАПТАУЛАРЫ (ЕНГІЗІЛДІ)
     const firebaseConfig = {
       apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
       authDomain: "batyr-final.firebaseapp.com",
@@ -104,7 +104,6 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ҚҰПИЯ КІРУ (01012027)
     let clicks = 0;
     document.getElementById('secret-trigger').addEventListener('click', function() {
         clicks++;
@@ -122,18 +121,25 @@
         setTimeout(() => { clicks = 0; }, 3000);
     });
 
-    // ЖАРНАМАЛАРДЫ ЖҮКТЕУ (Тек 'pending' статусы)
+    // ЖАРНАМАЛАРДЫ ЖҮКТЕУ (Түзетілген нұсқа)
     function loadAds() {
         const list = document.getElementById('ads-list');
+        // Базадағы 'pending' статусын қадағалау
         db.collection("ads").where("status", "==", "pending").onSnapshot(snap => {
-            list.innerHTML = snap.empty ? "<p style='text-align:center;'>Жаңа жарнамалар жоқ.</p>" : "";
+            list.innerHTML = snap.empty ? "<p style='text-align:center;'>Тексеретін жаңа жарнама жоқ.</p>" : "";
             snap.forEach(doc => {
                 const ad = doc.data();
+                
+                // Скриншотыңа сәйкес images массивінен бірінші суретті алу
+                const photo = (ad.images && ad.images.length > 0) ? ad.images[0] : 'https://via.placeholder.com/300?text=Сурет+жоқ';
+                
                 list.innerHTML += `
                     <div class="ad-card">
-                        <img src="${ad.image_url}" onerror="this.src='https://via.placeholder.com/300?text=Сурет+жоқ'">
-                        <p><b>Сипаттама:</b> ${ad.description || 'Жоқ'}</p>
+                        <img src="${photo}" alt="ad-photo">
+                        <p><b>Тақырыбы:</b> ${ad.title || 'Тақырыпсыз'}</p>
+                        <p><b>Сипаттама:</b> ${ad.desc || 'Сипаттамасыз'}</p>
                         <p><b>Баға:</b> ${ad.price || 0} тг</p>
+                        <p><b>Телефон:</b> ${ad.phone || 'Көрсетілмеген'}</p>
                         <div class="btn-group">
                             <button class="btn-ok" onclick="updateStatus('${doc.id}', 'active')">Мақұлдау</button>
                             <button class="btn-del" onclick="deleteAd('${doc.id}')">Өшіру</button>
@@ -145,7 +151,8 @@
 
     function updateStatus(id, newStatus) {
         db.collection("ads").doc(id).update({ status: newStatus })
-        .then(() => alert("Жарнама сайтқа шықты!"));
+        .then(() => alert("Жарнама сайтқа шықты! (Status: active)"))
+        .catch(err => alert("Қате: " + err));
     }
 
     function deleteAd(id) {
