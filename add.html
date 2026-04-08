@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Жарнама қосу - Batyrsity</title>
+    <title>Жарнама қосу - Batyr Info</title>
     <style>
         body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; color: #333; }
         .card { max-width: 450px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; margin-bottom: 20px; color: #007bff; }
         label { font-size: 14px; font-weight: bold; margin-top: 10px; display: block; }
-        input, select, textarea, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; }
+        input, select, textarea, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; outline: none; }
         .upload-area { border: 3px dashed #007bff; background: #f8fbff; padding: 20px; text-align: center; margin-top: 20px; cursor: pointer; color: #007bff; font-weight: bold; border-radius: 15px; }
         #previewContainer { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
         #previewContainer img { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; border: 2px solid #007bff; }
@@ -22,23 +22,22 @@
 <div class="card">
     <h2>Жаңа жарнама</h2>
     
-    <label>Бөлім:</label>
-    <select id="mainCat">
-        <option value="">-- Таңдау --</option>
-        <option value="market">🛒 Маркет</option>
-        <option value="jobs">💼 Жұмыс</option>
-        <option value="services">🛠 Сервистер</option>
+    <label>Категория таңдаңыз:</label>
+    <select id="categorySelect">
+        <option value="">Жүктелуде...</option>
     </select>
 
-    <label>Категория:</label>
-    <select id="subCat">
-        <option value="">-- Бөлімді таңдаңыз --</option>
-    </select>
-
-    <input type="text" id="title" placeholder="Не сатасыз?">
-    <input type="number" id="price" placeholder="Бағасы (₸)">
+    <label>Атауы:</label>
+    <input type="text" id="title" placeholder="Не сатасыз немесе ұсынасыз?">
+    
+    <label>Бағасы (₸):</label>
+    <input type="number" id="price" placeholder="Мысалы: 5000">
+    
+    <label>Телефон нөмірі:</label>
     <input type="tel" id="phone" placeholder="87071234567">
-    <textarea id="desc" placeholder="Сипаттама" rows="3"></textarea>
+    
+    <label>Толық сипаттама:</label>
+    <textarea id="desc" placeholder="Толығырақ жазыңыз..." rows="3"></textarea>
 
     <div class="upload-area" onclick="document.getElementById('imgInp').click()">
         📸 СУРЕТ ТАҢДАУ (Макс: 3)
@@ -53,7 +52,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-    // 1. FIREBASE КОНФИГУРАЦИЯСЫ
     const firebaseConfig = {
         apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
         authDomain: "batyr-final.firebaseapp.com",
@@ -66,31 +64,23 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // 2. CLOUDINARY ПАРАМЕТРЛЕРІ (Сенің деректерің)
     const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drfeyzyzb/image/upload";
     const CLOUDINARY_PRESET = "ml_default";
 
     let selectedFiles = [];
 
-    // Категорияларды алу
-    document.getElementById('mainCat').onchange = async (e) => {
-        const subCat = document.getElementById('subCat');
-        const val = e.target.value;
-        if(!val) return;
-        
-        subCat.innerHTML = "<option>Жүктелуде...</option>";
-        try {
-            const doc = await db.collection("categories").doc(val).get();
-            if(doc.exists) {
-                const list = doc.data().list || [];
-                subCat.innerHTML = list.map(item => `<option value="${item}">${item}</option>`).join('');
-            } else {
-                subCat.innerHTML = "<option value='Жалпы'>Жалпы</option>";
-            }
-        } catch(err) { 
-            subCat.innerHTML = "<option value='Жалпы'>Қате: Базаны тексеріңіз</option>"; 
-        }
-    };
+    // --- 1. КАТЕГОРИЯЛАРДЫ АВТОМАТТЫ ТҮРДЕ АЛУ ---
+    function loadCategories() {
+        const select = document.getElementById('categorySelect');
+        db.collection("categories").orderBy("name", "asc").onSnapshot(snap => {
+            select.innerHTML = '<option value="">-- Категория таңдаңыз --</option>';
+            snap.forEach(doc => {
+                const cat = doc.data().name;
+                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+        });
+    }
+    loadCategories();
 
     // Суретті алдын ала көру
     document.getElementById('imgInp').onchange = (e) => {
@@ -104,58 +94,49 @@
         });
     };
 
-    // 3. ЖІБЕРУ ФУНКЦИЯСЫ (CLOUDINARY + FIRESTORE)
+    // --- 2. ЖАРНАМА ЖІБЕРУ ---
     document.getElementById('sendBtn').onclick = async function() {
+        const category = document.getElementById('categorySelect').value;
         const title = document.getElementById('title').value;
         const price = document.getElementById('price').value;
         const phone = document.getElementById('phone').value;
         const desc = document.getElementById('desc').value;
 
-        if(!title || selectedFiles.length === 0) return alert("Атауы мен сурет міндетті!");
+        if(!category) return alert("Категорияны таңдаңыз!");
+        if(!title || selectedFiles.length === 0) return alert("Атауы мен кемінде 1 сурет қажет!");
 
         const btn = this;
         btn.disabled = true;
         let urls = [];
 
         try {
-            // СУРЕТТЕРДІ CLOUDINARY-ГЕ ЖҮКТЕУ
+            // Cloudinary-ге жүктеу
             for (let i = 0; i < selectedFiles.length; i++) {
-                btn.innerText = `Жүктеу: ${i+1}/${selectedFiles.length}...`;
-                
+                btn.innerText = `Сурет жүктелуде ${i+1}/${selectedFiles.length}...`;
                 const formData = new FormData();
                 formData.append('file', selectedFiles[i]);
                 formData.append('upload_preset', CLOUDINARY_PRESET);
 
-                const res = await fetch(CLOUDINARY_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
+                const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
                 const data = await res.json();
-                if (data.secure_url) {
-                    urls.push(data.secure_url);
-                } else {
-                    throw new Error(data.error ? data.error.message : "Cloudinary қатесі");
-                }
+                if (data.secure_url) urls.push(data.secure_url);
             }
 
-            // МӘЛІМЕТТЕРДІ FIRESTORE-ҒА САҚТАУ
+            // Firestore-ға сақтау
             await db.collection("ads").add({
-                mainCat: document.getElementById('mainCat').value,
-                subCat: document.getElementById('subCat').value,
+                category: category,
                 title: title,
                 price: Number(price),
                 phone: phone,
                 desc: desc,
                 images: urls,
-                status: "active",
+                status: "pending", // Жарнама админ тексеруіне (Күтуде) түседі
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            alert("ЖАРНАМА СӘТТІ ҚОСЫЛДЫ! ✅");
+            alert("Жарнама жіберілді! Админ тексерген соң шығады. ✅");
             window.location.reload();
         } catch (e) {
-            console.error(e);
             alert("Қате шықты: " + e.message);
             btn.disabled = false;
             btn.innerText = "ҚАЙТА КӨРУ";
