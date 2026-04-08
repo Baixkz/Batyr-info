@@ -234,5 +234,39 @@
         if(confirm("Жарнаманы өшіресіз бе?")) db.collection("ads").doc(id).delete();
     }
 </script>
+    <script>
+    // ... бұрыннан бар кодтар ...
+
+    // 1. МЫНАУ СТАТУС ӨЗГЕРТУ КОДЫ (Функциялардың астына қой)
+    async function setAdStatus(adId, newStatus) {
+        try {
+            await db.collection("ads").doc(adId).update({
+                status: newStatus,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert("Жарнама статусы өзгерді!"); // Пайдаланушыға хабарлама
+            console.log("Статус өзгерді: " + newStatus);
+        } catch (error) {
+            console.error("Қате шықты: ", error);
+        }
+    }
+
+    // 2. МЫНАУ ҚҰПИЯ КІРУ КОДЫ (Скрипттің кез келген бос жеріне)
+    let secretClicks = 0;
+    document.getElementById('secret-trigger').addEventListener('click', function() {
+        secretClicks++;
+        if (secretClicks === 7) { 
+            let pass = prompt("Админ паролі:");
+            if (pass === "01012027") {
+                document.getElementById('user-view').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadCategories();
+            }
+        }
+        // 3 секундтан кейін кликтерді нөлге түсіру (қауіпсіздік үшін)
+        setTimeout(() => secretClicks = 0, 3000); 
+    });
+</script>
+
 </body>
 </html>
