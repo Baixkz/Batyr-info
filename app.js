@@ -174,3 +174,11 @@ function renderAdsWithImages(querySnapshot) {
 // Құрылыс заттары аудармалары
 'stroy-mat': 'Құрылыс материалдары',
 'tools-all': 'Құрал-сайман'
+// Мал базар аудармалары
+'cattle': 'Ірі қара',
+'horses': 'Жылқы',
+'sheep': 'Қой мен Ешкі',
+'camel': 'Түйе',
+'birds': 'Құстар',
+'pets': 'Үй жануарлары',
+'feed-all': 'Жем-шөп'
