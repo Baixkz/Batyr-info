@@ -1,33 +1,135 @@
-
 <!DOCTYPE html>
 <html lang="kk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тізім</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BATYR INFO - Тізім</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <style>
-        body { font-family: sans-serif; background: #f2f4f7; margin: 0; }
-        .header { background: #007aff; color: white; padding: 20px; display: flex; align-items: center; gap: 15px; }
+        :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding-bottom: 20px; }
+        
+        /* Хедер */
+        .header { 
+            background: var(--main-blue); color: white; padding: 15px 20px; 
+            display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 100;
+        }
+        .header a { color: white; text-decoration: none; font-size: 20px; }
+        .header h2 { margin: 0; font-size: 18px; text-transform: capitalize; }
+
         .container { padding: 15px; }
-        .item-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .call-btn { background: #25D366; color: white; padding: 10px 15px; border-radius: 10px; text-decoration: none; font-weight: bold; }
+
+        /* Іздеу жолағы */
+        .search-inner { background: white; border-radius: 12px; padding: 10px; display: flex; gap: 10px; margin-bottom: 15px; }
+        .search-inner input { border: none; outline: none; width: 100%; font-size: 14px; }
+
+        /* Жарнама карточкасы */
+        .ad-item { 
+            background: white; padding: 12px; border-radius: 18px; 
+            margin-bottom: 12px; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .ad-img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #eee; }
+        .ad-info { flex: 1; }
+        .ad-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #1a1a1a; }
+        .ad-info p { margin: 0; font-size: 12px; color: #777; line-height: 1.4; }
+        .ad-price { color: var(--main-blue); font-weight: 800; font-size: 14px; margin-top: 4px; display: block; }
+
+        .call-btn { 
+            background: #25D366; color: white; width: 40px; height: 40px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 18px;
+        }
+
+        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 14px; }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <a href="index.html" style="color:white;"><i class="fas fa-arrow-left"></i></a>
+        <a href="index.html"><i class="fas fa-arrow-left"></i></a>
         <h2 id="catTitle">Жүктелуде...</h2>
     </div>
-    <div class="container" id="listContainer">
+
+    <div class="container">
+        <div class="search-inner">
+            <i class="fas fa-search" style="color:#ccc"></i>
+            <input type="text" id="innerSearch" onkeyup="filterAds()" placeholder="Осы бөлімнен іздеу...">
         </div>
 
+        <div id="listContainer">
+            </div>
+    </div>
+
+    <script src="app.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
-        const type = params.get('type');
-        document.getElementById('catTitle').innerText = type.toUpperCase();
+        const type = params.get('type') || 'other';
         
-        // Мұнда Firebase-тен деректерді тарту коды болады
+        // Категория атын қазақшалау (сөздік)
+        const catNames = {
+            'taxi': 'Такси қызметі',
+            'shops': 'Дүкендер',
+            'jobs': 'Жұмыс орындары',
+            'food': 'Тамақтану',
+            'med': 'Медицина',
+            'mal-bazar': 'Мал базар',
+            'feed': 'Жем-шөп',
+            'meat': 'Ет өнімдері',
+            'avto': 'Көлік сату',
+            'uiler': 'Жер және Үй',
+            'stroy': 'Құрылыс',
+            'market': 'Маркет',
+            'cloth': 'Киімдер',
+            'phone': 'Телефондар'
+        };
+        document.getElementById('catTitle').innerText = catNames[type] || type;
+
+        function loadAds() {
+            const container = document.getElementById('listContainer');
+            // 'active' статусы бар және таңдалған категориядағы жарнамаларды алу
+            db.collection("ads")
+              .where("category", "==", type)
+              .where("status", "==", "active")
+              .orderBy("createdAt", "desc")
+              .onSnapshot(snap => {
+                container.innerHTML = "";
+                if(snap.empty) {
+                    container.innerHTML = '<p class="empty-msg">Бұл бөлімде әзірге жарнама жоқ.</p>';
+                    return;
+                }
+                snap.forEach(doc => {
+                    const ad = doc.data();
+                    const photo = ad.images && ad.images.length > 0 ? ad.images[0] : 'https://via.placeholder.com/100?text=No+Photo';
+                    
+                    container.innerHTML += `
+                        <div class="ad-item">
+                            <img src="${photo}" class="ad-img" onerror="this.src='https://via.placeholder.com/100?text=Error'">
+                            <div class="ad-info">
+                                <h4>${ad.title}</h4>
+                                <p>${ad.desc ? ad.desc.substring(0, 50) + '...' : 'Сипаттама жоқ'}</p>
+                                <span class="ad-price">${ad.price ? ad.price + ' ₸' : 'Келісімді'}</span>
+                            </div>
+                            <a href="tel:${ad.phone}" class="call-btn"><i class="fas fa-phone"></i></a>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function filterAds() {
+            let input = document.getElementById('innerSearch').value.toLowerCase();
+            let cards = document.getElementsByClassName('ad-item');
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].querySelector('h4').innerText.toLowerCase();
+                cards[i].style.display = title.includes(input) ? "flex" : "none";
+            }
+        }
+
+        // Базадан мәліметті тартуды бастау
+        loadAds();
     </script>
 </body>
 </html>
