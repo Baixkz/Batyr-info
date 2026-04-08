@@ -182,3 +182,10 @@ function renderAdsWithImages(querySnapshot) {
 'birds': 'Құстар',
 'pets': 'Үй жануарлары',
 'feed-all': 'Жем-шөп'
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW тіркелді!', reg))
+      .catch(err => console.log('SW қатесі:', err));
+  });
+}
