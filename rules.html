@@ -122,23 +122,31 @@
 
     function loadAds() {
         const list = document.getElementById('ads-list');
+        
         // ТЕК pending статусындағыларды бақылаймыз
-        db.collection("ads").where("status", "==", "pending").onSnapshot(snap => {
-            list.innerHTML = snap.empty ? "<p style='text-align:center;'>Тексеретін жаңа жарнама жоқ.</p>" : "";
+        db.collection("ads").where("status", "==", "pending")
+        .onSnapshot(snap => {
+            if (snap.empty) {
+                list.innerHTML = "<p style='text-align:center;'>Тексеретін жаңа жарнама жоқ.</p>";
+                return;
+            }
+            
+            list.innerHTML = ""; // Тізімді тазалау
             snap.forEach(doc => {
                 const ad = doc.data();
                 
-                // Cloudinary сілтемесін алу (скриншотта images массивінің 0-ші элементінде тұр)
+                // Суретті тексеру
                 let photo = 'https://via.placeholder.com/300?text=Сурет+жоқ';
                 if (ad.images && Array.isArray(ad.images) && ad.images.length > 0) {
                     photo = ad.images[0]; 
                 }
 
                 list.innerHTML += `
-                    <div class="ad-card">
+                    <div class="ad-card" id="card-${doc.id}">
                         <img src="${photo}" alt="ad-photo">
-                        <p><b>Тақырыбы:</b> ${ad.title || 'Жоқ'}</p>
-                        <p><b>Сипаттама:</b> ${ad.desc || 'Жоқ'}</p>
+                        <p><b>ID:</b> <span style="font-size:10px; color:#999;">${doc.id}</span></p>
+                        <p><b>Тақырыбы:</b> ${ad.title || 'Көрсетілмеген'}</p>
+                        <p><b>Сипаттама:</b> ${ad.desc || 'Көрсетілмеген'}</p>
                         <p><b>Баға:</b> ${ad.price || 0} тг</p>
                         <p><b>Телефон:</b> ${ad.phone || 'Жоқ'}</p>
                         <div class="btn-group">
@@ -147,18 +155,34 @@
                         </div>
                     </div>`;
             });
+        }, error => {
+            // Егер Firebase-те Index жоқ болса немесе қате шықса, осы жерден көресіз
+            console.error("Firebase қатесі:", error);
+            list.innerHTML = `<div style="color:red; background:#fee; padding:10px; border-radius:10px;">
+                <b>Қате орын алды:</b><br>${error.message}
+                <br><br><i>Егер "index" туралы айтылса, консольдегі сілтемеге басып индекс жасаңыз.</i>
+            </div>`;
         });
     }
 
     function updateStatus(id, newStatus) {
+        if (!confirm("Бұл жарнаманы мақұлдап, сайтқа шығарасыз ба?")) return;
+        
         db.collection("ads").doc(id).update({ status: newStatus })
-        .then(() => alert("Мақұлданды! Енді бұл жарнама сайтта көрінеді."))
-        .catch(err => alert("Қате: " + err));
+        .then(() => {
+            alert("Мақұлданды! Жарнама сайтқа шықты.");
+        })
+        .catch(err => {
+            console.error("Жарнаманы жаңарту қатесі:", err);
+            alert("Қате: " + err.message);
+        });
     }
 
     function deleteAd(id) {
-        if(confirm("Өшіруге сенімдісіз бе?")) {
-            db.collection("ads").doc(id).delete().then(() => alert("Өшірілді!"));
+        if(confirm("Бұл жарнаманы біржола өшіруге сенімдісіз бе?")) {
+            db.collection("ads").doc(id).delete()
+            .then(() => alert("Жарнама өшірілді!"))
+            .catch(err => alert("Өшіру мүмкін болмады: " + err.message));
         }
     }
 </script>
