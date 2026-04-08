@@ -1,4 +1,3 @@
-
 // 1. АУА РАЙЫ
 async function getWeather() {
     try {
