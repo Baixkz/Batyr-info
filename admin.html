@@ -29,3 +29,25 @@
     </script>
 </body>
 </html>
+<div class="admin-new-logic" style="margin-top: 50px; border-top: 5px solid #007bff; padding-top: 20px;">
+    <script>
+        // Мынау Cloudinary арқылы сурет жүктеп, Firestore-ға сақтайтын жаңа логика
+        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drfeyzyzb/image/upload";
+        const CLOUDINARY_PRESET = "ml_default";
+        
+        // Сурет пен жарнаманы жіберу функциясы осы жерден басталады
+        async function uploadAndSaveAd(adData, files) {
+            let urls = [];
+            for (let file of files) {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_PRESET);
+                const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.secure_url) urls.push(data.secure_url);
+            }
+            adData.images = urls;
+            return db.collection("ads").add(adData);
+        }
+    </script>
+</div>
