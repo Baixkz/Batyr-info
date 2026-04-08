@@ -1,1 +1,82 @@
 
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate">
+    <title>BATYR INFO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* [Осы жерге өзіңнің жоғарыда жіберген стиліңді толықтай сал] */
+        :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .header-section { background: #007aff; padding: 15px 20px 35px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .location-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
+        .header-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
+        .live-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
+        .live-item { background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; min-width: 80px; justify-content: center; }
+        .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
+        .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); height: 100px; justify-content: center; }
+        .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; }
+        .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+        .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-item.active { color: var(--main-blue); }
+        /* Жарнама қосу батырмасы */
+        .add-ad-btn { background: #007aff; color: white; margin: 15px 20px 0; padding: 12px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div id="page-home" class="page active">
+        <div class="header-section">
+            <div class="top-bar">
+                <button class="location-btn" onclick="toggleSheet(true)">
+                    <i class="fas fa-map-marker-alt"></i> <span id="currentLocText">Батыр ауылы</span>
+                </button>
+            </div>
+            <div class="header-title">BATYR INFO</div>
+            <div class="live-bar">
+                <div class="live-item" id="prayerText"><i class="fas fa-mosque"></i> ...</div>
+                <div class="live-item" id="weatherText"><i class="fas fa-temperature-high"></i> ...°C</div>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Іздеу...">
+            </div>
+        </div>
+
+        <a href="admin.html" class="add-ad-btn">
+            <i class="fas fa-plus-circle"></i> <span>Жарнама қосу</span>
+        </a>
+
+        <div class="grid" id="mainGrid">
+            <a href="category.html?type=shops" class="card"><i class="fas fa-shopping-bag"></i><span>Дүкендер</span></a>
+            <a href="category.html?type=jobs" class="card"><i class="fas fa-briefcase"></i><span>Жұмыс</span></a>
+            <a href="category.html?type=taxi" class="card"><i class="fas fa-taxi"></i><span>Такси</span></a>
+            <a href="category.html?type=food" class="card"><i class="fas fa-utensils"></i><span>Тамақтану</span></a>
+            <a href="category.html?type=services" class="card"><i class="fas fa-th-large"></i><span>Қызметтер</span></a>
+            <a href="category.html?type=med" class="card"><i class="fas fa-hospital"></i><span>Медицина</span></a>
+            <a href="category.html?type=org" class="card"><i class="fas fa-landmark"></i><span>Мекемелер</span></a>
+            <a href="category.html?type=fun" class="card"><i class="fas fa-gamepad"></i><span>Ойын-сауық</span></a>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('home')"><i class="fas fa-home"></i><span>Басты</span></div>
+        <div class="nav-item" onclick="showPage('market')"><i class="fas fa-store"></i><span>Маркет</span></div>
+        <div class="nav-item" onclick="location.href='admin.html'"><i class="fas fa-user-shield"></i><span>Админ</span></div>
+    </div>
+
+    <script src="app.js"></script> <script>
+        // Сенің ескі getWeather, getPrayerTimes функцияларыңды осы жерге немесе app.js-ке сал
+    </script>
+</body>
+</html>
