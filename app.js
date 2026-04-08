@@ -171,3 +171,6 @@ function renderAdsWithImages(querySnapshot) {
 'clothes': 'Киім мен сән',
 'kids-world': 'Балалар әлемі',
 'for-home': 'Үйге арналған'
+// Құрылыс заттары аудармалары
+'stroy-mat': 'Құрылыс материалдары',
+'tools-all': 'Құрал-сайман'
