@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Стили толығымен сенің бірінші кодыңнан алынды */
         :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg-color); margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
         .page { display: none; }
@@ -28,17 +27,25 @@
         .search-box { background: white; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; font-size: 14px; color: #333; }
         .add-ad-btn { background: #007aff; color: white; margin: 15px 20px 0; padding: 12px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 14px; box-shadow: 0 4px 12px rgba(0,122,255,0.2); transition: 0.2s; }
+        .promo-slider { margin: 15px 20px; height: 70px; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .promo-track { display: flex; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
+        .promo-slide { min-width: 100%; height: 100%; display: flex; align-items: center; padding: 0 15px; gap: 12px; box-sizing: border-box; }
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 5px 15px 25px; max-width: 600px; margin: 0 auto; }
         .card { background: white; padding: 18px 5px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; height: 100px; justify-content: center; box-sizing: border-box; }
         .card i { font-size: 28px; color: var(--main-blue); margin-bottom: 8px; height: 32px; display: flex; align-items: center; }
         .card span { font-size: 10.5px; font-weight: 700; color: #1a1a1a; text-align: center; line-height: 1.2; }
+        
+        /* Market Styles */
+        .market-header-btn { grid-column: span 3; background: #007aff; color: white !important; height: 120px !important; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .olx-inner-grid { display: none; grid-column: span 3; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 20px; }
+        
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
         .nav-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 700; cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--main-blue); }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1999; }
-        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding: 20px; box-sizing: border-box; }
+        #locationSheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; transition: 0.4s; z-index: 2000; padding: 25px; }
         #locationSheet.active { bottom: 0; }
-        .loc-item { padding: 15px; border-bottom: 1px solid #eee; font-weight: 600; cursor: pointer; }
+        .loc-item { padding: 15px; border-bottom: 1px solid #f9f9f9; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -69,6 +76,15 @@
             <i class="fas fa-plus-circle"></i> <span data-key="addBtnText">Жарнама қосу</span>
         </a>
 
+        <div class="promo-slider">
+            <div class="promo-track">
+                <div class="promo-slide">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100" alt="Promo">
+                    <div class="promo-text"><h4>"Береке" Асханасы</h4><p>Дәмді тағамдар мен мәзірлер</p></div>
+                </div>
+            </div>
+        </div>
+
         <div class="grid" id="mainGrid">
             <a href="shops.html" class="card"><i class="fas fa-shopping-bag"></i><span data-key="shops">Дүкендер</span></a>
             <a href="jobs.html" class="card"><i class="fas fa-briefcase"></i><span data-key="jobs">Жұмыс</span></a>
@@ -81,74 +97,64 @@
         </div>
 
         <footer>
-            <a href="rules.html" style="color: #007aff; text-decoration: none; font-weight: 700; display: block; text-align: center; margin: 20px 0;">Пайдалану шарттары</a>
-            <div style="text-align: center; font-weight: 800;">2026 BAIX</div>
+            <a href="rules.html" style="color:var(--main-blue); text-decoration:none; font-weight:700;">Пайдалану шарттары</a>
+            <div style="font-weight:800; margin-top:10px;">2026 BAIX</div>
         </footer>
     </div>
 
     <div id="page-market" class="page">
-        <div class="header-section"><div class="header-title">МАРКЕТ</div></div>
-        <div style="padding: 20px; text-align: center;">Маркет бөлімі дайындалуда...</div>
+        <div class="header-section"><div class="header-title" data-key="navMarket">МАРКЕТ</div></div>
+        <div class="grid" style="margin-top: 20px;">
+            <div class="market-header-btn" onclick="window.toggleOlx()">
+                <i class="fas fa-bullhorn"></i> <span data-key="ads">ХАБАРЛАНДЫРУ</span>
+            </div>
+            <div id="olx-content" class="olx-inner-grid">
+                <a href="mal-bazar.html" class="card"><i class="fa-solid fa-paw"></i><span data-key="mal">Мал базар</span></a>
+                <a href="olxavto.html" class="card"><i class="fa-solid fa-car"></i><span data-key="auto">Көлік сату</span></a>
+            </div>
+        </div>
     </div>
 
     <div id="page-profile" class="page">
-        <div class="header-section"><div class="header-title">ПРОФИЛЬ</div></div>
-        <div style="padding: 20px; text-align: center;">Кіру жүйесі жақын арада...</div>
+        <div class="header-section"><div class="header-title" data-key="navProfile">ПРОФИЛЬ</div></div>
+        <div style="text-align:center; padding:50px;">Кіру жүйесі жақын арада...</div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="window.showPage('home')">
-            <i class="fas fa-home"></i><span data-key="navHome">Басты</span>
-        </div>
-        <div class="nav-item" id="nav-market" onclick="window.showPage('market')">
-            <i class="fas fa-store"></i><span data-key="navMarket">Маркет</span>
-        </div>
-        <div class="nav-item" id="nav-profile" onclick="window.showPage('profile')">
-            <i class="fas fa-user"></i><span data-key="navProfile">Профиль</span>
-        </div>
+        <div class="nav-item active" id="nav-home" onclick="window.showPage('home')"><i class="fas fa-home"></i><span data-key="navHome">Басты</span></div>
+        <div class="nav-item" id="nav-market" onclick="window.showPage('market')"><i class="fas fa-store"></i><span data-key="navMarket">Маркет</span></div>
+        <div class="nav-item" id="nav-profile" onclick="window.showPage('profile')"><i class="fas fa-user"></i><span data-key="navProfile">Профиль</span></div>
     </div>
 
     <div class="overlay" id="overlay" onclick="window.toggleSheet(false)"></div>
     <div id="locationSheet">
-        <div style="font-weight: 900; margin-bottom: 15px;">Локация таңдаңыз</div>
         <div class="loc-item" onclick="window.selectLoc('Батыр ауылы')">Батыр ауылы</div>
         <div class="loc-item" onclick="window.selectLoc('Ақтау қаласы')">Ақтау қаласы</div>
     </div>
 
     <script type="module">
-        import { db } from "./firebase.js"; // Firebase-ті қосамыз
+        import { db } from "./firebase.js"; 
 
         const translations = {
-            kk: { 
-                navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль", addBtnText: "Жарнама қосу", 
-                shops: "Дүкендер", jobs: "Жұмыс", trans: "Көлік және Такси", food: "Тамақтану", 
-                services: "Қызмет көрсету", med: "Медицина", org: "Мекемелер", fun: "Ойын-сауық",
-                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" } 
+            kk: {
+                ads: "ХАБАРЛАНДЫРУ", shops: "Дүкендер", jobs: "Жұмыс", trans: "Көлік және Такси",
+                food: "Тамақтану", services: "Қызмет көрсету", med: "Медицина", org: "Мекемелер",
+                fun: "Ойын-сауық", navHome: "Басты", navMarket: "Маркет", navProfile: "Профиль",
+                addBtnText: "Жарнама қосу",
+                prayerNames: { Fajr: "Таң", Dhuhr: "Бесін", Asr: "Екінді", Maghrib: "Ақшам", Isha: "Құптан" }
             },
-            ru: { 
-                navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль", addBtnText: "Подать объявление",
-                shops: "Магазины", jobs: "Работа", trans: "Транспорт", food: "Питание", 
-                services: "Услуги", med: "Медицина", org: "Учреждения", fun: "Развлечения",
-                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" } 
+            ru: {
+                ads: "ОБЪЯВЛЕНИЯ", shops: "Магазины", jobs: "Работа", trans: "Транспорт",
+                food: "Питание", services: "Услуги", med: "Медицина", org: "Учреждения",
+                fun: "Развлечения", navHome: "Главная", navMarket: "Маркет", navProfile: "Профиль",
+                addBtnText: "Подать объявление",
+                prayerNames: { Fajr: "Фаджр", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" }
             }
         };
 
-        window.currentLang = 'kk';
+        let currentLang = 'kk';
 
-        // 1. Тіл ауыстыру
-        window.changeLang = (lang) => {
-            window.currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
-            
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[lang][key]) el.textContent = translations[lang][key];
-            });
-            updatePrayerTimes();
-        };
-
-        // 2. Беттерді ауыстыру
+        // МЫНА ЖЕРДЕ ФУНКЦИЯЛАРДЫ WINDOW ОБЪЕКТІСІНЕ ТІРКЕЙМІЗ (onclick істеу үшін)
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
@@ -156,49 +162,62 @@
             document.getElementById('nav-' + id).classList.add('active');
         };
 
-        // 3. Локация
         window.toggleSheet = (show) => {
             document.getElementById('locationSheet').classList.toggle('active', show);
             document.getElementById('overlay').style.display = show ? 'block' : 'none';
         };
+
         window.selectLoc = (city) => {
             document.getElementById('currentLocText').innerText = city;
             window.toggleSheet(false);
         };
 
-        // 4. Іздеу
+        window.changeLang = (lang) => {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(lang === 'kk' ? 'btnKZ' : 'btnRU').classList.add('active');
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+            getPrayerTimes(lang);
+        };
+
+        window.toggleOlx = () => {
+            const content = document.getElementById('olx-content');
+            content.style.display = content.style.display === 'grid' ? 'none' : 'grid';
+        };
+
         window.searchCards = () => {
             let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('card');
+            let cards = document.getElementById('mainGrid').getElementsByClassName('card');
             for (let card of cards) {
                 card.style.display = card.innerText.toLowerCase().includes(input) ? "" : "none";
             }
         };
 
-        // 5. Ауа райы және Намаз (API)
-        async function updateWeather() {
+        async function getPrayerTimes(lang) {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
+                const data = await res.json();
+                const timings = data.data.timings;
+                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${translations[lang].prayerNames.Dhuhr}: ${timings.Dhuhr}`;
+            } catch (e) { console.log("Prayer Error:", e); }
+        }
+
+        async function getWeather() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
                 const data = await res.json();
                 document.getElementById('weatherText').innerHTML = `<i class="fas fa-temperature-high"></i> ${Math.round(data.current_weather.temperature)}°C`;
-            } catch (e) { console.error(e); }
+            } catch (e) { console.log("Weather Error:", e); }
         }
 
-        async function updatePrayerTimes() {
-            try {
-                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
-                const data = await res.json();
-                const t = data.data.timings;
-                // Келесі намазды анықтау логикасын осында қосуға болады, қазірше "Бесін" үлгі ретінде:
-                document.getElementById('prayerText').innerHTML = `<i class="fas fa-mosque"></i> ${translations[window.currentLang].prayerNames.Dhuhr}: ${t.Dhuhr}`;
-            } catch (e) { console.error(e); }
-        }
-
-        // Іске қосу
-        window.onload = () => {
-            updateWeather();
-            updatePrayerTimes();
-        };
+        // БЕТ ЖҮКТЕЛГЕНДЕ ІСКЕ ҚОСУ
+        window.addEventListener('DOMContentLoaded', () => {
+            getWeather();
+            getPrayerTimes(currentLang);
+        });
     </script>
 </body>
 </html>
