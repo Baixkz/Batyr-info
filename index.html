@@ -124,6 +124,45 @@
 <a href="category.html?type=birds" class="card"><i class="fa-solid fa-kiwi-bird" style="color: #ffb300;"></i><span>Құстар</span></a>
 <a href="category.html?type=pets" class="card"><i class="fa-solid fa-dog" style="color: #fb8c00;"></i><span>Үй жануарлары</span></a>
 <a href="category.html?type=feed-all" class="card"><i class="fa-solid fa-wheat-awn" style="color: #fdd835;"></i><span>Жем-шөп</span></a>
+/* ТАКСИ ЖӘНЕ БАСҚА ДА КАРТОЧКАЛАРДЫҢ СТИЛЬДЕРІ */
+.grid-container, .shop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 20px;
+}
+
+.card, .grid-item {
+    background: white;
+    padding: 25px 10px;
+    border-radius: 15px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card:active, .grid-item:active {
+    transform: scale(0.95);
+}
+
+.grid-item i { 
+    font-size: 24px; 
+    color: #007bff; 
+    margin-bottom: 8px; 
+}
+
+.grid-item span { 
+    font-size: 13px; 
+    font-weight: bold; 
+    display: block; 
+}
 
 </body>
 </html>
