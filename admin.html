@@ -1,1 +1,31 @@
 
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ Панель</title>
+    <style>
+        body { padding: 20px; font-family: sans-serif; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; }
+        button { width: 100%; padding: 15px; background: #007aff; color: white; border: none; border-radius: 8px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Жаңа жарнама қосу</h2>
+    <select id="catSelect">
+        <option value="shops">Дүкендер</option>
+        <option value="taxi">Такси</option>
+        <option value="jobs">Жұмыс</option>
+    </select>
+    <input type="text" id="title" placeholder="Аты (мысалы: Береке дүкені)">
+    <input type="tel" id="phone" placeholder="Телефоны">
+    <textarea id="desc" placeholder="Сипаттамасы"></textarea>
+    <button onclick="saveAd()">Базаға сақтау</button>
+
+    <script>
+        function saveAd() {
+            alert("Firebase қосылған соң, бұл мәлімет базаға түседі!");
+        }
+    </script>
+</body>
+</html>
