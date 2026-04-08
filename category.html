@@ -1,1 +1,33 @@
 
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тізім</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #f2f4f7; margin: 0; }
+        .header { background: #007aff; color: white; padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .container { padding: 15px; }
+        .item-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .call-btn { background: #25D366; color: white; padding: 10px 15px; border-radius: 10px; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" style="color:white;"><i class="fas fa-arrow-left"></i></a>
+        <h2 id="catTitle">Жүктелуде...</h2>
+    </div>
+    <div class="container" id="listContainer">
+        </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type');
+        document.getElementById('catTitle').innerText = type.toUpperCase();
+        
+        // Мұнда Firebase-тен деректерді тарту коды болады
+    </script>
+</body>
+</html>
