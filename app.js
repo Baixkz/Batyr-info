@@ -1,12 +1,12 @@
 // 1. FIREBASE КОНФИГУРАЦИЯСЫ
 const firebaseConfig = {
-  apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
-  authDomain: "batyr-final.firebaseapp.com",
-  projectId: "batyr-final",
-  storageBucket: "batyr-final.firebasestorage.app",
-  messagingSenderId: "621519255228",
-  appId: "1:621519255228:web:6087e026a6db84afa2c2b9",
-  measurementId: "G-73YT8RDF4W"
+    apiKey: "AIzaSyCaIwrxsSc4s4SV_sIfOwcGaeB6obdpuzE",
+    authDomain: "batyr-final.firebaseapp.com",
+    projectId: "batyr-final",
+    storageBucket: "batyr-final.firebasestorage.app",
+    messagingSenderId: "621519255228",
+    appId: "1:621519255228:web:6087e026a6db84afa2c2b9",
+    measurementId: "G-73YT8RDF4W"
 };
 
 if (!firebase.apps.length) {
@@ -14,102 +14,146 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 2. АВТОМАТТЫ ИКОНКА ТАҢДАУ ЛОГИКАСЫ
+// 2. АВТОМАТТЫ ИКОНКА ЛОГИКАСЫ (Сен жазған тізім сақталды)
 function getAutoIcon(name) {
     const n = name.toLowerCase();
-    if (n.includes('такси') || n.includes('көлік')) return 'fa-taxi';
-    if (n.includes('дүкен') || n.includes('маркет') || n.includes('сауда')) return 'fa-shopping-bag';
-    if (n.includes('жұмыс')) return 'fa-briefcase';
-    if (n.includes('тамақ') || n.includes('асхана') || n.includes('дәмхана')) return 'fa-utensils';
-    if (n.includes('мед') || n.includes('дәріхана') || n.includes('емхана')) return 'fa-hospital';
-    if (n.includes('мал') || n.includes('сиыр') || n.includes('қой')) return 'fa-cow';
-    if (n.includes('ет')) return 'fa-drumstick-bite';
-    if (n.includes('үй') || n.includes('жер') || n.includes('пәтер')) return 'fa-house-chimney';
-    if (n.includes('телефон') || n.includes('ұялы')) return 'fa-mobile-alt';
-    if (n.includes('киім')) return 'fa-tshirt';
-    if (n.includes('құрылыс') || n.includes('цемент')) return 'fa-screwdriver-wrench';
-    return 'fa-folder'; // Ештеңе табылмаса
+    const icons = {
+        'такси': 'fa-taxi', 'көлік': 'fa-car', 'дүкен': 'fa-shopping-bag', 
+        'маркет': 'fa-store', 'сауда': 'fa-shopping-cart', 'жұмыс': 'fa-briefcase',
+        'тамақ': 'fa-utensils', 'асхана': 'fa-coffee', 'мед': 'fa-hospital',
+        'дәріхана': 'fa-pills', 'мал': 'fa-cow', 'ет': 'fa-drumstick-bite',
+        'үй': 'fa-home', 'пәтер': 'fa-building', 'телефон': 'fa-mobile-alt',
+        'киім': 'fa-tshirt', 'құрылыс': 'fa-tools'
+    };
+    for (let key in icons) { if (n.includes(key)) return icons[key]; }
+    return 'fa-th-large';
 }
 
-// 3. КАТЕГОРИЯЛАРДЫ БЕТТЕРГЕ БӨЛІП ЖҮКТЕУ (Home, Market, Other)
-function loadPageCategories(pageName, gridId) {
+// 3. КАТЕГОРИЯЛАРДЫ БЕТТЕРГЕ БӨЛІП ЖҮКТЕУ
+function loadCategoriesByPage(pageName, gridId) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
 
     db.collection("categories")
-      .where("page", "==", pageName) // Тек осы бетке арналған
-      .where("parentId", "==", "root") // Тек басты бөлімдер
+      .where("page", "==", pageName)
       .onSnapshot(snap => {
         grid.innerHTML = "";
         if (snap.empty) {
-            grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding:20px; color:#999;'>Бұл бетке әзірге бөлім қосылмаған...</p>";
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; font-size:12px; color:#999;">${pageName} бөлімі бос...</p>`;
             return;
         }
         snap.forEach(doc => {
             const cat = doc.data();
-            // Егер базада иконка болмаса, автоматты түрде атына қарап қояды
-            const iconClass = cat.icon && cat.icon !== "" ? cat.icon : getAutoIcon(cat.name);
-            
+            const iconClass = cat.icon || getAutoIcon(cat.name);
             grid.innerHTML += `
-                <div class="card" onclick="location.href='category.html?id=${doc.id}&name=${encodeURIComponent(cat.name)}'">
+                <div class="card-item" onclick="location.href='category.html?id=${doc.id}&name=${encodeURIComponent(cat.name)}'">
                     <i class="fas ${iconClass}"></i>
                     <span>${cat.name}</span>
                 </div>`;
         });
-    }, err => console.log("Жүктеу қатесі:", err));
+    });
 }
 
-// 4. АУА РАЙЫ (Aktau)
-async function getWeather() {
-    try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
-        const data = await res.json();
-        const temp = Math.round(data.current_weather.temperature);
-        const el = document.getElementById('weatherText');
-        if(el) el.innerHTML = `<i class="fas fa-temperature-high"></i> ${temp}°C`;
-    } catch (e) { console.log("Ауа райы қатесі"); }
+// 4. БАННЕРЛЕРДІ БАЗАДАН ЖҮКТЕУ (3 СЕКУНДТЫҚ)
+function loadBanners(containerId, location) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    db.collection("banners").where("position", "==", location).onSnapshot(snap => {
+        if (snap.empty) return;
+        container.innerHTML = "";
+        let index = 0;
+        snap.forEach(doc => {
+            const b = doc.data();
+            const div = document.createElement('div');
+            div.className = `slide ${index === 0 ? 'active' : ''}`;
+            div.style.backgroundImage = `url('${b.url}')`;
+            div.onclick = () => { if(b.link) window.location.href = b.link; };
+            container.appendChild(div);
+            index++;
+        });
+    });
 }
 
-// 5. НАМАЗ УАҚЫТЫ (Aktau)
-async function getPrayerTimes() {
+// 5. НАМАЗ УАҚЫТЫ (АВТОМАТТЫ ЖАҢАРТУ)
+async function updatePrayerTime() {
     try {
         const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aktau&country=Kazakhstan&method=2');
         const data = await res.json();
         const t = data.data.timings;
-        const el = document.getElementById('prayerText');
-        if(el) el.innerHTML = `<i class="fas fa-mosque"></i> Бесін: ${t.Dhuhr}`;
-    } catch (e) { console.log("Намаз уақыты қатесі"); }
+        const now = new Date();
+        const currentMin = now.getHours() * 60 + now.getMinutes();
+
+        const times = [
+            {n: "Таң", t: t.Fajr}, {n: "Бесін", t: t.Dhuhr}, 
+            {n: "Екінті", t: t.Asr}, {n: "Ақшам", t: t.Maghrib}, {n: "Құптан", t: t.Isha}
+        ];
+
+        let nextPrayer = times[0];
+        for (let p of times) {
+            const [h, m] = p.t.split(':');
+            if (parseInt(h) * 60 + parseInt(m) > currentMin) {
+                nextPrayer = p; break;
+            }
+        }
+        const el = document.getElementById('prayerTime');
+        if(el) el.innerHTML = `${nextPrayer.n}: ${nextPrayer.t}`;
+    } catch (e) { console.log("Prayer error"); }
 }
 
-// 6. ІЗДЕУ ЛОГИКАСЫ
-function searchCards() {
-    let input = document.getElementById('searchInput').value.toLowerCase();
-    let cards = document.getElementsByClassName('card');
-    for (let card of cards) {
-        let text = card.innerText.toLowerCase();
+// 6. АУА РАЙЫ
+async function updateWeather() {
+    try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.65&longitude=51.17&current_weather=true');
+        const data = await res.json();
+        const temp = Math.round(data.current_weather.temperature);
+        const el = document.getElementById('temp');
+        if(el) el.innerHTML = `${temp}°C`;
+    } catch (e) { console.log("Weather error"); }
+}
+
+// 7. ЛОКАЦИЯ ТАҢДАУ
+function locationSelect() {
+    const locs = ["Батыр ауылы", "Ақтау қаласы", "Мұнайлы", "Шетпе", "Жанаөзен"];
+    let choice = prompt("Локация таңдаңыз:\n" + locs.join("\n"));
+    if (choice && locs.includes(choice)) {
+        document.getElementById('locName').innerText = choice;
+        localStorage.setItem('userLoc', choice);
+    }
+}
+
+// 8. ІЗДЕУ ФУНКЦИЯСЫ
+function searchApp() {
+    const input = document.querySelector('.search-area input').value.toLowerCase();
+    const cards = document.querySelectorAll('.card-item');
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
         card.style.display = text.includes(input) ? "flex" : "none";
-    }
+    });
 }
 
-// 7. БЕТ ЖҮКТЕЛГЕНДЕ ІСКЕ ҚОСУ
+// 9. БЕТ ЖҮКТЕЛГЕНДЕ БӘРІН ІСКЕ ҚОСУ
 document.addEventListener('DOMContentLoaded', () => {
-    getWeather();
-    getPrayerTimes();
+    updateWeather();
+    updatePrayerTime();
     
-    // Беттің атына қарай тиісті категорияларды жүктейміз
-    loadPageCategories('home', 'categoryGrid');     // index.html үшін
-    loadPageCategories('market', 'marketGrid');     // market.html үшін
-    loadPageCategories('other', 'otherGrid');       // 3-ші бет үшін
-    
-    const searchInput = document.getElementById('searchInput');
-    if(searchInput) {
-        searchInput.addEventListener('keyup', searchCards);
-    }
+    // Категорияларды беттерге тарату
+    loadCategoriesByPage('home', 'mainGrid');
+    loadCategoriesByPage('market', 'marketGrid');
+    loadCategoriesByPage('other', 'profileGrid');
+
+    // Баннерлерді жүктеу
+    loadBanners('homeBanners', 'home');
+    loadBanners('marketBanners', 'market');
+
+    // Сақталған локацияны алу
+    const savedLoc = localStorage.getItem('userLoc');
+    if(savedLoc) document.getElementById('locName').innerText = savedLoc;
 });
 
-// 8. SERVICE WORKER
+// SERVICE WORKER
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error'));
-  });
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error'));
+    });
 }
