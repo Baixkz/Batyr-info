@@ -8,87 +8,87 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <style>
-        :root { --main-blue: #007aff; --bg-color: #f2f4f7; }
+        :root { --main-blue: #001fcc; --bg-color: #f2f4f7; }
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); margin: 0; padding-bottom: 20px; }
         
+        /* Жаңа стильдегі Header */
         .header { 
-            background: var(--main-blue); color: white; padding: 15px 20px; 
+            background: var(--main-blue); color: white; padding: 18px 20px; 
             display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 100;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
         }
         .header a { color: white; text-decoration: none; font-size: 20px; }
-        .header h2 { margin: 0; font-size: 18px; text-transform: capitalize; }
+        .header h2 { margin: 0; font-size: 18px; font-weight: 800; }
 
         .container { padding: 15px; }
 
-        /* Ішкі категориялар стилі (Sub-categories) */
+        /* Ішкі категориялар (Таза стиль) */
         .sub-cat-item {
-            background: white; padding: 18px; border-radius: 15px; margin-bottom: 10px;
+            background: white; padding: 18px; border-radius: 18px; margin-bottom: 10px;
             display: flex; justify-content: space-between; align-items: center;
-            font-weight: 600; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            font-weight: 700; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             cursor: pointer; transition: 0.2s;
         }
-        .sub-cat-item:active { transform: scale(0.98); background: #f9f9f9; }
+        .sub-cat-item:active { transform: scale(0.97); background: #fafafa; }
 
-        /* Жарнама карточкасы */
+        /* Жарнама карточкалары (Маркет стилі) */
         .ad-item { 
-            background: white; padding: 12px; border-radius: 18px; 
-            margin-bottom: 12px; display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            background: white; padding: 12px; border-radius: 22px; 
+            margin-bottom: 12px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
-        .ad-img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #eee; }
+        .ad-img { width: 85px; height: 85px; border-radius: 15px; object-fit: cover; background: #eee; }
         .ad-info { flex: 1; }
-        .ad-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #1a1a1a; }
-        .ad-info p { margin: 0; font-size: 12px; color: #777; line-height: 1.4; }
-        .ad-price { color: var(--main-blue); font-weight: 800; font-size: 14px; margin-top: 4px; display: block; }
+        .ad-info h4 { margin: 0 0 5px 0; font-size: 15px; color: #1a1a1a; font-weight: 800; }
+        .ad-info p { margin: 0; font-size: 12px; color: #666; line-height: 1.4; height: 34px; overflow: hidden; }
+        .ad-price { color: var(--main-blue); font-weight: 900; font-size: 15px; margin-top: 6px; display: block; }
 
         .call-btn { 
-            background: #25D366; color: white; width: 40px; height: 40px; 
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 18px;
+            background: #25D366; color: white; width: 45px; height: 45px; 
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
         }
-        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 14px; }
+        .empty-msg { text-align: center; color: #999; margin-top: 60px; font-size: 14px; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a>
+        <a href="javascript:history.back()"><i class="fas fa-chevron-left"></i></a>
         <h2 id="catTitle">Жүктелуде...</h2>
     </div>
 
-    <div class="container">
-        <div id="listContainer">
-            </div>
+    <div class="container" id="listContainer">
+        <p style="text-align: center; padding: 50px; color: #999;">Жүктелуде...</p>
     </div>
 
     <script src="app.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
-        const catId = params.get('id'); // Категория ID-і
+        const catId = params.get('id');
         const catName = params.get('name') || 'Бөлім';
         
         document.getElementById('catTitle').innerText = decodeURIComponent(catName);
 
         function renderPage() {
             const container = document.getElementById('listContainer');
-            container.innerHTML = "";
-
-            // 1. Алдымен осы категорияға тиесілі ІШКІ КАТЕГОРИЯЛАРДЫ іздейміз
+            
+            // 1. Ішкі категорияларды тексеру
             db.collection("categories")
               .where("parentId", "==", catId)
               .onSnapshot(snap => {
                 if (!snap.empty) {
-                    container.innerHTML = ""; // Категориялар бар болса тазалаймыз
+                    container.innerHTML = "";
                     snap.forEach(doc => {
                         const sub = doc.data();
                         container.innerHTML += `
                             <div class="sub-cat-item" onclick="location.href='category.html?id=${doc.id}&name=${encodeURIComponent(sub.name)}'">
                                 <span>${sub.name}</span>
-                                <i class="fas fa-chevron-right" style="color:#ccc; font-size:12px"></i>
+                                <i class="fas fa-chevron-right" style="color: var(--main-blue); font-size:14px"></i>
                             </div>`;
                     });
                 } else {
-                    // 2. Ішкі категория жоқ болса, ДЕМЕК ЖАРНАМАЛАРДЫ шығарамыз
+                    // 2. Ішкі категория жоқ болса -> Жарнамалар
                     loadAds();
                 }
             });
@@ -102,7 +102,7 @@
               .onSnapshot(snap => {
                 container.innerHTML = "";
                 if(snap.empty) {
-                    container.innerHTML = '<p class="empty-msg">Бұл бөлімде әзірге ештеңе жоқ.</p>';
+                    container.innerHTML = '<div class="empty-msg"><i class="fas fa-box-open" style="font-size: 40px; display: block; margin-bottom: 15px; color: #ddd;"></i>Бұл бөлімде әзірге ештеңе жоқ.</div>';
                     return;
                 }
                 snap.forEach(doc => {
