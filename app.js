@@ -123,3 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     getWeather();
     getPrayerTimes();
 });
+const langData = {
+    'kk': { 'm-market': 'Маркет', 'm-meat': 'Ет', 'm-fish': 'Балық', 'm-feed': 'Жем-шөп', 'm-build': 'Құрылыс', 'm-cloth': 'Киім', 'm-parts': 'Запчасти', 'm-mebel': 'Мебель', 'm-flowers': 'Гүлдер', 'm-kanz': 'Оқу-құрал', 'm-phone': 'Телефон', 'm-cakes': 'Торттар', 'm-kids': 'Балалар әлемі' },
+    'ru': { 'm-market': 'Продукты', 'm-meat': 'Мясо', 'm-fish': 'Рыба', 'm-feed': 'Корма', 'm-build': 'Стройка', 'm-cloth': 'Одежда', 'm-parts': 'Запчасти', 'm-mebel': 'Мебель', 'm-flowers': 'Цветы', 'm-kanz': 'Канцтовары', 'm-phone': 'Телефон', 'm-cakes': 'Торты', 'm-kids': 'Детский мир' }
+};
