@@ -127,3 +127,24 @@ const langData = {
     'kk': { 'm-market': 'Маркет', 'm-meat': 'Ет', 'm-fish': 'Балық', 'm-feed': 'Жем-шөп', 'm-build': 'Құрылыс', 'm-cloth': 'Киім', 'm-parts': 'Запчасти', 'm-mebel': 'Мебель', 'm-flowers': 'Гүлдер', 'm-kanz': 'Оқу-құрал', 'm-phone': 'Телефон', 'm-cakes': 'Торттар', 'm-kids': 'Балалар әлемі' },
     'ru': { 'm-market': 'Продукты', 'm-meat': 'Мясо', 'm-fish': 'Рыба', 'm-feed': 'Корма', 'm-build': 'Стройка', 'm-cloth': 'Одежда', 'm-parts': 'Запчасти', 'm-mebel': 'Мебель', 'm-flowers': 'Цветы', 'm-kanz': 'Канцтовары', 'm-phone': 'Телефон', 'm-cakes': 'Торты', 'm-kids': 'Детский мир' }
 };
+// ЖАРНАМАЛАРДЫ КАТЕГОРИЯ БОЙЫНША СУРЕТПЕН ШЫҒАРУ ЛОГИКАСЫ
+function renderAdsWithImages(querySnapshot) {
+    const container = document.getElementById('listContainer');
+    if(!container) return;
+    
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const imgUrl = (data.images && data.images.length > 0) ? data.images[0] : 'https://via.placeholder.com/150';
+        
+        const html = `
+            <div class="ad-card" style="display:flex; gap:15px; background:white; padding:10px; border-radius:12px; margin-bottom:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+                <img src="${imgUrl}" style="width:100px; height:100px; object-fit:cover; border-radius:8px;">
+                <div style="flex:1;">
+                    <h4 style="margin:0; font-size:16px;">${data.title}</h4>
+                    <p style="margin:5px 0; color:#007aff; font-weight:bold;">${data.price} ₸</p>
+                    <p style="margin:0; font-size:12px; color:#777;">${data.phone}</p>
+                </div>
+            </div>`;
+        container.innerHTML += html;
+    });
+}
